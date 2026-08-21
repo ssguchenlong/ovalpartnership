@@ -50,11 +50,15 @@ function bin(mime, buf, name) {
 exports.handler = async (event) => {
   try {
     const rawPath = event.path || "";
-    // 优先用 Netlify 注入的 splat；某些运行/直连场景下 splat 为空，则从 path 兜底解析
+    // 优先用 Netlify 注入的 splat；某些运行/直连场景下 splat 为空，则从 path / rawUrl 兜底解析
     let seg = (event.pathParameters && event.pathParameters.splat) || "";
     if (!seg) {
-      const idx = rawPath.indexOf("/tool/");
-      if (idx >= 0) seg = rawPath.slice(idx + 6); // "/tool/" 长度为 6
+      const candidates = [rawPath, event.rawUrl, event.url, event.request && event.request.url].filter(Boolean);
+      for (const c of candidates) {
+        const s = String(c);
+        const i = s.indexOf("/tool/");
+        if (i >= 0) { seg = s.slice(i + 6); break; } // "/tool/" 长度为 6
+      }
     }
     const method = (event.httpMethod || "GET").toUpperCase();
     const q = event.queryStringParameters || {};
