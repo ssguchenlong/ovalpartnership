@@ -939,11 +939,12 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;bor
     .fb-status.ok{background:rgba(46,160,67,.10);border:1px solid #2ea043;color:#1f7a37}
     .fb-status.warn{background:rgba(192,98,46,.10);border:1px solid #c0622e;color:#a8521f}
     .fb-actions{display:flex;gap:14px;align-items:center}
-    .fb-del-btn{background:none;border:none;color:#bbb;font-size:13px;cursor:pointer;padding:2px 0}
+    .fb-del-btn{display:none;background:none;border:none;color:#bbb;font-size:13px;cursor:pointer;padding:2px 0}
     .fb-del-btn:hover{color:#e0463e;text-decoration:underline}
     .fb-del-btn.sm{font-size:12px;padding:0}
     .fb-reply-head{display:flex;align-items:baseline;gap:8px}
     .fb-reply-head .fb-del-btn{margin-left:auto}
+    body.fb-admin .fb-del-btn{display:inline-block}
   </style>
   <section id="feedback" class="section">
     <div class="fb-wrap">
@@ -1118,7 +1119,7 @@ function dimLabel(k){ return t("dim."+k) || k; }
 
 // ================= 版本号（每次更新请同步递增 APP_VERSION 与 APP_BUILD） =================
 // 显示在界面头部徽标与页脚，便于复制分发时核对是否为最新版。
-const APP_VERSION = "1.39.4";
+const APP_VERSION = "1.39.5";
 const APP_BUILD   = "2026-08-21";
 
 // merge locally-imported cases
@@ -2100,6 +2101,8 @@ function fbMergePosts(srv, local){
   return Object.keys(map).map(k=>map[k]);
 }
 async function loadFeedback(){
+  // 管理员模式：localStorage["ctc_fb_admin"]="1" 或 URL 含 #fbadmin 时显示删除按钮
+  try{ if(localStorage.getItem("ctc_fb_admin")==="1"||location.hash.indexOf("fbadmin")>=0) document.body.classList.add("fb-admin"); }catch(e){}
   // 0) 先即时渲染本地历史，保证「一打开意见」就能看到记录（无论是否有服务器、网络快慢）
   let localArr=[]; try{ localArr=JSON.parse(localStorage.getItem(FB_LOCAL_KEY)||"[]"); }catch(e){}
   if(localArr.length) fbRender(localArr);
