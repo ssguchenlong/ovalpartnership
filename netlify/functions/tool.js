@@ -49,7 +49,13 @@ function bin(mime, buf, name) {
 
 exports.handler = async (event) => {
   try {
-    const seg = (event.pathParameters && event.pathParameters.splat) || "";
+    const rawPath = event.path || "";
+    // 优先用 Netlify 注入的 splat；某些运行/直连场景下 splat 为空，则从 path 兜底解析
+    let seg = (event.pathParameters && event.pathParameters.splat) || "";
+    if (!seg) {
+      const idx = rawPath.indexOf("/tool/");
+      if (idx >= 0) seg = rawPath.slice(idx + 6); // "/tool/" 长度为 6
+    }
     const method = (event.httpMethod || "GET").toUpperCase();
     const q = event.queryStringParameters || {};
 
