@@ -36,12 +36,12 @@ const CASE_IMAGES = {
     { file:"images/chengdu-kuanzhai/01.jpg", caption:"Shops - Kuanzhai Alleys - Chengdu, China - DSC05305", credit:"Daderot · CC0 · via Wikimedia Commons" }
   ],
   "chengdu-taikoo-li": [
-    { file:"images/chengdu-taikoo-li/01.png", caption:"001_at-a-glance-sino-ocean-taikoo-li-chengdu-retail-1", credit:"via www.swireproperties.com" },
-    { file:"images/chengdu-taikoo-li/02.png", caption:"002_at-a-glance-sino-ocean-taikoo-li-chengdu-retail-2", credit:"via www.swireproperties.com" },
-    { file:"images/chengdu-taikoo-li/03.png", caption:"003_at-a-glance-sino-ocean-taikoo-li-chengdu-retail-1", credit:"via www.swireproperties.com" },
-    { file:"images/chengdu-taikoo-li/04.png", caption:"004_upper-house-chengdu_thumbnail", credit:"via www.swireproperties.com" },
-    { file:"images/chengdu-taikoo-li/05.png", caption:"005_taikoo-li-chengdu-mixed", credit:"via www.swireproperties.com" },
-    { file:"images/chengdu-taikoo-li/06.png", caption:"006_chengdu-1", credit:"via www.swireproperties.com" }
+    { file:"images/chengdu-taikoo-li/01.png?v=2", caption:"001_at-a-glance-sino-ocean-taikoo-li-chengdu-retail-1", credit:"via www.swireproperties.com" },
+    { file:"images/chengdu-taikoo-li/02.png?v=2", caption:"002_at-a-glance-sino-ocean-taikoo-li-chengdu-retail-2", credit:"via www.swireproperties.com" },
+    { file:"images/chengdu-taikoo-li/03.png?v=2", caption:"003_at-a-glance-sino-ocean-taikoo-li-chengdu-retail-1", credit:"via www.swireproperties.com" },
+    { file:"images/chengdu-taikoo-li/04.png?v=2", caption:"004_upper-house-chengdu_thumbnail", credit:"via www.swireproperties.com" },
+    { file:"images/chengdu-taikoo-li/05.png?v=2", caption:"005_taikoo-li-chengdu-mixed", credit:"via www.swireproperties.com" },
+    { file:"images/chengdu-taikoo-li/06.png?v=2", caption:"006_chengdu-1", credit:"via www.swireproperties.com" }
   ],
   "clarke-quay": [
     { file:"images/clarke-quay/01.jpg", caption:"Singapore Central Business District viewed from Clarke Quay 1", credit:"Zairon · CC BY-SA 4.0 · via Wikimedia Commons" },
@@ -220,12 +220,12 @@ const CASE_IMAGES = {
     { file:"images/roppongi-hills/05.jpg", caption:"Roppongi Art Night 2014", credit:"Nicolas1981 · CC BY-SA 3.0 · via Wikimedia Commons" }
   ],
   "sanlitun-taikoo-li": [
-    { file:"images/sanlitun-taikoo-li/01.png", caption:"001_20230425spltls-tune--16x9", credit:"via www.swireproperties.com" },
-    { file:"images/sanlitun-taikoo-li/02.png", caption:"002_20211203_tls-west", credit:"via www.swireproperties.com" },
-    { file:"images/sanlitun-taikoo-li/03.png", caption:"003_20230425spltls-tune--16x9", credit:"via www.swireproperties.com" },
-    { file:"images/sanlitun-taikoo-li/04.png", caption:"004_taikoo-li-chengdu-mixed", credit:"via www.swireproperties.com" },
-    { file:"images/sanlitun-taikoo-li/05.png", caption:"005_tlq_936px_thumbnail", credit:"via www.swireproperties.com" },
-    { file:"images/sanlitun-taikoo-li/06.png", caption:"006_2023051", credit:"via www.swireproperties.com" }
+    { file:"images/sanlitun-taikoo-li/01.png?v=2", caption:"001_20230425spltls-tune--16x9", credit:"via www.swireproperties.com" },
+    { file:"images/sanlitun-taikoo-li/02.png?v=2", caption:"002_20211203_tls-west", credit:"via www.swireproperties.com" },
+    { file:"images/sanlitun-taikoo-li/03.png?v=2", caption:"003_20230425spltls-tune--16x9", credit:"via www.swireproperties.com" },
+    { file:"images/sanlitun-taikoo-li/04.png?v=2", caption:"004_taikoo-li-chengdu-mixed", credit:"via www.swireproperties.com" },
+    { file:"images/sanlitun-taikoo-li/05.png?v=2", caption:"005_tlq_936px_thumbnail", credit:"via www.swireproperties.com" },
+    { file:"images/sanlitun-taikoo-li/06.png?v=2", caption:"006_2023051", credit:"via www.swireproperties.com" }
   ],
   "seoul-bukchon": [
     { file:"images/seoul-bukchon/02.jpg", caption:"Bukchon Hanok Village 01", credit:"Bgag · CC0 · via Wikimedia Commons" },
@@ -270,37 +270,37 @@ const CASE_IMAGES = {
     { file:"images/sh-tianzifang/05.jpg", caption:"Tianzifang 21641-Shanghai (33029166756)", credit:"xiquinhosilva · CC BY 2.0 · via Wikimedia Commons" }
   ],
   "shanghai-xintiandi": [
-    { file:"images/shanghai-xintiandi/01.jpg", caption:"001_DJI_0219-3000x1999", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/02.jpg", caption:"002_DJI_0233-1-3000x1999", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/03.jpg", caption:"003_DSC01133-3000x2001", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/04.jpg", caption:"004_________________04-3000x2001", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/05.jpg", caption:"005_________________01-3000x2000", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/06.jpg", caption:"006_______Social-House____4F_01-3000x2000", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/07.jpg", caption:"007_WechatIMG1118-cut", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/08.jpg", caption:"008_WechatIMG1119", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/09.jpg", caption:"009_WechatIMG1120", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/10.jpg", caption:"010_WechatIMG1121", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/11.jpg", caption:"011_XINTIANDISHISHANG2", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/12.jpg", caption:"012___-THE-HOSUE", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/13.jpg", caption:"013________", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/14.jpg", caption:"014_048bd43b5694ad56013a46fc68193ae9", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/15.jpg", caption:"015______2-3000x2001", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/16.jpg", caption:"016_1", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/17.jpg", caption:"017__________-3000x2000", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/18.jpg", caption:"018_____-22-3000x2000", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/19.jpg", caption:"019_Feng_Mian_Tu_2_Xuan_1", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/20.jpg", caption:"020_8392272ecef8b3d3b38a106272f80d96", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/21.jpg", caption:"021_____-3000x1987", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/22.jpg", caption:"022_1-_Feng_Mian_Tu-1", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/23.jpg", caption:"023_____-3000x2002", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/24.jpg", caption:"024_____-3000x2002", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/25.png", caption:"025_IFCX-jpg", credit:"via 上海新天地官方" },
-    { file:"images/shanghai-xintiandi/26.jpg", caption:"026_DJI_0233", credit:"via 上海新天地官方" }
+    { file:"images/shanghai-xintiandi/01.jpg?v=2", caption:"001_DJI_0219-3000x1999", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/02.jpg?v=2", caption:"002_DJI_0233-1-3000x1999", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/03.jpg?v=2", caption:"003_DSC01133-3000x2001", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/04.jpg?v=2", caption:"004_________________04-3000x2001", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/05.jpg?v=2", caption:"005_________________01-3000x2000", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/06.jpg?v=2", caption:"006_______Social-House____4F_01-3000x2000", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/07.jpg?v=2", caption:"007_WechatIMG1118-cut", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/08.jpg?v=2", caption:"008_WechatIMG1119", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/09.jpg?v=2", caption:"009_WechatIMG1120", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/10.jpg?v=2", caption:"010_WechatIMG1121", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/11.jpg?v=2", caption:"011_XINTIANDISHISHANG2", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/12.jpg?v=2", caption:"012___-THE-HOSUE", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/13.jpg?v=2", caption:"013________", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/14.jpg?v=2", caption:"014_048bd43b5694ad56013a46fc68193ae9", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/15.jpg?v=2", caption:"015______2-3000x2001", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/16.jpg?v=2", caption:"016_1", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/17.jpg?v=2", caption:"017__________-3000x2000", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/18.jpg?v=2", caption:"018_____-22-3000x2000", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/19.jpg?v=2", caption:"019_Feng_Mian_Tu_2_Xuan_1", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/20.jpg?v=2", caption:"020_8392272ecef8b3d3b38a106272f80d96", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/21.jpg?v=2", caption:"021_____-3000x1987", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/22.jpg?v=2", caption:"022_1-_Feng_Mian_Tu-1", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/23.jpg?v=2", caption:"023_____-3000x2002", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/24.jpg?v=2", caption:"024_____-3000x2002", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/25.png?v=2", caption:"025_IFCX-jpg", credit:"via 上海新天地官方" },
+    { file:"images/shanghai-xintiandi/26.jpg?v=2", caption:"026_DJI_0233", credit:"via 上海新天地官方" }
   ],
   "shenzhen-dayun-tiandi": [
-    { file:"images/shenzhen-dayun-tiandi/01.jpg", caption:"001_f048a1318b6e7c62", credit:"via www.ovalpartnership.com" },
-    { file:"images/shenzhen-dayun-tiandi/02.jpg", caption:"002_P1019097", credit:"via www.ovalpartnership.com" },
-    { file:"images/shenzhen-dayun-tiandi/03.jpg", caption:"003_DJI_0720", credit:"via www.ovalpartnership.com" }
+    { file:"images/shenzhen-dayun-tiandi/01.jpg?v=2", caption:"001_f048a1318b6e7c62", credit:"via www.ovalpartnership.com" },
+    { file:"images/shenzhen-dayun-tiandi/02.jpg?v=2", caption:"002_P1019097", credit:"via www.ovalpartnership.com" },
+    { file:"images/shenzhen-dayun-tiandi/03.jpg?v=2", caption:"003_DJI_0720", credit:"via www.ovalpartnership.com" }
   ],
   "shenzhen-happy-harbor": [
     { file:"images/shenzhen-happy-harbor/02.jpg", caption:"SZ 深圳 Shenzhen 寶安區 Bao'An 歡樂港灣商場 OH Bay Baoan Shopping Mall shop 57Cool War Games July ...", credit:"QINGFATTIEAM 2002 · CC BY-SA 4.0 · via Wikimedia Commons" },
