@@ -847,7 +847,7 @@ function caseMeta(zhVal){
 // ============================================================================
 // 当前语言 + 翻译函数（缺失键回落到 zh-CN）
 // ============================================================================
-const I18N_DEFAULT = "zh-CN";
+const I18N_DEFAULT = "en";
 let I18N_CURRENT = (()=>{
   try{ const v=localStorage.getItem("ctc_lang"); if(v&&I18N[v]) return v; }catch(e){}
   return I18N_DEFAULT;
