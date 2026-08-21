@@ -729,7 +729,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;bor
         <div class="tool-icon">🗺️</div>
         <div class="tool-meta">
           <h3 data-i18n="imp.tool0.title">高德地图 API</h3>
-          <p data-i18n="imp.tool0.desc">调用高德开放平台 Web 服务 API：地理编码、逆地理、天气、POI 搜索、周边配套、路线与距离。输入地点即可查坐标、看地图、查天气与周边配套，辅助项目选址与交通接驳分析。</p>
+          <p data-i18n="imp.tool0.desc">调用高德开放平台 Web 服务 API：选址业态分析（周边配套统计）、地理编码、逆地理、天气、POI 搜索、周边配套、路线（含公交/地铁）与距离。直接输入地名即可自动定位查坐标、看地图、统计周边业态，辅助项目选址与交通接驳分析。</p>
         </div>
         <span class="tool-tag" data-i18n="imp.tool0.tag">地图 / 位置</span>
       </div>
@@ -738,6 +738,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;bor
           <div class="imp-grid">
             <div class="f"><label data-i18n="imp.amap.cmd">功能</label>
               <select id="amapCmd">
+                <option value="analyze">选址业态分析（周边配套统计）</option>
                 <option value="geo">地理编码（地址 → 坐标）</option>
                 <option value="regeo">逆地理编码（坐标 → 地址）</option>
                 <option value="weather">天气查询</option>
@@ -749,12 +750,13 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;bor
             </div>
             <div class="f" id="amapFAddr"><label data-i18n="imp.amap.addr">地址 / 关键词</label><input id="amapAddr" type="text" placeholder="如：成都太古里 / 地铁"></div>
             <div class="f" id="amapFCity"><label data-i18n="imp.amap.city">城市</label><input id="amapCity" type="text" placeholder="如：成都"></div>
-            <div class="f" id="amapFLoc" style="display:none"><label data-i18n="imp.amap.loc">坐标（经度,纬度）</label><input id="amapLoc" type="text" placeholder="114.30,30.59"></div>
-            <div class="f" id="amapFLoc2" style="display:none"><label data-i18n="imp.amap.loc2">终点坐标（经度,纬度）</label><input id="amapLoc2" type="text" placeholder="114.40,30.70"></div>
+            <div class="f" id="amapFLoc" style="display:none"><label data-i18n="imp.amap.loc">坐标（经度,纬度）</label><input id="amapLoc" type="text" placeholder="114.30,30.59 或直接填地名，自动转坐标"></div>
+            <div class="f" id="amapFLoc2" style="display:none"><label data-i18n="imp.amap.loc2">终点坐标（经度,纬度）</label><input id="amapLoc2" type="text" placeholder="114.40,30.70 或直接填地名，自动转坐标"></div>
             <div class="f" id="amapFRadius" style="display:none"><label data-i18n="imp.amap.radius">半径（米）</label><input id="amapRadius" type="text" value="3000"></div>
             <div class="f" id="amapFMode" style="display:none"><label data-i18n="imp.amap.mode">出行方式</label>
               <select id="amapMode">
                 <option value="driving" data-i18n="imp.amap.modeDriving">驾车</option>
+                <option value="transit" data-i18n="imp.amap.modeTransit">公交 / 地铁</option>
                 <option value="walking" data-i18n="imp.amap.modeWalking">步行</option>
                 <option value="cycling" data-i18n="imp.amap.modeCycling">骑行</option>
               </select>
@@ -1063,7 +1065,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;bor
 <script src="data/codes.js"></script>
 <script src="data/quant.js"></script>
 <script src="data/locales.js"></script>
-<script src="data/i18n.js"></script>
+<script src="data/i18n.js?v=1.39.7"></script>
 <script>
 // ---------- state ----------
 // 优先使用校对后的定稿图：浏览器本地覆盖 > gooood 实拍 > data/images.curated.js > 既有 data/images.js
@@ -1119,7 +1121,7 @@ function dimLabel(k){ return t("dim."+k) || k; }
 
 // ================= 版本号（每次更新请同步递增 APP_VERSION 与 APP_BUILD） =================
 // 显示在界面头部徽标与页脚，便于复制分发时核对是否为最新版。
-const APP_VERSION = "1.39.6";
+const APP_VERSION = "1.39.7";
 const APP_BUILD   = "2026-08-21";
 
 // merge locally-imported cases
@@ -2795,7 +2797,7 @@ const AMAP_DIRECT = {
   distance:"https://restapi.amap.com/v3/distance",
 };
 function amapDirectEp(cmd, mode){
-  if(cmd==="route"){ const sub = mode==="walking"?"walking":mode==="cycling"?"bicycling":"driving"; return AMAP_DIRECT.route+"/"+sub; }
+  if(cmd==="route"){ const sub = mode==="walking"?"walking":mode==="cycling"?"bicycling":mode==="transit"?"transit/integrated":"driving"; return AMAP_DIRECT.route+"/"+sub; }
   return AMAP_DIRECT[cmd]||AMAP_DIRECT.geo;
 }
 function amapDirectUrl(cmd, p, key){
@@ -2822,12 +2824,47 @@ function amapJsonp(url){
 function amapToggleFields(){
   const cmd = amapVal("amapCmd");
   const show = (id,on)=>{ const el=document.getElementById(id); if(el) el.style.display = on ? "" : "none"; };
-  show("amapFAddr", cmd==="geo"||cmd==="search"||cmd==="around");
-  show("amapFCity", cmd==="geo"||cmd==="search"||cmd==="weather");
-  show("amapFLoc", cmd==="regeo"||cmd==="around"||cmd==="route"||cmd==="distance");
+  show("amapFAddr", cmd==="geo"||cmd==="search"||cmd==="around"||cmd==="analyze");
+  show("amapFCity", cmd==="geo"||cmd==="search"||cmd==="weather"||cmd==="route"||cmd==="analyze");
+  show("amapFLoc", cmd==="regeo"||cmd==="around"||cmd==="route"||cmd==="distance"||cmd==="analyze");
   show("amapFLoc2", cmd==="route"||cmd==="distance");
-  show("amapFRadius", cmd==="around");
+  show("amapFRadius", cmd==="around"||cmd==="analyze");
   show("amapFMode", cmd==="route");
+  // 选址分析默认 1km 步行圈，其余周边搜索默认 3km
+  const rd=document.getElementById("amapRadius");
+  if(rd){ if(cmd==="analyze" && rd.value.trim()==="3000") rd.value="1000"; else if(cmd!=="analyze" && rd.value.trim()==="1000") rd.value="3000"; }
+}
+// 统一调用助手：有本地 Key 走 JSONP 直连，否则走同源代理（Key 藏服务器端）
+async function amapCall(cmd, p){
+  const pk = amapPK();
+  if(pk) return await amapJsonp(amapDirectUrl(cmd, p, pk));
+  const q = new URLSearchParams({ cmd });
+  ["address","city","location","keywords","radius","mode","destination","origin","origins","extensions","type","offset","page"].forEach(k=>{ if(p[k]) q.set(k, p[k]); });
+  const r = await fetch(AMAP_API + "?" + q.toString());
+  const data = await r.json();
+  if(data && data.amap_proxy==="no_key") throw { amapNoKey:true };
+  return data;
+}
+// 智能解析：接受「经度,纬度」或任意地名/地址 → 返回 {lon,lat,name?}（先地理编码，失败再 POI 搜索兜底）
+function amapIsCoord(txt){ return /^\s*\d+(\.\d+)?\s*[,，]\s*\d+(\.\d+)?\s*$/.test(txt||""); }
+async function amapResolveLoc(txt, city){
+  if(!txt) return null;
+  if(amapIsCoord(txt)){ const a=txt.replace(/，/g,",").trim().split(","); return {lon:a[0],lat:a[1]}; }
+  try{
+    const d = await amapCall("geo", {address:txt, city:city||""});
+    if(d && d.status==="1" && d.geocodes && d.geocodes.length){
+      const l=(d.geocodes[0].location||"").split(",");
+      if(l.length===2 && l[0] && l[1]) return {lon:l[0],lat:l[1],name:d.geocodes[0].formatted_address||txt};
+    }
+  }catch(e){}
+  try{
+    const d = await amapCall("search", {keywords:txt, city:city||"", offset:"1"});
+    if(d && d.status==="1" && d.pois && d.pois.length){
+      const l=(d.pois[0].location||"").split(",");
+      if(l.length===2 && l[0] && l[1]) return {lon:l[0],lat:l[1],name:d.pois[0].name||txt};
+    }
+  }catch(e){}
+  return null;
 }
 async function amapQuery(){
   const cmd = amapVal("amapCmd");
@@ -2842,26 +2879,48 @@ async function amapQuery(){
     destination: amapVal("amapLoc2"),
   };
   if(cmd==="weather") p.extensions="all";
-  if(cmd==="route" || cmd==="distance"){ p.origin = p.location; p.origins = p.location; }
+
+  // 选址业态分析：独立流程（多次查询 + 渐进渲染）
+  if(cmd==="analyze"){
+    const txt = p.keywords || p.location;
+    if(!txt) return amapErr(t("imp.amap.errEmpty"));
+    return amapAnalyze(txt, p.city, p.radius);
+  }
+
+  // 坐标智能解析：坐标框可直接填地名/地址
+  if(cmd==="regeo"||cmd==="around"||cmd==="route"||cmd==="distance"){
+    if(!p.location && !p.address) return amapErr(t("imp.amap.errEmpty"));
+    if(p.location && !amapIsCoord(p.location)){
+      const rl = await amapResolveLoc(p.location, p.city);
+      if(!rl) return amapErr("未能解析地点「"+p.location+"」：请检查名称是否正确，或直接输入「经度,纬度」");
+      p.location = rl.lon+","+rl.lat; if(rl.name) p._resolved = rl.name;
+    }
+    if(!p.location && p.address){
+      const rl = await amapResolveLoc(p.address, p.city);
+      if(!rl) return amapErr("未能解析地点「"+p.address+"」");
+      p.location = rl.lon+","+rl.lat;
+    }
+  }
+  if(cmd==="route" || cmd==="distance"){
+    if(p.destination && !amapIsCoord(p.destination)){
+      const rl = await amapResolveLoc(p.destination, p.city);
+      if(!rl) return amapErr("未能解析终点「"+p.destination+"」");
+      p.destination = rl.lon+","+rl.lat;
+    }
+    p.origin = p.location; p.origins = p.location;
+  }
   if((cmd==="geo"||cmd==="search") && !p.address) return amapErr(t("imp.amap.errEmpty"));
   if(cmd==="regeo" && !p.location) return amapErr(t("imp.amap.errEmpty"));
   if((cmd==="route"||cmd==="distance") && (!p.location||!p.destination)) return amapErr(t("imp.amap.errEmpty"));
   if(cmd==="weather" && !p.city) return amapErr(t("imp.amap.errEmpty"));
   if(cmd==="around" && !p.location) return amapErr(t("imp.amap.errEmpty"));
+  if(cmd==="route" && p.mode==="transit" && !p.city) return amapErr("公交 / 地铁规划需要填写城市");
 
   let data;
-  const pk = amapPK();
-  if(pk){
-    try{ data = await amapJsonp(amapDirectUrl(cmd, p, pk)); }
-    catch(e){ return amapErr(String(e.message||e)); }
-  } else {
-    const q = new URLSearchParams({ cmd });
-    ["address","city","location","keywords","radius","mode","destination","origin","origins","extensions"].forEach(k=>{ if(p[k]) q.set(k, p[k]); });
-    try{
-      const r = await fetch(AMAP_API + "?" + q.toString());
-      data = await r.json();
-    }catch(e){ return amapErr(t("imp.amap.errFail") + e.message); }
-    if(data && data.amap_proxy==="no_key"){ if(warn){ warn.style.display="block"; warn.textContent = t("imp.amap.keyMissing"); } return; }
+  try{ data = await amapCall(cmd, p); }
+  catch(e){
+    if(e && e.amapNoKey){ if(warn){ warn.style.display="block"; warn.textContent = t("imp.amap.keyMissing"); } return; }
+    return amapErr(t("imp.amap.errFail") + (e&&e.message ? e.message : String(e)));
   }
   if(warn) warn.style.display="none";
   if(!data || data.status!=="1"){
@@ -2869,6 +2928,65 @@ async function amapQuery(){
     return amapErr(t("imp.amap.errFail") + amapFriendlyInfo(info));
   }
   amapRender(cmd, data, p);
+}
+// ---------- 选址业态分析 ----------
+// 说明：高德 v3 周边搜索的 type 参数已不生效（实测被忽略），v5 的 types 又不返回总数；
+// 关键词搜索则按「名称+类目」匹配并返回半径内总数，统计口径最适合本工具。
+const AMAP_CATS = [
+  {kw:"地铁站", label:"地铁站"},
+  {kw:"公交站", label:"公交站"},
+  {kw:"中餐厅", label:"餐饮（餐厅）"},
+  {kw:"咖啡", label:"咖啡 / 茶饮"},
+  {kw:"购物中心", label:"购物中心"},
+  {kw:"商场", label:"商场"},
+  {kw:"便利店", label:"便利店"},
+  {kw:"超市", label:"超市"},
+  {kw:"写字楼", label:"写字楼"},
+  {kw:"酒店", label:"酒店住宿"},
+  {kw:"银行", label:"银行网点"},
+  {kw:"电影院", label:"电影院"},
+  {kw:"公园", label:"公园绿地"},
+];
+async function amapAnalyze(txt, city, radiusTxt){
+  const r = document.getElementById("amapResult");
+  if(!r) return;
+  const radius = (parseInt(radiusTxt,10)>0) ? parseInt(radiusTxt,10) : 1000;
+  r.innerHTML = '<div class="ar-err" style="color:var(--muted)">正在解析地点…</div>';
+  const loc = await amapResolveLoc(txt, city);
+  if(!loc) return amapErr("未能解析地点「"+txt+"」：请检查名称是否正确，或直接输入「经度,纬度」");
+  const location = loc.lon+","+loc.lat;
+  // 中心点地址（逆地理，尽力而为）
+  let center = loc.name || location;
+  try{
+    const rg = await amapCall("regeo", {location:location});
+    if(rg && rg.status==="1" && rg.regeocode && rg.regeocode.formatted_address) center = rg.regeocode.formatted_address;
+  }catch(e){}
+  r.innerHTML = '<div class="ar-sec">选址业态分析 · 半径 '+radius+' m</div>'+
+    '<div class="ar-card"><div><b>'+amapEsc(center)+'</b>'+amapMarkerLink(loc.lon,loc.lat)+'</div>'+
+    '<div class="ar-kv"><span>坐标 '+amapEsc(location)+'</span></div></div>'+
+    '<div class="ar-card" id="amapAnalyzeCard"><table id="amapAnalyzeTbl"><tr><th>业态</th><th>数量（处）</th><th>最近（距离）</th></tr></table>'+
+    '<div class="ar-kv" style="margin-top:8px">统计口径：高德 POI 关键词（名称+类目）半径内匹配总数，600 为上限；仅供选址参考。</div></div>';
+  const tbl = document.getElementById("amapAnalyzeTbl");
+  for(const cat of AMAP_CATS){
+    const tr = tbl ? (tbl.insertAdjacentHTML("beforeend", '<tr><td>'+cat.label+'</td><td>…</td><td></td></tr>'), tbl.lastElementChild) : null;
+    let ok = false;
+    try{
+      const d = await amapCall("around", {location:location, radius:String(radius), keywords:cat.kw, offset:"5", page:"1"});
+      if(d && d.status==="1"){
+        const pois = d.pois||[];
+        const cnt = parseInt(d.count,10) || pois.length;
+        let near = "—";
+        if(pois.length){
+          const p0 = pois[0];
+          near = amapEsc(p0.name||"")+(p0.distance? ' <span class="ar-kv">'+Math.round(p0.distance)+' m</span>' : "");
+        }
+        if(tr) tr.innerHTML = '<td>'+cat.label+'</td><td><b>'+(cnt>=600?"600+":cnt)+'</b></td><td>'+near+'</td>';
+        ok = true;
+      }
+    }catch(e){}
+    if(!ok && tr) tr.innerHTML = '<td>'+cat.label+'</td><td>—</td><td>查询失败</td>';
+  }
+  amapShowMap(loc.lon, loc.lat);
 }
 function amapErr(msg){ const r=document.getElementById("amapResult"); if(r) r.innerHTML = '<div class="ar-err">'+amapEsc(msg)+'</div>'; }
 function amapFriendlyInfo(info){
@@ -2942,6 +3060,29 @@ function amapRender(cmd, data, p){
       html += '<div class="ar-poi"><div><div class="nm">'+amapEsc(poi.name||"")+'</div>'+
               '<div class="ad">'+(amapEsc(poi.address||"")+(poi.adname?" · "+amapEsc(poi.adname):"")+(poi.type?" · "+amapEsc(poi.type):""))+'</div></div>'+
               '<div style="text-align:right;white-space:nowrap"><span class="ar-kv" style="margin-bottom:4px">'+amapEsc(poi.location||"")+'</span>'+amapMarkerLink(lon,lat)+'</div></div>';
+    });
+  }
+  else if(cmd==="route" && p.mode==="transit"){
+    const rt = data.route||{};
+    const trs = rt.transits||[];
+    const a=p.location.split(","), b=p.destination.split(",");
+    if(a[0]&&a[1]) mapPt={lon:a[0],lat:a[1]};
+    if(!trs.length){ html += '<div class="ar-empty">未找到公交 / 地铁方案</div>'; }
+    trs.slice(0,3).forEach((t0,ti)=>{
+      const dist = t0.distance? (t0.distance/1000).toFixed(2)+" km" : "-";
+      const dur = t0.duration? Math.round(t0.duration/60)+" 分钟" : "-";
+      let segHtml = "";
+      (t0.segments||[]).forEach(s=>{
+        if(s.walking && s.walking.distance && s.walking.distance!=="0"){
+          segHtml += '<li>步行 '+Math.round(s.walking.distance)+' 米</li>';
+        }
+        const bus = s.bus && s.bus.buslines && s.bus.buslines[0];
+        if(bus){
+          segHtml += '<li>'+amapEsc(bus.name||"公交")+'（'+amapEsc((bus.departure_stop&&bus.departure_stop.name)||"")+' → '+amapEsc((bus.arrival_stop&&bus.arrival_stop.name)||"")+'，'+amapEsc(bus.via_num||"")+' 站）</li>';
+        }
+      });
+      html += '<div class="ar-card"><div class="ar-kv"><span>方案 '+(ti+1)+' · 距离 '+dist+'</span><span>耗时 '+dur+'</span>'+(t0.walking_distance?'<span>步行合计 '+Math.round(t0.walking_distance)+' m</span>':'')+'</div>'+
+              (segHtml?'<div class="ar-steps"><ol class="ar-num">'+segHtml+'</ol></div>':'')+'</div>';
     });
   }
   else if(cmd==="route"){

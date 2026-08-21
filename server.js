@@ -260,7 +260,7 @@ const AMAP_BASE = {
 function amapEndpoint(cmd, params) {
   if (cmd === "route") {
     const m = params.get("mode");
-    const sub = m === "walking" ? "walking" : m === "cycling" ? "bicycling" : "driving";
+    const sub = m === "walking" ? "walking" : m === "cycling" ? "bicycling" : m === "transit" ? "transit/integrated" : "driving";
     return AMAP_BASE.route + "/" + sub;
   }
   return AMAP_BASE[cmd] || AMAP_BASE.geo;
@@ -268,7 +268,7 @@ function amapEndpoint(cmd, params) {
 function amapBuildUrl(cmd, params, key) {
   const ep = amapEndpoint(cmd, params);
   const q = new URLSearchParams();
-  const pass = ["address", "city", "location", "keywords", "radius", "origins", "destination", "type", "extensions", "zoom", "size", "markers", "offset", "page", "policy"];
+  const pass = ["address", "city", "location", "keywords", "radius", "origin", "origins", "destination", "type", "extensions", "zoom", "size", "markers", "offset", "page", "policy"];
   pass.forEach(k => { const v = params.get(k); if (v !== null && v !== "") q.set(k, v); });
   q.set("key", key);
   if (cmd !== "static") q.set("output", "JSON");

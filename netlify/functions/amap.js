@@ -31,7 +31,7 @@ const AMAP_BASE = {
 function amapEndpoint(cmd, params) {
   if (cmd === "route") {
     const m = params.get ? params.get("mode") : (params.mode || "");
-    const sub = m === "walking" ? "walking" : m === "cycling" ? "bicycling" : "driving";
+    const sub = m === "walking" ? "walking" : m === "cycling" ? "bicycling" : m === "transit" ? "transit/integrated" : "driving";
     return AMAP_BASE.route + "/" + sub;
   }
   return AMAP_BASE[cmd] || AMAP_BASE.geo;
