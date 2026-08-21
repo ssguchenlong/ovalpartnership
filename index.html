@@ -1053,10 +1053,10 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;bor
 
 <script src="data/cases.js"></script>
 <script src="data/cases_en.js"></script>
-<script src="data/images.js?v=1.39.1"></script>
+<script src="data/images.js?v=1.39.2"></script>
 <script src="data/images.candidates.js"></script>
-<script src="data/images.curated.js"></script>
-<script src="data/gooood.curated.js"></script>
+<script src="data/images.curated.js?v=1.39.2"></script>
+<script src="data/gooood.curated.js?v=1.39.2"></script>
 <script src="data/principles.js"></script>
 <script src="data/guidance.js"></script>
 <script src="data/codes.js"></script>
@@ -1073,6 +1073,8 @@ function resolveImages(c){
   if(typeof CASE_CURATED!=="undefined" && CASE_CURATED[c.id] && CASE_CURATED[c.id].length) return CASE_CURATED[c.id];
   return ((typeof CASE_IMAGES!=="undefined" && CASE_IMAGES[c.id])||[]);
 }
+// 版本变更时清空旧的 localStorage 配图覆盖（防止旧 curated 数据压新图）
+try{ if(localStorage.getItem('oval_curated_ver')!=='1.39.2'){ localStorage.removeItem('oval_curated_full'); localStorage.setItem('oval_curated_ver','1.39.2'); } }catch(e){}
 let CASES_RUNTIME = (typeof CASES !== "undefined") ? CASES.map(c=>({...c, images:resolveImages(c)})) : [];
 
 // ---------- 案例正文英文切换（v1.34.0）----------
@@ -1116,7 +1118,7 @@ function dimLabel(k){ return t("dim."+k) || k; }
 
 // ================= 版本号（每次更新请同步递增 APP_VERSION 与 APP_BUILD） =================
 // 显示在界面头部徽标与页脚，便于复制分发时核对是否为最新版。
-const APP_VERSION = "1.39.1";
+const APP_VERSION = "1.39.2";
 const APP_BUILD   = "2026-08-21";
 
 // merge locally-imported cases

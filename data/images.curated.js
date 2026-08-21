@@ -1,5 +1,3 @@
-// 校对后定稿配图 / Curated case images (由 curate.html 导出)
-// 每个案例最多 5 张，[0] 为封面。放入 data/ 覆盖同名文件后刷新案例库生效。
 const CASE_CURATED = {
   "bj-trb-hutong": [
     {
@@ -120,29 +118,6 @@ const CASE_CURATED = {
     {
       "file": "images/chengdu-kuanzhai/03.jpg",
       "caption": "chengdu-kuanzhai 手动配图（请在校对窗口补充说明）",
-      "credit": "手动添加 · 来源待补充",
-      "page": "",
-      "source": "manual"
-    }
-  ],
-  "chengdu-taikoo-li": [
-    {
-      "file": "images/chengdu-taikoo-li/04.jpg",
-      "caption": "Details of Daci Temple & Tai Koo Li Chengdu 12 13 45 426000",
-      "credit": "来斤小仓鼠吧 · CC BY-SA 4.0 · via Wikimedia Commons",
-      "page": "",
-      "source": "existing"
-    },
-    {
-      "file": "images/chengdu-taikoo-li/07.jpg",
-      "caption": "chengdu-taikoo-li 手动配图（请在校对窗口补充说明）",
-      "credit": "手动添加 · 来源待补充",
-      "page": "",
-      "source": "manual"
-    },
-    {
-      "file": "images/chengdu-taikoo-li/06.jpg",
-      "caption": "chengdu-taikoo-li 手动配图（请在校对窗口补充说明）",
       "credit": "手动添加 · 来源待补充",
       "page": "",
       "source": "manual"
@@ -716,43 +691,6 @@ const CASE_CURATED = {
       "source": "existing"
     }
   ],
-  "sanlitun-taikoo-li": [
-    {
-      "file": "images/sanlitun-taikoo-li/01.jpg",
-      "caption": "sanlitun-taikoo-li 手动配图（请在校对窗口补充说明）",
-      "credit": "手动添加 · 来源待补充",
-      "page": "",
-      "source": "manual"
-    },
-    {
-      "file": "images/sanlitun-taikoo-li/02.jpg",
-      "caption": "Central square of Taikoo Li Sanlitun South (20200808171801)",
-      "credit": "N509FZ · CC BY-SA 4.0 · via Wikimedia Commons",
-      "page": "",
-      "source": "existing"
-    },
-    {
-      "file": "images/sanlitun-taikoo-li/03.jpg",
-      "caption": "Taikoo Li Sanlitun South (20200808170437)",
-      "credit": "N509FZ · CC BY-SA 4.0 · via Wikimedia Commons",
-      "page": "",
-      "source": "existing"
-    },
-    {
-      "file": "images/sanlitun-taikoo-li/04.jpg",
-      "caption": "Sanlitun at dusk",
-      "credit": "Leeluv · CC BY-SA 3.0 · via Wikimedia Commons",
-      "page": "",
-      "source": "existing"
-    },
-    {
-      "file": "images/sanlitun-taikoo-li/05.jpg",
-      "caption": "Sanlitun Village South Building View2",
-      "credit": "WiNG · CC BY-SA 3.0 · via Wikimedia Commons",
-      "page": "",
-      "source": "existing"
-    }
-  ],
   "seoul-bukchon": [
     {
       "file": "images/seoul-bukchon/01.jpg",
@@ -929,31 +867,6 @@ const CASE_CURATED = {
       "file": "images/sh-tianzifang/04.jpg",
       "caption": "Passage in Tianzifang Area",
       "credit": "そらみみ · CC BY-SA 4.0 · via Wikimedia Commons",
-      "page": "",
-      "source": "existing"
-    }
-  ],
-  "shanghai-xintiandi": [
-    {
-      "file": "images/shanghai-xintiandi/01.jpg",
-      "caption": "shanghai-xintiandi 手动配图（请在校对窗口补充说明）",
-      "credit": "手动添加 · 来源待补充",
-      "page": "",
-      "source": "manual"
-    }
-  ],
-  "shenzhen-dayun-tiandi": [
-    {
-      "file": "images/shenzhen-dayun-tiandi/01.jpg",
-      "caption": "shenzhen-dayun-tiandi 手动配图（请在校对窗口补充说明）",
-      "credit": "手动添加 · 来源待补充",
-      "page": "",
-      "source": "manual"
-    },
-    {
-      "file": "images/shenzhen-dayun-tiandi/03.jpg",
-      "caption": "大运天地3",
-      "credit": "Lhzss8 · CC BY-SA 4.0 · via Wikimedia Commons",
       "page": "",
       "source": "existing"
     }
