@@ -954,6 +954,142 @@ const CASES_EN = {
       transit: "Multiple Green Line metro stations direct; walkable to the CBD."
     },
     success: ["Brownstone architecture", "Row-house commerce", "Boutique retail", "Gallery cluster", "8-block gradient", "Intimate scale"]
+  },
+  "integer-kunming": {
+    summary: "An Oval Partnership work. INTEGER Kunming — the first eco-town in southern China: four intelligent-and-green houses and a 2,000 sqm visitor centre form a live-in research and education platform built on sustainable lifestyles, environmental protection and open-platform smart technology.",
+    dims: {
+      facade: "Demonstration house façades focus on showcasing green and intelligent components.",
+      landscape: "Set on a naturally vegetated site, retaining the native greenery as the base.",
+      circulation: "Demonstration-cluster circulation serving visitor flows.",
+      landmark: "A demonstration project standing on ideas rather than landmark imagery.",
+      signage: "Educational, science-oriented signage serving visits and learning.",
+      scale: "Small demonstration-cluster scale.",
+      program: "Four intelligent-and-green houses plus a 2,000 sqm visitor centre.",
+      material: "An integrated application platform for intelligent and green building technologies.",
+      lighting: "Primarily functional lighting.",
+      narrative: "The first eco-town in southern China and the first INTEGER project in mainland China — technology evaluation and public education staged in real-life settings.",
+      transit: "Adjacent to the International Horticultural Expo site on Kunming's north-eastern fringe."
+    },
+    success: ["Eco demonstration", "Technology showcase platform", "Public education", "Intelligent & green"]
+  },
+  "integer-bamboo-house": {
+    summary: "An Oval Partnership work. The world's first multi-storey laminated bamboo house — exploring affordable, replicable ecological construction with bamboo, a fast-growing carbon-fixing material. DFA Design for Asia Silver Award winner.",
+    dims: {
+      facade: "The bamboo structure is the façade; the material speaks for itself.",
+      landscape: "Designed for the hilly terrain of western China, following the slope.",
+      circulation: "A two-storey experimental house with minimal circulation.",
+      landmark: "A small-scale research artefact.",
+      signage: "No wayfinding requirements.",
+      scale: "A 200 sqm small-scale experimental building.",
+      program: "Experimental residential function.",
+      material: "The world's first multi-storey laminated bamboo house — bamboo matures in four years, sequesters carbon while growing, is light and earthquake-resistant, and can be built by local villagers without heavy equipment. 2012 DFA Silver Award and 2012 International Property Award (Asia Pacific) Best Single Residence.",
+      lighting: "Predominantly daylighting.",
+      narrative: "An 'action research' paradigm — a technology-transfer project with local academic institutions including Kunming University of Science and Technology, offering an affordable, ecologically sensitive building path for China's townships and villages.",
+      transit: "Located within the Expo INTEGER site."
+    },
+    success: ["Bamboo structure", "Low-carbon construction", "Local buildability", "Technology transfer"]
+  },
+  "integer-innhouse": {
+    summary: "An Oval Partnership work. An eco guest house on a forested hill — 17 suites scattered village-like across four L-shaped structures; passive design and water-recycling technologies make each room an extension of the landscape.",
+    dims: {
+      facade: "Timber-clad volumes stripped of decoration, expressed through form and material alone.",
+      landscape: "A 'village for travellers' on a forested hillside — numerous retained trees, natural trails and terraced courtyards at varying levels linking four L-shaped buildings; every guest suite reads as an extension of the landscape.",
+      circulation: "Trails and courtyards at varying levels thread the cluster; viewing bridge-corridors link the three-part units.",
+      landmark: "Quietly absorbed into the valley landscape.",
+      signage: "Minimal wayfinding.",
+      scale: "A village-like cluster of 17 suites at human scale.",
+      program: "Eco guest house with valley-landscape experiences.",
+      material: "Timber cladding and reconstituted bamboo decking — materials of low embodied energy.",
+      lighting: "Graded lighting from soft vertical-window daylight to the private bathroom end.",
+      narrative: "An integrated sustainability narrative: passive design, site watershed conservation, solar thermal hot water, rainwater recycling and grey-water reuse.",
+      transit: "Within Kunming's Expo Eco-Town district."
+    },
+    success: ["Eco tourism", "Passive design", "Retained trees", "Village-like cluster"]
+  },
+  "hotel-haitang-bay": {
+    summary: "An Oval Partnership work. 1 Hotels' first property in Asia — designed from the inside out around nature: an intelligent single-loaded structure gives every room equal daylight, ventilation and ocean views, defining eco-luxury resort design.",
+    dims: {
+      facade: "An intelligent single-loaded structure ensures all rooms enjoy daylight, cross-ventilation and ocean views; shading screens respond to the tropical climate.",
+      landscape: "Perched 22 metres above sea level overlooking the bay; daylight and sea breezes organize the landscape.",
+      circulation: "Single-loaded corridors make every room equally light, airy and sea-facing.",
+      landmark: "A signature resort destination on Haitang Bay.",
+      signage: "Standard resort wayfinding.",
+      scale: "A large-volume hotel broken down village-style.",
+      program: "Hotel + dining + leisure resort mix.",
+      material: "Drawing on Hainan's local geography and cultural character.",
+      lighting: "Daylight first; restrained night lighting.",
+      narrative: "1 Hotels' first property in Asia — a 'nature inside-out' eco-luxury narrative redefining the 21st-century resort hotel.",
+      transit: "Haitang Bay resort area; reliant on shuttle connections."
+    },
+    success: ["Eco luxury", "Single-loaded ocean views", "Local materials", "Brand's Asia debut"]
+  },
+  "lost-cities-kampong": {
+    summary: "An Oval Partnership curatorial work. The first in the Lost Cities series — staged during the Singapore Night Festival, it reimagines the Kampong port cities of the pre-colonial 14th century, delivering historical wisdom on sustainable cultures and livelihoods through immersive storytelling.",
+    dims: {
+      facade: "Exhibition installation; no architectural façade dimension.",
+      landscape: "Set within the historic grounds of Fort Canning Park.",
+      circulation: "A narrative route guides visitors through reimagined 14th-century port-city scenes.",
+      landmark: "Patron project of the Singapore Night Festival 2023.",
+      signage: "Integrated exhibition graphics and visitor guidance.",
+      scale: "Exhibition scale.",
+      program: "Exhibition plus Night Festival public programmes.",
+      material: "Multimedia installations by a multidisciplinary team of artists.",
+      lighting: "Night-time exhibition lighting is the atmosphere itself.",
+      narrative: "World-class curatorial narrative — reimagining 14th-century Southeast Asian Kampong port cities where trees were worth more than land, genders held equal rights, and wealth grew through knowledge: real historical wisdom for contemporary sustainability.",
+      transit: "Fort Canning Centre; reachable by metro."
+    },
+    success: ["Curatorial narrative", "Reimagined history", "Public education", "Cross-disciplinary collaboration"]
+  },
+  "tung-st-42": {
+    summary: "An Oval Partnership work. A boutique residence in Sheung Wan's Poho quarter — a grid façade drawn from the Tong Lau typology and neighbourhood fabric, with a ground-level retail podium integrated into the streetscape to activate street life.",
+    dims: {
+      facade: "A grid façade translating the Tong Lau shop-house typology — exposed columns and beams in a modular elevation echoing the Tai Ping Shan streetscape; a boutique paradigm of old-new dialogue.",
+      landscape: "Supplemented by streetscape greening and al-fresco dining terraces.",
+      circulation: "An individual lift lobby per residence — an exclusive arrival experience starting at the ground-floor lift.",
+      landmark: "Woven into the neighbourhood fabric rather than a standalone landmark.",
+      signage: "Restrained treatment.",
+      scale: "A 23-storey tower plus 3-storey podium; modular scale responding to the neighbourhood.",
+      program: "13 boutique residences (9 simplexes, 4 duplexes) above a 3-storey commercial podium.",
+      material: "Low-key painted and modular tiled finishes with accent metalwork, in keeping with the Tai Ping Shan character.",
+      lighting: "Primarily functional residential lighting.",
+      narrative: "Continuing the Tong Lau typology and the Poho quarter's story in a contemporary language; the ground floor activates street life.",
+      transit: "Sheung Wan's walkable Poho quarter with good public transport."
+    },
+    success: ["Tong Lau translation", "Neighbourhood fabric", "Ground-floor activation", "Boutique scale"]
+  },
+  "the-hub-office": {
+    summary: "An Oval Partnership work. The firm's new office, The Hub — placemaking methodology applied to itself: a cross-disciplinary 'creative laboratory' exploring how next-generation workspaces can host collaboration and creativity.",
+    dims: {
+      facade: "Interior project.",
+      landscape: "Connected to the city through window views.",
+      circulation: "Maximizing physical and online connectivity between members, encouraging cross-disciplinary encounters.",
+      landmark: "Interior office space.",
+      signage: "Minimal treatment.",
+      scale: "A 700 sqm single-floor space.",
+      program: "A 'creative laboratory' — architects together with in-house experts in urban policy, storytelling, social work, data science and more.",
+      material: "Sustainable material choices.",
+      lighting: "Daylight and panoramic views.",
+      narrative: "Placemaking applied to the firm itself — the office as laboratory, producing ideas through cross-disciplinary collaboration.",
+      transit: "Sheung Wan location with convenient transport."
+    },
+    success: ["Cross-disciplinary collaboration", "Placemaking", "Office as laboratory", "Sustainability"]
+  },
+  "scents-and-soil": {
+    summary: "A furniture art piece co-designed by Oval Partnership and HK Timberbank — a 400-year-old fallen camphor tree from Tai Po, 3D-scanned and upcycled into a sculptural concierge counter. FRAME Awards 2024 Furniture of the Year shortlist.",
+    dims: {
+      facade: "A furniture-scale work.",
+      landscape: "Placed within the lobby.",
+      circulation: "The concierge function is itself a circulation node.",
+      landmark: "The lobby's artistic focal point.",
+      signage: "The art piece itself carries the place identity.",
+      scale: "Furniture, human scale.",
+      program: "Concierge counter function.",
+      material: "A 400-year-old Tai Po camphor tree reclaimed and upcycled — 3D scanning reverse-engineers the trunk's rhythmic form; the annual rings and fragrance are the design. FRAME Awards 2024 Furniture of the Year shortlist.",
+      lighting: "Spotlighting accentuates the form.",
+      narrative: "'Distant fragrance announces the arrival of the noble' — an ancient tree reborn as a concierge counter, its scent still greeting guests.",
+      transit: "Located in the lobby of Standard Chartered Bank Building, Central."
+    },
+    success: ["Upcycling", "Material narrative", "Digital fabrication", "Award recognition"]
   }
 };
 if (typeof module !== "undefined" && module.exports) { module.exports = { CASES_EN }; }

@@ -619,7 +619,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;bor
       <button class="subtab" data-sub="cmp" onclick="switchLibSub('cmp')" data-i18n="lib.sub.cmp">对比分析</button>
     </div>
     <div class="subpane" id="libBrowseView">
-      <p class="lead" data-i18n="lib.lead">收录 33 个全球标杆商业街（含 Oval 的成都太古里、北京太古里、深圳大运天地），每个案例配实景图与 11 维设计标注。点击卡片进入 ArchDaily 式详情页：封面大图 + 图廊 + 逐维解析。暂无配图的案例显示优雅占位，在本地 images/&lt;案例id&gt;/ 放入照片后自动显示。</p>
+      <p class="lead" data-i18n="lib.lead">收录 64 个全球标杆案例（商业街标杆 + Oval 官网全部 16 件作品），每个案例配实景图与 11 维设计标注。点击卡片进入 ArchDaily 式详情页：封面大图 + 图廊 + 逐维解析。暂无配图的案例显示优雅占位，在本地 images/&lt;案例id&gt;/ 放入照片后自动显示。</p>
       <div class="filters">
         <div class="f"><label data-i18n="lib.filter.search">搜索</label><input type="search" id="fSearch" data-i18n-ph="lib.searchPh" placeholder="名称 / 城市 / 关键词"></div>
         <div class="f"><label data-i18n="lib.filter.region">区域</label><select id="fRegion"><option value="" data-i18n="lib.filter.all">全部</option></select></div>
@@ -649,7 +649,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;bor
       <button class="subtab" data-sub="chat" onclick="switchAdvSub('chat')" data-i18n="adv.sub.chat">AI 对话</button>
     </div>
     <div class="subpane" id="advGuideView">
-      <p class="lead" data-i18n="adv.lead">输入项目参数并填写城市，系统从 33 个案例库匹配相似标杆与本地类比案例，推送「可量化、可溯源、结合在地」的分维度设计指引：每个维度给出决策逻辑（核心目标 / 决策步骤 / 关键参数 / 出彩要点 / 常见误区）+ 量化依据（带案例实证）+ 适配法则 + 案例实证；并输出项目所在地研判（气候 / 业态 / 人文 / 尺度提示）。可在「关注重点」中直接提问（如「多宽的步行街最适宜本地」）。生成结果将以图文并茂方式呈现。</p>
+      <p class="lead" data-i18n="adv.lead">输入项目参数并填写城市，系统从 64 个案例库匹配相似标杆与本地类比案例，推送「可量化、可溯源、结合在地」的分维度设计指引：每个维度给出决策逻辑（核心目标 / 决策步骤 / 关键参数 / 出彩要点 / 常见误区）+ 量化依据（带案例实证）+ 适配法则 + 案例实证；并输出项目所在地研判（气候 / 业态 / 人文 / 尺度提示）。可在「关注重点」中直接提问（如「多宽的步行街最适宜本地」）。生成结果将以图文并茂方式呈现。</p>
       <div class="formcard">
         <div class="formgrid">
           <div class="f"><label data-i18n="adv.context">区位 / 语境</label><select id="aContext"></select></div>
@@ -692,7 +692,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;bor
               <textarea id="askText" data-i18n-ph="chat.askPh" placeholder="例：对比成都太古里和北京三里屯太古里的动线与立面？"></textarea>
               <button class="btn" id="askSend" data-i18n="chat.send">发送</button>
             </div>
-            <div class="chat-tools"><span id="askHint" data-i18n="chat.askHint">本地检索 56 案例 + 92 法则 · 无需联网</span></div>
+            <div class="chat-tools"><span id="askHint" data-i18n="chat.askHint">本地检索 64 案例 + 92 法则 · 无需联网</span></div>
           </div>
         </div>
         <!-- 窗口 2：AI 生图（保留原功能） -->
@@ -993,7 +993,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;bor
       <div class="feat-card" onclick="goTab('lib')">
         <div class="fc-icon">🏛</div>
         <h3 data-i18n="about.feat.lib.title">案例库</h3>
-        <p data-i18n="about.feat.lib.desc">33 个全球标杆商业街（含 Oval 代表作），统一按 11 维标注、含星级评价与实景图。点击进入 ArchDaily 式图文详情页。</p>
+        <p data-i18n="about.feat.lib.desc">64 个全球标杆案例（商业街标杆 + Oval 官网全部作品），统一按 11 维标注、含星级评价与实景图。点击进入 ArchDaily 式图文详情页。</p>
       </div>
       <div class="feat-card" onclick="goTab('lib','cmp')">
         <div class="fc-icon">⚖</div>
@@ -1003,7 +1003,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;bor
       <div class="feat-card" onclick="goTab('adv','chat')">
         <div class="fc-icon">💬</div>
         <h3 data-i18n="about.feat.chat.title">AI 对话</h3>
-        <p data-i18n="about.feat.chat.desc">双窗口：文字问答（本地检索 56 案例 + 92 法则，直接回答公司项目案例对比与维度数据）；AI 生图（支持纯文字生图，或上传效果图图生图重绘，可对比、可下载）。</p>
+        <p data-i18n="about.feat.chat.desc">双窗口：文字问答（本地检索 64 案例 + 92 法则，直接回答公司项目案例对比与维度数据）；AI 生图（支持纯文字生图，或上传效果图图生图重绘，可对比、可下载）。</p>
       </div>
       <div class="feat-card" onclick="goTab('imp','code')">
         <div class="fc-icon">📕</div>
@@ -1054,12 +1054,12 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;bor
   <div class="form-actions"><button class="btn" onclick="saveSettings()" data-i18n="settings.save">保存</button><button class="btn ghost" onclick="closeSettings()" data-i18n="settings.cancel">取消</button></div>
 </div></div>
 
-<script src="data/cases.js"></script>
-<script src="data/cases_en.js"></script>
-<script src="data/images.js?v=1.39.2"></script>
+<script src="data/cases.js?v=1.40.0"></script>
+<script src="data/cases_en.js?v=1.40.0"></script>
+<script src="data/images.js?v=1.40.0"></script>
 <script src="data/images.candidates.js"></script>
-<script src="data/images.curated.js?v=1.39.2"></script>
-<script src="data/gooood.curated.js?v=1.39.2"></script>
+<script src="data/images.curated.js?v=1.40.0"></script>
+<script src="data/gooood.curated.js?v=1.40.0"></script>
 <script src="data/principles.js"></script>
 <script src="data/guidance.js"></script>
 <script src="data/codes.js"></script>
@@ -1077,7 +1077,7 @@ function resolveImages(c){
   return ((typeof CASE_IMAGES!=="undefined" && CASE_IMAGES[c.id])||[]);
 }
 // 版本变更时清空旧的 localStorage 配图覆盖（防止旧 curated 数据压新图）
-try{ if(localStorage.getItem('oval_curated_ver')!=='1.39.2'){ localStorage.removeItem('oval_curated_full'); localStorage.setItem('oval_curated_ver','1.39.2'); } }catch(e){}
+try{ if(localStorage.getItem('oval_curated_ver')!=='1.40.0'){ localStorage.removeItem('oval_curated_full'); localStorage.setItem('oval_curated_ver','1.40.0'); } }catch(e){}
 let CASES_RUNTIME = (typeof CASES !== "undefined") ? CASES.map(c=>({...c, images:resolveImages(c)})) : [];
 
 // ---------- 案例正文英文切换（v1.34.0）----------
@@ -1121,7 +1121,7 @@ function dimLabel(k){ return t("dim."+k) || k; }
 
 // ================= 版本号（每次更新请同步递增 APP_VERSION 与 APP_BUILD） =================
 // 显示在界面头部徽标与页脚，便于复制分发时核对是否为最新版。
-const APP_VERSION = "1.39.7";
+const APP_VERSION = "1.40.0";
 const APP_BUILD   = "2026-08-21";
 
 // merge locally-imported cases

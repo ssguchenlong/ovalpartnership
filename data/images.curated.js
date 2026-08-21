@@ -990,11 +990,53 @@ const CASE_CURATED = {
   ],
   "xian-qujiang": [
     {
-      "file": "images/xian-qujiang/01.jpg",
-      "caption": "xian-qujiang 手动配图（请在校对窗口补充说明）",
-      "credit": "手动添加 · 来源待补充",
-      "page": "",
-      "source": "manual"
+      "file": "https://www.ovalpartnership.com/images/projects/key/f683a580797f7f9f.jpg",
+      "caption": "西安曲江创意谷 · 创意文化中心",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Xian-Qujiang-Creative-Cultural-Centre",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/20001d0bdafac269.jpg",
+      "caption": "西安曲江创意谷 · 室内展演空间",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Xian-Qujiang-Creative-Cultural-Centre",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/423dc53b95eec93d.jpg",
+      "caption": "西安曲江创意谷 · 剧场空间",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Xian-Qujiang-Creative-Cultural-Centre",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/ab133d7f6c214c6f.jpg",
+      "caption": "西安曲江创意谷 · 地下文化空间",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Xian-Qujiang-Creative-Cultural-Centre",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/3af39e442d5daff9.jpg",
+      "caption": "西安曲江创意谷 · 材料细部",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Xian-Qujiang-Creative-Cultural-Centre",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/cf1fd3de429949cd.jpg",
+      "caption": "西安曲江创意谷 · 空间氛围",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Xian-Qujiang-Creative-Cultural-Centre",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/8ffa3505c84fe616.jpg",
+      "caption": "西安曲江创意谷 · 演出场景",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Xian-Qujiang-Creative-Cultural-Centre",
+      "source": "oval"
     }
   ],
   "yunnan-dongfengyun": [
@@ -1004,6 +1046,365 @@ const CASE_CURATED = {
       "credit": "手动添加 · 来源待补充",
       "page": "",
       "source": "manual"
+    }
+  ],
+  "integer-kunming": [
+    {
+      "file": "https://www.ovalpartnership.com/images/projects/key/f67e45501958e491.jpg",
+      "caption": "INTEGER 昆明 · 智能绿色住宅",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/INTEGER-Kunming",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/C007-1.jpg",
+      "caption": "INTEGER 昆明 · 示范住宅",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/INTEGER-Kunming",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/C007-4.jpg",
+      "caption": "INTEGER 昆明 · 智能技术应用",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/INTEGER-Kunming",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/C007-5.jpg",
+      "caption": "INTEGER 昆明 · 生态示范",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/INTEGER-Kunming",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/4a1f37c8532004c2.jpg",
+      "caption": "INTEGER 昆明 · 访客中心",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/INTEGER-Kunming",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/2835dd9615e722bc.jpg",
+      "caption": "INTEGER 昆明 · 环境基底",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/INTEGER-Kunming",
+      "source": "oval"
+    }
+  ],
+  "integer-bamboo-house": [
+    {
+      "file": "https://www.ovalpartnership.com/images/projects/key/650427bede1f9bc7.jpg",
+      "caption": "INTEGER 竹屋 · 世界首栋多层胶合竹住宅",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/INTEGER-Kunming-Bamboo-House",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/IMG_6952(reduced).jpg",
+      "caption": "INTEGER 竹屋 · 竹结构外观",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/INTEGER-Kunming-Bamboo-House",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/IMG_7028(reduced).jpg",
+      "caption": "INTEGER 竹屋 · 竹材细部",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/INTEGER-Kunming-Bamboo-House",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/IMG_6981(reduced)%20(1).jpg",
+      "caption": "INTEGER 竹屋 · 建造过程",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/INTEGER-Kunming-Bamboo-House",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/16b90ac624b4645a.jpg",
+      "caption": "INTEGER 竹屋 · 室内",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/INTEGER-Kunming-Bamboo-House",
+      "source": "oval"
+    }
+  ],
+  "integer-innhouse": [
+    {
+      "file": "https://www.ovalpartnership.com/images/projects/key/c5e79b30ebe8e8ee.jpg",
+      "caption": "昆明 INNHOUSE 生态客舍",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Innhouse",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/C006-1.jpg",
+      "caption": "INNHOUSE · 森林山坡上的旅人村落",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Innhouse",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/C006-2.jpg",
+      "caption": "INNHOUSE · 木饰面建筑体量",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Innhouse",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/C006-3.jpg",
+      "caption": "INNHOUSE · 客房即景观延伸",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Innhouse",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/C006-4.jpg",
+      "caption": "INNHOUSE · 自然小径与庭院",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Innhouse",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/C006-6.jpg",
+      "caption": "INNHOUSE · 建筑与景观",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/Innhouse",
+      "source": "oval"
+    }
+  ],
+  "hotel-haitang-bay": [
+    {
+      "file": "https://www.ovalpartnership.com/images/projects/key/61ceb0389fb20e9d.jpg",
+      "caption": "三亚 1 酒店海棠湾",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/1-Hotel-Haitang-Bay",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/1%20Hotel/%E8%A5%BF%E5%8C%97%E9%B8%9F%E7%9E%B0%E5%A4%9C%E6%99%AF.jpg",
+      "caption": "1 酒店 · 海棠湾夜景",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/1-Hotel-Haitang-Bay",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/1%20Hotel/%E5%BB%BA%E7%AD%91%E4%B8%9C%E4%BE%A7%E5%BA%AD%E9%99%A2%E4%B8%80%E9%9A%85.jpg",
+      "caption": "1 酒店 · 东侧庭院",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/1-Hotel-Haitang-Bay",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/1%20Hotel/%E5%AE%A2%E6%88%BF%E8%B5%B0%E5%BB%8A%E6%9C%A8%E8%8A%B1%E6%A0%BC%E5%A2%99.jpg",
+      "caption": "1 酒店 · 客房走廊绿植墙",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/1-Hotel-Haitang-Bay",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/1%20Hotel/%E7%9F%B3%E7%AC%BC%E5%A2%99%E4%B8%8E%E9%81%AE%E9%98%B3%E9%87%91%E5%B1%9E%E7%BD%91%E5%B1%80%E9%83%A8.jpg",
+      "caption": "1 酒店 · 石笼墙与遮阳金属网",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/1-Hotel-Haitang-Bay",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/1%20Hotel/%E7%BB%93%E5%90%88%E9%81%AE%E9%98%B3%E5%92%8C%E6%A4%8D%E7%89%A9%E6%88%90%E9%95%BF%E7%9A%84%E5%BB%BA%E7%AD%91%E7%AB%8B%E9%9D%A2%E7%A9%BA%E9%97%B4%20lr.jpg",
+      "caption": "1 酒店 · 结合遮阳与植物生长的立面",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/1-Hotel-Haitang-Bay",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/1%20Hotel/%E5%BB%BA%E7%AD%91%E4%B8%8A%E5%B1%82%E4%B8%9C%E4%BE%A7%E9%9C%B2%E5%8F%B0.jpg",
+      "caption": "1 酒店 · 上尧东侧露台",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/1-Hotel-Haitang-Bay",
+      "source": "oval"
+    }
+  ],
+  "lost-cities-kampong": [
+    {
+      "file": "https://www.ovalpartnership.com/images/events/landing.jpg",
+      "caption": "失落城市系列 · 甘榜港城展览",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/kampong-port-cities-of-the-pre-colonial-era-exhibition",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/images/events/exhibit/photo1.jpg",
+      "caption": "甘榜港城 · 展览现场",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/kampong-port-cities-of-the-pre-colonial-era-exhibition",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/images/events/exhibit/photo2.jpg",
+      "caption": "甘榜港城 · 沉浸式场景",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/kampong-port-cities-of-the-pre-colonial-era-exhibition",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/images/events/exhibit/photo3.jpg",
+      "caption": "甘榜港城 · 多媒介装置",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/kampong-port-cities-of-the-pre-colonial-era-exhibition",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/images/events/exhibit/photo4.jpg",
+      "caption": "甘榜港城 · 夜节现场",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/kampong-port-cities-of-the-pre-colonial-era-exhibition",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/images/events/exhibit/photo5.jpg",
+      "caption": "甘榜港城 · 展陈细部",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/kampong-port-cities-of-the-pre-colonial-era-exhibition",
+      "source": "oval"
+    }
+  ],
+  "tung-st-42": [
+    {
+      "file": "https://www.ovalpartnership.com/images/projects/key/88b703bc0299e3dd.jpg",
+      "caption": "香港东街 42 号",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/42-Tung-St",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/42%20Tung%20St/42%20TUNG%20ST_DRONE%20SHOTS_1-2_low%20res_for%20digital_V1.jpg",
+      "caption": "42 Tung St. · 上环街坊肌理鸟瞰",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/42-Tung-St",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/42%20Tung%20St/42%20TUNG%20ST_HERO%20SHOTS_47_low%20res_for%20digital_V1%20copy.jpg",
+      "caption": "42 Tung St. · 网格立面",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/42-Tung-St",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/42%20Tung%20St/42%20TUNG%20ST_HERO%20SHOTS_73_low%20res_for%20digital_V1.jpg",
+      "caption": "42 Tung St. · 街道界面",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/42-Tung-St",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/42%20Tung%20St/42%20TUNG%20ST_HERO%20SHOTS_67_low%20res_for%20digital_V1%20copy.jpg",
+      "caption": "42 Tung St. · 立面细部",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/42-Tung-St",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/42%20Tung%20St/42%20TUNG%20ST_HERO%20SHOTS_16_low%20res_for%20digital_V1.jpg",
+      "caption": "42 Tung St. · 唐楼转译",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/42-Tung-St",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/42%20Tung%20St/42%20TUNG%20ST_HERO%20SHOTS_1_low%20res_for%20digital_V1.jpg",
+      "caption": "42 Tung St. · 与街景一体化",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/42-Tung-St",
+      "source": "oval"
+    }
+  ],
+  "the-hub-office": [
+    {
+      "file": "https://www.ovalpartnership.com/images/projects/key/9363d8d5b6e9f64c.jpg",
+      "caption": "The Hub · 欧华尔新办公室",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/The-Hub-the-Oval-Partnerships-New-Office",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/Oval%20Office%20Images/Oval_Sheung%20Wan%20Office_XU%20LIANG%20LEON_%EF%BF%BCXL_07128%20copy.jpg",
+      "caption": "The Hub · 创意实验室",
+      "credit": "the Oval Partnership 官网 · 摄影 Xu Liang Leon",
+      "page": "https://www.ovalpartnership.com/en/project/The-Hub-the-Oval-Partnerships-New-Office",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/Oval%20Office%20Images/Oval_Sheung%20Wan%20Office_XU%20LIANG%20LEON_%EF%BF%BCDSC01751%20copy.jpg",
+      "caption": "The Hub · 协作空间",
+      "credit": "the Oval Partnership 官网 · 摄影 Xu Liang Leon",
+      "page": "https://www.ovalpartnership.com/en/project/The-Hub-the-Oval-Partnerships-New-Office",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/Oval%20Office%20Images/Oval_Sheung%20Wan%20Office_XU%20LIANG%20LEON_%EF%BF%BCXL_07164%20copy.jpg",
+      "caption": "The Hub · 跨学科工坊",
+      "credit": "the Oval Partnership 官网 · 摄影 Xu Liang Leon",
+      "page": "https://www.ovalpartnership.com/en/project/The-Hub-the-Oval-Partnerships-New-Office",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/Oval%20Office%20Images/Oval_Sheung%20Wan%20Office_XU%20LIANG%20LEON_%EF%BF%BCDSC01805%20copy.jpg",
+      "caption": "The Hub · 会议与展示",
+      "credit": "the Oval Partnership 官网 · 摄影 Xu Liang Leon",
+      "page": "https://www.ovalpartnership.com/en/project/The-Hub-the-Oval-Partnerships-New-Office",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/Oval%20Office%20Images/Trunking2.jpg",
+      "caption": "The Hub · 空间细部",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/The-Hub-the-Oval-Partnerships-New-Office",
+      "source": "oval"
+    }
+  ],
+  "scents-and-soil": [
+    {
+      "file": "https://www.ovalpartnership.com/images/projects/key/76aef580cd8364c5.jpg",
+      "caption": "The Scents and the Soil · 香与土",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/The-Scents-and-the-Soil",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/The%20Scents%20and%20the%20Soil/HKTimberbank_SCBB_HLP_concierge_completed_11_PIMG_7921-cover.jpg",
+      "caption": "香与土 · 礼宾台完成品",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/The-Scents-and-the-Soil",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/The%20Scents%20and%20the%20Soil/_website.jpg",
+      "caption": "香与土 · 樟木年轮",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/The-Scents-and-the-Soil",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/The%20Scents%20and%20the%20Soil/G1404010_A1%20panel%202.jpg",
+      "caption": "香与土 · 形体演绎",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/The-Scents-and-the-Soil",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/The%20Scents%20and%20the%20Soil/makingof_0-cover.jpg",
+      "caption": "香与土 · 3D 扫描与制作",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/The-Scents-and-the-Soil",
+      "source": "oval"
+    },
+    {
+      "file": "https://www.ovalpartnership.com/upload/projects/The%20Scents%20and%20the%20Soil/recycle_ver-cover.jpg",
+      "caption": "香与土 · 升级再造过程",
+      "credit": "the Oval Partnership 官网",
+      "page": "https://www.ovalpartnership.com/en/project/The-Scents-and-the-Soil",
+      "source": "oval"
     }
   ]
 };
