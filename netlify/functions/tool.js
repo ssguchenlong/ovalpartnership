@@ -16,8 +16,9 @@
  *   GET  /api/tool/job?id=     -> 任务状态（函数模式无后台任务）
  *   POST /api/tool/cancel      -> 取消（函数模式无后台任务）
  */
-const path = require("path");
-const downloader = require(path.join(__dirname, "..", "..", "tools", "downloader.js"));
+// 关键：用静态字面量 require，确保 Netlify 函数打包器能追踪并包含该文件。
+// （动态 require(path.join(...)) 在 Netlify 打包时无法被静态分析，会导致运行时找不到模块）
+const downloader = require("../../tools/downloader.js");
 
 function json(statusCode, obj) {
   return {

@@ -1,0 +1,9 @@
+{
+  "name": "ovalpartnership-case-library",
+  "version": "1.39.0",
+  "private": true,
+  "description": "商业街案例库 + 案例图片下载器（含 Netlify Functions 后端）",
+  "dependencies": {
+    "@netlify/blobs": "^6.0.0"
+  }
+}
