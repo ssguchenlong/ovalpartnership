@@ -22,3 +22,9 @@
   from = "/api/feedback"
   to = "/.netlify/functions/feedback"
   status = 200
+
+# 将 /api/amap 重写到高德地图代理 Function（服务器默认 Key 在此转发，不暴露给浏览器）
+[[redirects]]
+  from = "/api/amap"
+  to = "/.netlify/functions/amap"
+  status = 200

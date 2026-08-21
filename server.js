@@ -45,6 +45,25 @@ const fs = require("fs");
 const path = require("path");
 const downloader = require("./tools/downloader.js");
 
+// ---------- 加载本地 .env（零依赖，仅本机/服务器本地用；不读则依赖真实环境变量） ----------
+// 用途：把敏感密钥（如高德地图 AMAP_API_KEY）放在 .env 中，避免硬编码进源码 / 提交到仓库。
+// 注意：.env 必须加入 .gitignore，切勿提交。生产部署（Netlify 等）改用平台环境变量。
+(function loadDotEnv() {
+  try {
+    const envPath = path.join(__dirname, ".env");
+    if (!fs.existsSync(envPath)) return;
+    const txt = fs.readFileSync(envPath, "utf8");
+    txt.split(/\r?\n/).forEach((line) => {
+      const m = line.match(/^\s*([\w.-]+)\s*=\s*(.*)\s*$/);
+      if (!m) return;                       // 跳过空行与注释（# 开头）
+      if (line.trim().startsWith("#")) return;
+      const k = m[1];
+      let v = m[2].replace(/^["']|["']$/g, ""); // 去包裹引号
+      if (process.env[k] === undefined) process.env[k] = v;
+    });
+  } catch (e) { /* .env 解析失败不影响启动 */ }
+})();
+
 const ROOT = __dirname;
 const FEEDBACK_FILE = path.join(ROOT, "data", "feedback.json");
 const PORT = parseInt(process.env.PORT, 10) || 8080;
