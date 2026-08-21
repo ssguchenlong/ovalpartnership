@@ -1,0 +1,3045 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商业街案例研究与设计指导系统 · Oval</title>
+<style>/* ============================================================
+   商业街案例研究与设计指导系统 · 视觉系统 v2
+   设计语言：建筑期刊 / ArchDaily 编辑风
+   · 暖纸底 + 赤陶强调色，近黑墨色文字（避免纯黑/纯白）
+   · 流体排版 clamp() + 衬线展示字
+   · ease-out-expo 状态动效（无回弹）
+   · 仅替换样式，保留所有 JS 依赖的 class/ID 选择器
+   ============================================================ */
+
+:root{
+  --paper:#f4f1ea;
+  --paper-2:#eee7d8;
+  --panel:#fffdf8;
+  --ink:#221d16;
+  --ink-2:#4a4138;
+  --muted:#8b8073;
+  --line:#e7ddca;
+  --line-2:#d9ccb3;
+  --accent:#a85d31;
+  --accent-soft:#c89a5e;
+  --accent-deep:#7c4222;
+  --gold:#c7913a;
+  --good:#4f8165;
+  --good-soft:#cfe3d4;
+  --star:#cf9133;
+  --chip:#efe7d8;
+  --shadow-sm:0 1px 2px rgba(54,42,28,.05),0 5px 16px rgba(54,42,28,.06);
+  --shadow:0 4px 14px rgba(54,42,28,.08),0 18px 46px rgba(54,42,28,.12);
+  --shadow-lg:0 8px 24px rgba(54,42,28,.1),0 28px 70px rgba(54,42,28,.16);
+  --radius:14px; --radius-sm:10px; --radius-lg:18px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --t:.3s var(--ease);
+  --maxw:1240px;
+  --serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:var(--sans);font-size:15px;line-height:1.68;color:var(--ink);
+  background:
+    radial-gradient(1100px 560px at 84% -8%,#faf6ec 0%,transparent 60%),
+    radial-gradient(900px 500px at -6% 4%,#f1ebdd 0%,transparent 55%),
+    var(--paper);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;letter-spacing:.2px;line-height:1.25}
+a{color:var(--accent);text-decoration:none;transition:color var(--t)}
+a:hover{color:var(--accent-deep)}
+::selection{background:rgba(168,93,49,.18)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+/* ---------- header ---------- */
+header{
+  background:rgba(255,253,248,.82);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
+  border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(54,42,28,.04);
+  padding:14px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  position:sticky;top:0;z-index:20;
+}
+header .brand{display:flex;align-items:center;gap:12px}
+header .brand .logo{
+  width:40px;height:40px;border-radius:11px;flex:0 0 auto;
+  background:linear-gradient(135deg,var(--accent),var(--accent-deep) 70%,#5c3219);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(124,66,34,.32),inset 0 1px 0 rgba(255,255,255,.18);
+}
+header .brand .logo svg{width:21px;height:21px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.18))}
+header .brand .bt{display:flex;flex-direction:column}
+header .brand h1{margin:0;font-size:18px;line-height:1.2;color:var(--ink)}
+header .brand p{margin:2px 0 0;color:var(--muted);font-size:11.5px;font-family:var(--sans);letter-spacing:.1px}
+nav{display:flex;gap:3px;flex-wrap:wrap}
+nav button{
+  background:none;border:none;padding:8px 14px;border-radius:var(--radius-sm);cursor:pointer;
+  font-size:13.5px;color:var(--muted);font-family:var(--sans);font-weight:500;transition:var(--t);position:relative;
+}
+nav button:hover{background:var(--chip);color:var(--ink)}
+nav button.active{background:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(168,93,49,.28)}
+/* 语言切换 */
+.lang-switch{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:12px;color:var(--muted)}
+.lang-switch>span{text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+.lang-btn{background:transparent;border:1px solid var(--line-2);color:var(--muted);padding:5px 10px;border-radius:8px;cursor:pointer;font-family:var(--sans);font-size:12px;font-weight:500;transition:var(--t)}
+.lang-btn:hover{border-color:var(--accent);color:var(--accent)}
+.lang-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+main{max-width:var(--maxw);margin:0 auto;padding:clamp(24px,3vw,38px) 20px 60px}
+.section{display:none}
+.section.active{display:block;animation:fade .4s var(--ease)}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.lead{color:var(--ink-2);margin:0 0 22px;font-size:14.5px;line-height:1.75;max-width:78ch}
+.lead b{color:var(--ink)}
+.sec-h{
+  font-size:clamp(20px,2.4vw,26px);margin:0 0 18px;padding-bottom:11px;
+  border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;position:relative;color:var(--ink);
+}
+.sec-h::after{content:"";position:absolute;left:0;bottom:-1px;width:56px;height:3px;background:var(--accent);border-radius:3px}
+
+/* ---------- filters ---------- */
+.filters{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px;align-items:flex-end}
+.filters .f{display:flex;flex-direction:column;gap:6px}
+.filters label{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:700}
+.filters input,.filters select{
+  padding:10px 13px;border:1px solid var(--line-2);border-radius:var(--radius-sm);
+  background:var(--panel);font-family:var(--sans);font-size:13.5px;min-width:132px;color:var(--ink);transition:var(--t);
+  box-shadow:0 1px 2px rgba(54,42,28,.03);
+}
+.filters input:hover,.filters select:hover{border-color:var(--accent-soft)}
+.filters input:focus,.filters select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(168,93,49,.14)}
+.filters input[type=search]{min-width:210px}
+
+/* ---------- card grid ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:22px}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0;cursor:pointer;
+  box-shadow:var(--shadow-sm);transition:transform var(--t),box-shadow var(--t),border-color var(--t);overflow:hidden;
+}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:var(--accent-soft)}
+.card h3{margin:0 0 2px;font-size:17px}
+.card .en{color:var(--muted);font-size:12px;font-style:italic;margin-bottom:8px}
+.card .meta{font-size:12px;color:var(--muted);margin-bottom:8px}
+.card .meta b{color:var(--ink);font-weight:600}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.tag{background:var(--chip);color:var(--ink-2);font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid rgba(168,93,49,.06)}
+.scoremeta{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--accent);margin-top:10px;font-weight:600;letter-spacing:.2px}
+
+/* ---------- modal / detail ---------- */
+.overlay{position:fixed;inset:0;background:rgba(35,28,18,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  display:none;align-items:flex-start;justify-content:center;padding:40px 16px;z-index:50;overflow:auto}
+.overlay.show{display:flex;animation:fade .3s var(--ease)}
+.modal{background:var(--panel);max-width:880px;width:100%;border-radius:var(--radius-lg);padding:28px 30px;
+  box-shadow:var(--shadow-lg);animation:modalIn .42s var(--ease)}
+@keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+.modal .close{float:right;position:relative;z-index:6;border:none;background:rgba(255,253,248,.94);width:36px;height:36px;border-radius:50%;
+  cursor:pointer;font-size:18px;color:var(--ink);box-shadow:0 3px 10px rgba(0,0,0,.16);transition:var(--t);line-height:1}
+.modal .close:hover{background:#fff;transform:rotate(90deg);box-shadow:0 5px 14px rgba(0,0,0,.22)}
+.modal h2{margin:0 0 2px;font-size:24px}
+.modal .sub{color:var(--muted);font-style:italic;margin-bottom:14px}
+.modal .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px 20px;
+  background:linear-gradient(135deg,var(--paper),var(--paper-2));padding:16px 18px;border-radius:12px;margin-bottom:18px;font-size:13px;border:1px solid var(--line)}
+.modal .facts span b{color:var(--accent);font-weight:700}
+.summary{background:#fbf8f1;border-left:3px solid var(--accent);padding:13px 16px;border-radius:10px;
+  margin-bottom:18px;font-size:14px;line-height:1.7}
+.dimrow{border-top:1px solid var(--line);padding:13px 0;display:grid;grid-template-columns:150px 1fr;gap:12px}
+.dimrow .dl{font-weight:700;font-size:13.5px}
+.dimrow .dl .st{color:var(--star);font-size:13px;letter-spacing:1px}
+.dimrow .dn{font-size:13.5px;color:#433f39}
+.succ{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+
+/* ---------- image placeholders ---------- */
+.ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#a99e8c;font-size:11px;text-align:center;gap:4px;padding:8px;
+  background:repeating-linear-gradient(45deg,#ece3d1,#ece3d1 11px,#e3d9c4 11px,#e3d9c4 22px)}
+.ph .phname{font-size:13px;color:#7a6f5d;font-weight:700;line-height:1.3;font-family:var(--serif)}
+
+/* 案例卡片：图主导 */
+.card-media{position:relative;aspect-ratio:4/3;background:var(--paper-2);overflow:hidden}
+.card-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s var(--ease)}
+.card:hover .card-media img{transform:scale(1.045)}
+.card-media::after{content:"";position:absolute;inset:0;box-shadow:inset 0 -40px 50px -30px rgba(34,29,22,.4);opacity:.7;pointer-events:none}
+.card-body{padding:16px 18px 18px}
+.card-body h3{margin:0 0 2px;font-size:17px}
+.card-body .en{color:var(--muted);font-size:12px;font-style:italic;margin-bottom:6px}
+.card-body .meta{font-size:12px;color:var(--muted);margin-bottom:8px}
+.card-body .meta b{color:var(--ink);font-weight:600}
+
+/* 详情 hero */
+.hero{position:relative;aspect-ratio:16/9;background:var(--paper-2);margin:-28px -30px 0;border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.hero .htitle{position:absolute;left:0;right:0;bottom:0;padding:52px 30px 20px;
+  background:linear-gradient(transparent,rgba(20,16,10,.78));color:#fff;pointer-events:none}
+.hero .htitle h2{color:#fff;margin:0;font-size:27px;font-family:var(--sans);font-weight:600;letter-spacing:.3px}
+.hero .htitle .sub{color:#f0ece4;font-style:italic;font-size:13px}
+
+/* 画廊 */
+.gallery{margin:18px 0 4px}
+.gallery-main{position:relative;aspect-ratio:16/10;background:var(--paper-2);border-radius:12px;overflow:hidden;cursor:zoom-in;box-shadow:var(--shadow-sm)}
+.gallery-main img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .35s var(--ease)}
+.gallery-main:hover img{opacity:.94}
+.gallery-cap{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.5}
+.gallery-thumbs{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.thumb{width:90px;height:60px;border-radius:8px;overflow:hidden;border:2px solid transparent;cursor:pointer;background:var(--paper-2);transition:var(--t)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb:hover{border-color:var(--accent-soft)}
+.thumb.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(168,93,49,.18)}
+.gph{background:linear-gradient(135deg,#ece3d1,#d8ccae)}
+
+/* 灯箱 */
+.lightbox{position:fixed;inset:0;background:rgba(15,12,8,.93);display:none;align-items:center;justify-content:center;
+  z-index:120;padding:32px;cursor:zoom-out;backdrop-filter:blur(2px)}
+.lightbox.show{display:flex;animation:fade .25s var(--ease)}
+.lightbox img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;box-shadow:0 14px 50px rgba(0,0,0,.55);animation:modalIn .4s var(--ease)}
+.lightbox .lbcap{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#eee;font-size:13px;padding:0 20px}
+
+/* 详情维度编辑式排版 */
+.ad-h{font-family:var(--sans);font-size:16px;color:var(--accent);margin:22px 0 8px;font-weight:700;letter-spacing:.2px}
+.adim{border-top:1px solid var(--line);padding:16px 0;display:grid;grid-template-columns:180px 1fr;gap:16px}
+.adim .al{font-weight:700;font-size:15px;color:var(--ink)}
+.adim .al .st{display:block;color:var(--star);font-size:14px;letter-spacing:2px;margin-top:3px}
+.adim .an{font-size:14px;color:#433f39;line-height:1.78}
+@media(max-width:640px){.adim{grid-template-columns:1fr;gap:6px}.hero{aspect-ratio:4/3}}
+
+/* ---------- compare ---------- */
+.picklist{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:14px;
+  max-height:300px;overflow:auto;padding:6px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.picklist label{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:9px;font-size:13px;cursor:pointer;transition:background var(--t)}
+.picklist label:hover{background:var(--chip)}
+
+.btn{background:var(--accent);color:#fff;border:none;padding:10px 22px;border-radius:var(--radius-sm);cursor:pointer;
+  font-size:14px;font-family:var(--sans);font-weight:600;transition:var(--t);box-shadow:0 3px 10px rgba(168,93,49,.22)}
+.btn:hover{background:var(--accent-deep);transform:translateY(-1px);box-shadow:0 6px 16px rgba(124,66,34,.32)}
+.btn:active{transform:translateY(0)}
+.btn.ghost{background:var(--panel);border:1px solid var(--accent);color:var(--accent);box-shadow:none}
+.btn.ghost:hover{background:var(--chip);box-shadow:none;color:var(--accent-deep);transform:translateY(-1px)}
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
+.cmp-block{border-top:1px solid var(--line);padding:15px 0}
+.cmp-block h3{margin:0 0 8px;font-size:16px;color:var(--accent);font-family:var(--sans)}
+.cmp-row{display:grid;grid-template-columns:160px 1fr;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.cmp-row .cname{font-weight:600;font-size:13px}
+.cmp-row .cnote{font-size:13px;color:#433f39;line-height:1.6}
+.cloud{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.cloud .chip{background:var(--accent);color:#fff;padding:5px 13px;border-radius:20px;font-size:13px;cursor:pointer;transition:var(--t)}
+.cloud .chip:hover{background:var(--accent-deep)}
+
+/* enhanced compare */
+.cmp-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:16px 0}
+.cmp-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:var(--t)}
+.cmp-card:hover{border-color:var(--accent-soft);box-shadow:0 6px 18px rgba(168,93,49,.14);transform:translateY(-2px)}
+.cmp-card-img{aspect-ratio:16/10;overflow:hidden;background:var(--paper-2);position:relative}
+.cmp-card-img img{width:100%;height:100%;object-fit:cover;display:block}
+.cmp-card-img .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--chip),var(--paper-2))}
+.cmp-card-img .ph .phname{font-size:14px;color:var(--muted);font-weight:600;text-align:center;padding:10px}
+.cmp-card-body{padding:12px 14px}
+.cmp-card-body h4{margin:0 0 4px;font-size:15px;color:var(--accent)}
+.cmp-card-body .meta{font-size:11.5px;color:var(--muted);line-height:1.6}
+.cmp-card-body .tags{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px}
+.cmp-card-body .tags span{font-size:10.5px;padding:2px 7px;border-radius:10px;background:var(--chip);color:var(--accent)}
+.cmp-overview{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px}
+.cmp-overview th,.cmp-overview td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+.cmp-overview th{background:var(--panel-2);color:var(--accent);font-weight:700;white-space:nowrap;width:110px}
+.cmp-overview td{color:#433f39;line-height:1.55}
+.cmp-score-section{margin:16px 0;padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.cmp-score-row{display:flex;align-items:center;gap:10px;margin:8px 0}
+.cmp-score-row .sname{width:130px;font-size:13px;font-weight:600;flex-shrink:0;cursor:pointer}
+.cmp-score-row .sname:hover{color:var(--accent)}
+.cmp-score-row .sbar-wrap{flex:1;height:22px;background:var(--paper-2);border-radius:11px;overflow:hidden;position:relative}
+.cmp-score-row .sbar{height:100%;border-radius:11px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:11px;font-weight:700;color:#fff;transition:width .6s var(--ease)}
+.cmp-score-row .sbar.b3{background:linear-gradient(90deg,#b8860b,#d4a017)}
+.cmp-score-row .sbar.b2{background:linear-gradient(90deg,#c0622e,#d97842)}
+.cmp-score-row .sbar.b1{background:linear-gradient(90deg,#8a8077,#a89e95)}
+.cmp-winner{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;background:linear-gradient(135deg,#f0c75e,#d4a017);color:#fff;font-weight:700;margin-left:6px;vertical-align:middle}
+.cmp-block{border-top:1px solid var(--line);padding:15px 0}
+.cmp-block h3{margin:0 0 8px;font-size:16px;color:var(--accent);font-family:var(--sans);display:flex;align-items:center;gap:8px}
+.cmp-block .cmp-dim-bar{display:inline-flex;gap:3px;margin-left:6px}
+.cmp-block .cmp-dim-bar span{width:10px;height:14px;border-radius:2px;background:var(--line)}
+.cmp-block .cmp-dim-bar span.on3{background:#d4a017}
+.cmp-block .cmp-dim-bar span.on2{background:#d97842}
+.cmp-block .cmp-dim-bar span.on1{background:#a89e95}
+.cmp-row{display:grid;grid-template-columns:170px 1fr;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.cmp-row:last-child{border-bottom:none}
+.cmp-row .cname{font-weight:600;font-size:13px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.cmp-row .cnote{font-size:13px;color:#433f39;line-height:1.65}
+.cmp-summary{margin:14px 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.cmp-summary-item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.cmp-summary-item h4{margin:0 0 6px;font-size:14px;color:var(--accent)}
+.cmp-summary-item p{margin:0;font-size:12.5px;color:#433f39;line-height:1.65}
+
+/* ---------- advisor ---------- */
+.formcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow-sm)}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.formgrid .f{display:flex;flex-direction:column;gap:6px}
+.formgrid label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:700}
+.formgrid select,.formgrid input{padding:11px 13px;border:1px solid var(--line-2);border-radius:var(--radius-sm);font-family:var(--sans);font-size:14px;
+  background:var(--panel);transition:var(--t);box-shadow:0 1px 2px rgba(54,42,28,.03)}
+.formgrid select:hover,.formgrid input:hover{border-color:var(--accent-soft)}
+.formgrid select:focus,.formgrid input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(168,93,49,.14)}
+.form-actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.matchcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow-sm);transition:var(--t)}
+.matchcard:hover{box-shadow:var(--shadow);transform:translateY(-2px);border-color:var(--accent-soft)}
+.matchcard h4{margin:0;font-size:16px;font-family:var(--sans);font-weight:600}
+.matchcard .mscore{float:right;color:var(--accent);font-weight:700}
+.matchcard .mwhy{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.5}
+.guideo{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin-bottom:14px;box-shadow:var(--shadow-sm);transition:box-shadow var(--t),border-color var(--t)}
+.guideo:hover{box-shadow:var(--shadow);border-color:var(--line-2)}
+.guideo h3{margin:0 0 10px;font-size:16px;color:var(--accent);font-family:var(--sans);font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.guideo .gtext{font-size:14px;margin:0 0 8px;line-height:1.7;color:var(--ink-2)}
+.guideo .gcases{font-size:12.5px;color:var(--muted)}
+.guideo .gdemo{display:flex;gap:12px;align-items:flex-start;font-size:12.5px;color:#433f39;background:var(--paper);
+  padding:11px 13px;border-radius:var(--radius-sm);margin-top:10px;border:1px solid var(--line)}
+.res-h{font-size:clamp(18px,2.2vw,21px);margin:18px 0 12px;padding-bottom:9px;border-bottom:1px solid var(--line);font-family:var(--serif);color:var(--ink);position:relative}
+.res-h::after{content:"";position:absolute;left:0;bottom:-1px;width:48px;height:3px;background:var(--accent);border-radius:3px}
+.overall{background:linear-gradient(135deg,#fbf8f1,#f5efe2);border-left:4px solid var(--accent);padding:18px 20px;border-radius:var(--radius-sm);margin-top:16px;font-size:14px;line-height:1.75;box-shadow:var(--shadow-sm)}
+.legend{font-size:11.5px;color:var(--muted);margin-top:8px}
+
+/* 设计指导大师 · 生成结果图文并茂 */
+.res-hero{position:relative;border-radius:var(--radius);padding:32px 34px;margin:8px 0 18px;color:#fff;overflow:hidden;
+  min-height:120px;display:flex;align-items:flex-end;background:#4f3620;box-shadow:var(--shadow)}
+.res-hero::after{content:"";position:absolute;top:-20px;right:-30px;width:210px;height:210px;border-radius:50%;background:rgba(255,255,255,.07)}
+.res-hero::before{content:"";position:absolute;top:-60px;left:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.04)}
+.res-hero-plain{background:linear-gradient(120deg,#3d2b1a,#6f4a2d 60%,#8b5e3c)}
+.res-hero-t{position:relative;z-index:2}
+.res-hero h2{color:#fff;margin:0 0 7px;font-size:22px;font-family:var(--sans);font-weight:600}
+.res-hero p{margin:0;color:#f3ece2;font-size:13px;max-width:660px;line-height:1.65}
+.mcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin:4px 0 8px}
+.mcard{display:flex;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:11px;
+  cursor:pointer;box-shadow:var(--shadow-sm);transition:transform var(--t),box-shadow var(--t),border-color var(--t);align-items:stretch}
+.mcard:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--accent-soft)}
+.mcard-img{position:relative;width:94px;min-width:94px;aspect-ratio:4/5;background:var(--paper-2);overflow:hidden;border-radius:8px}
+.mcard-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease)}
+.mcard:hover .mcard-img img{transform:scale(1.04)}
+.mcard.analog{border-color:var(--good-soft)}
+.mcard-body{flex:1;min-width:0}
+.mcard-body h4{margin:0;font-size:14.5px;font-family:var(--sans);font-weight:600;line-height:1.3}
+.mcard .mscore{display:inline-block;color:var(--accent);font-weight:700;font-size:12px;margin-bottom:2px}
+.mcard .mwhy{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
+.gdemo-img{position:relative;width:86px;min-width:86px;aspect-ratio:4/5;background:var(--paper-2);overflow:hidden;border-radius:8px}
+.gdemo-img img{width:100%;height:100%;object-fit:cover;display:block}
+.gdemo-txt{flex:1;line-height:1.6}
+.loc-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:6px}
+.lthumb{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;
+  box-shadow:var(--shadow-sm);transition:transform var(--t),border-color var(--t)}
+.lthumb:hover{transform:translateY(-3px);border-color:var(--accent-soft)}
+.lthumb>img,.lthumb>.ph{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;background:var(--paper-2)}
+.lthumb-cap{padding:7px 9px;font-size:12px;color:#433f39;font-weight:600}
+
+/* guidance master (设计指导大师 决策逻辑) */
+.gmaster{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:6px 0 10px;background:linear-gradient(135deg,#fbf8f1,#f6f0e3);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.gm-goal{font-size:13.5px;color:#433f39;margin-bottom:8px;line-height:1.65}
+.gm-goal b,.gm-sec>b{color:var(--accent);font-weight:700}
+.gm-sec{margin-top:8px}
+.gm-steps{margin:4px 0 0;padding-left:20px;font-size:13px;color:#433f39}
+.gm-steps li{margin:3px 0;line-height:1.55}
+.gm-params{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:4px}
+.gm-params td{border:1px solid var(--line);padding:5px 9px}
+.gm-params td:first-child{background:var(--paper);color:var(--accent);white-space:nowrap;width:40%;font-weight:600}
+.gm-sec.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.gm-list{margin:4px 0 0;padding-left:18px;font-size:12.5px;color:#433f39}
+.gm-list li{margin:3px 0;line-height:1.5}
+.gm-list.pit{color:#9a5a3a}
+@media(max-width:640px){.gm-sec.two{grid-template-columns:1fr}}
+
+/* locale synthesis (项目所在地研判) */
+.locale{border:1px solid var(--accent-soft);border-radius:var(--radius);padding:20px 22px;margin:8px 0 14px;background:linear-gradient(135deg,#fbf8f1,#f5efe2);box-shadow:var(--shadow-sm)}
+.locale h2{color:var(--accent)}
+.loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 12px;font-size:13px;color:#433f39}
+.loc-block{font-size:13.5px;color:#433f39;margin-top:10px;line-height:1.7}
+.loc-block>b{color:var(--accent)}
+.loc-block .note{margin-top:6px}
+
+/* focus banner */
+.focusban{background:var(--accent);color:#fff;border-radius:11px;padding:11px 15px;margin:8px 0;font-size:13.5px;line-height:1.6;box-shadow:0 3px 10px rgba(168,93,49,.2)}
+
+/* quantified evidence (量化依据) */
+.quant{margin-top:12px;border-top:1px dashed var(--line);padding-top:9px}
+.qlabel{font-size:12.5px;color:var(--accent);font-weight:700}
+.qtable{width:100%;border-collapse:collapse;margin-top:5px;font-size:12.5px}
+.qtable td{border:1px solid var(--line);padding:5px 9px;vertical-align:top}
+.qtable .qm{background:var(--paper);color:var(--ink-2);width:34%;white-space:nowrap;font-weight:600}
+.qtable .qv{color:var(--accent);font-weight:700}
+.qtable tr.qsub td{border:none;padding:0 9px 7px;color:var(--muted);font-size:11.5px}
+.qband{background:var(--chip);color:var(--ink-2);padding:1px 8px;border-radius:12px;margin-right:6px}
+.locscale{margin-top:10px;background:var(--paper);border-left:3px solid var(--accent);padding:9px 13px;border-radius:9px;font-size:13px;color:#433f39;line-height:1.6}
+.analog{margin-top:4px}
+.analog .chip{cursor:pointer}
+
+/* ---------- tools hub (功能) ---------- */
+.tool-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:18px;box-shadow:var(--shadow-sm);overflow:hidden;transition:box-shadow var(--t),border-color var(--t)}
+.tool-card:hover{box-shadow:var(--shadow);border-color:var(--accent-soft)}
+/* ---- 高德地图 API 工具 ---- */
+.amap-result{margin-top:14px;font-size:13px;line-height:1.7}
+.amap-result .ar-sec{margin:10px 0 6px;font-weight:700;color:var(--accent-2);font-size:12.5px;letter-spacing:.3px}
+.amap-result .ar-card{background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.amap-result .ar-card b{color:var(--ink)}
+.amap-result .ar-kv{display:flex;gap:8px;flex-wrap:wrap}
+.amap-result .ar-kv span{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:12px}
+.amap-result table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:4px}
+.amap-result th,.amap-result td{border:1px solid var(--line);padding:5px 8px;text-align:left}
+.amap-result th{background:var(--paper-2);color:var(--muted);font-weight:600}
+.amap-result .ar-poi{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.amap-result .ar-poi:last-child{border-bottom:none}
+.amap-result .ar-poi .nm{font-weight:600}
+.amap-result .ar-poi .ad{color:var(--muted);font-size:12px}
+.amap-result a.ar-link{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft)}
+.amap-result a.ar-link:hover{color:var(--accent-2)}
+.amap-key-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.amap-key-row label{font-size:13px;color:var(--muted);white-space:nowrap}
+.amap-key-row #amapKey{flex:1;min-width:220px}
+.amap-result .ar-num{margin:0;padding-left:20px}
+.amap-result .ar-num li{margin:4px 0}
+.amap-result .ar-steps{margin-top:6px}
+.amap-result .ar-empty{color:var(--muted)}
+.amap-result .ar-err{color:#c0392b;background:#fdecea;border:1px solid #f5c6cb;padding:8px 12px;border-radius:8px}
+.tool-head{display:flex;align-items:flex-start;gap:14px;padding:20px 22px 16px;border-bottom:1px solid var(--line)}
+.tool-icon{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+.tool-meta{flex:1;min-width:0}
+.tool-meta h3{margin:0 0 4px;font-size:16px;font-weight:700;color:var(--ink)}
+.tool-meta p{margin:0;font-size:13px;color:var(--muted);line-height:1.6}
+.tool-tag{flex:none;font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:4px 10px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
+.tool-body{padding:18px 22px 20px}
+.tool-status{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:13px;color:var(--muted)}
+.tool-dot{width:10px;height:10px;border-radius:50%;background:var(--muted);flex:none;transition:var(--t)}
+.tool-dot.on{background:var(--good);box-shadow:0 0 0 3px rgba(20,153,107,.18)}
+.tool-dot.off{background:var(--accent);opacity:.35}
+.tool-ext-url{display:inline-flex;align-items:center;gap:6px;background:rgba(20,153,107,.1);color:var(--good);font-size:12px;padding:5px 14px;border-radius:20px;font-family:var(--mono);word-break:break-all;text-decoration:none;border:1px solid rgba(20,153,107,.25)}
+.tool-ext-url:hover{background:rgba(20,153,107,.18)}
+.tool-guide{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 18px;margin-top:14px;font-size:13px;color:var(--ink-2);line-height:1.8}
+.tool-guide h4{margin:0 0 8px;font-size:14px;color:var(--ink)}
+.tool-guide ol{margin:0;padding-left:20px}
+.tool-guide ol li{margin-bottom:5px}
+.tool-guide .tip{margin-top:10px;padding:8px 12px;background:var(--accent-soft);border-radius:8px;color:var(--accent-deep);font-size:12px;line-height:1.6}
+
+/* 案例录入表单 (imp form) */
+.imp-form{margin-bottom:14px}
+.imp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px}
+.imp-grid .f{margin-bottom:0}
+.imp-grid input{width:100%}
+.imp-dims-title{margin:18px 0 10px;font-size:13.5px;font-weight:700;color:var(--ink);border-left:3px solid var(--accent);padding-left:9px}
+.imp-dims{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px}
+.imp-dim-row{display:flex;align-items:center;gap:10px}
+.imp-dim-label{flex:none;width:104px;font-size:13px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.imp-stars{flex:none;display:inline-flex;gap:2px}
+.imp-star{border:1px solid var(--line-2);background:var(--panel);color:#d8dde6;width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:14px;line-height:1;transition:var(--t);padding:0}
+.imp-star:hover{border-color:var(--accent-soft)}
+.imp-star.on{color:#f5a623;border-color:#f5a623;background:rgba(245,166,35,.12)}
+.imp-dim-note{flex:1;min-width:0;width:100%;font-size:13px}
+.imp-adv{margin:14px 0 4px;border:1px dashed var(--line-2);border-radius:var(--radius-sm);padding:6px 14px;background:var(--paper)}
+.imp-adv summary{cursor:pointer;font-size:13px;color:var(--muted);padding:6px 0;user-select:none}
+.imp-adv summary:hover{color:var(--accent)}
+.imp-adv textarea{width:100%;margin:6px 0 10px;font-family:var(--mono);font-size:12px}
+@media (max-width:640px){
+  .imp-grid,.imp-dims{grid-template-columns:1fr}
+  .imp-dim-label{width:92px}
+}
+
+/* code library (中国建筑规范) */
+.code-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.code-tab{padding:8px 18px;border:1px solid var(--line-2);border-radius:999px;background:var(--panel);cursor:pointer;font-family:var(--sans);font-size:13.5px;color:var(--muted);transition:var(--t)}
+.code-tab:hover{color:var(--accent);border-color:var(--accent-soft)}
+.code-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.subnav{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.subtab{padding:8px 20px;border:1px solid var(--line-2);border-radius:999px;background:var(--panel);cursor:pointer;font-family:var(--sans);font-size:14px;color:var(--muted);transition:var(--t)}
+.subtab:hover{color:var(--accent);border-color:var(--accent-soft)}
+.subtab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.code-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.chiprow{display:flex;flex-wrap:wrap;margin-top:6px}
+.chiprow .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.code-match-sum{font-size:14px;color:var(--ink);background:var(--paper);border-left:3px solid var(--accent);padding:10px 14px;border-radius:9px;margin:16px 0 6px;font-weight:600}
+.code-cat{margin:24px 0 12px;font-size:16px;color:var(--accent);font-family:var(--sans);font-weight:700;border-top:1px solid var(--line);padding-top:16px}
+.code-cat:first-of-type{border-top:none;padding-top:0}
+.code-cat-n{font-size:12px;color:var(--muted);font-weight:400}
+.code-fold-hint{font-size:12px;color:var(--muted);margin:6px 0 0}
+.code-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.code-fold-head{display:block;width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:13px 16px 12px;font-family:inherit;border-radius:var(--radius)}
+.code-fold-head:hover{background:var(--chip)}
+.code-fold-caret{display:inline-block;color:var(--accent);font-size:11px;margin-right:7px;transition:transform .18s ease}
+.code-card.open .code-fold-caret{transform:rotate(90deg)}
+.code-card h4{margin:8px 0 0;font-size:15px;color:var(--ink);font-weight:700;line-height:1.5}
+.code-head{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
+.code-body{display:none;padding:2px 16px 14px}
+.code-card.open .code-body{display:block}
+.code-std{background:var(--accent);color:#fff;font-size:11.5px;padding:2px 10px;border-radius:20px;font-family:var(--sans);font-weight:600}
+.code-clause{font-size:12.5px;color:var(--accent-deep);font-weight:600;font-family:var(--sans)}
+.code-lvl{font-size:11px;padding:2px 9px;border-radius:20px;font-family:var(--sans);font-weight:600}
+.code-lvl.must{background:#fdeaea;color:#b3261e;border:1px solid #f3c4c0}
+.code-lvl.should{background:var(--chip);color:var(--muted);border:1px solid var(--line-2)}
+.code-text{font-size:13.5px;color:#433f39;line-height:1.75;margin:0}
+.code-note{margin-top:9px;background:var(--paper);border-left:3px solid var(--accent-soft);padding:8px 12px;border-radius:8px;font-size:12.5px;color:#5a5245;line-height:1.65}
+.code-tags{margin-top:10px}
+.code-tags span{display:inline-block;background:var(--chip);border-radius:20px;padding:2px 10px;font-size:11px;color:var(--accent);margin:0 6px 4px 0}
+.code-empty{color:var(--muted);font-size:13.5px;padding:26px 0;text-align:center}
+.bar{height:7px;background:var(--chip);border-radius:5px;overflow:hidden}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--good),#6aa684);width:0;transition:width .35s var(--ease)}
+.note{font-size:12.5px;color:var(--ink-2);background:var(--paper);padding:15px 17px;border-radius:var(--radius-sm);margin-top:14px;line-height:1.7;border:1px solid var(--line)}
+code{background:var(--chip);padding:1px 7px;border-radius:5px;font-size:12px;font-family:"SF Mono","Consolas","Courier New",monospace;color:var(--accent-deep)}
+
+/* ---------- about page ---------- */
+.about-hero{background:
+    linear-gradient(135deg,rgba(61,43,26,.96) 0%,rgba(111,74,45,.92) 50%,rgba(139,94,60,.9) 100%),
+    radial-gradient(400px 300px at 88% 12%,rgba(255,255,255,.08),transparent);
+  border-radius:var(--radius-lg);padding:clamp(34px,5vw,48px) clamp(24px,4vw,40px);margin-bottom:30px;color:#fff;position:relative;overflow:hidden}
+.about-hero::after{content:"";position:absolute;top:-40px;right:-30px;width:240px;height:240px;
+  border-radius:50%;background:rgba(255,255,255,.06)}
+.ah-inner{position:relative;z-index:2;max-width:740px}
+.ah-badge{display:inline-block;background:rgba(255,255,255,.14);color:#f3e9d8;font-size:11.5px;
+  padding:5px 13px;border-radius:20px;margin-bottom:16px;letter-spacing:.6px;border:1px solid rgba(255,255,255,.16);font-weight:500}
+.ah-title{font-size:clamp(26px,4vw,33px);line-height:1.28;margin:0 0 16px;color:#fff;font-family:var(--serif);font-weight:600;letter-spacing:.3px}
+.ah-sub{font-size:15px;line-height:1.78;color:#e9ddc8;margin:0 0 26px}
+.ah-sub b{color:#fff}
+.ah-stats{display:flex;gap:34px;flex-wrap:wrap}
+.ah-stat{display:flex;flex-direction:column}
+.ah-stat .num{font-size:clamp(26px,3vw,30px);font-weight:700;color:var(--accent-soft);font-family:var(--serif);line-height:1}
+.ah-stat .lab{font-size:12px;color:#d4c8b5;margin-top:5px;letter-spacing:.2px}
+.feat-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:28px}
+.feat-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;
+  cursor:pointer;box-shadow:var(--shadow-sm);transition:transform var(--t),box-shadow var(--t),border-color var(--t);position:relative;overflow:hidden}
+.feat-card::before{content:"";position:absolute;left:0;top:0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-soft));transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.feat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--accent-soft)}
+.feat-card:hover::before{transform:scaleX(1)}
+.feat-card .fc-icon{font-size:25px;margin-bottom:12px;display:inline-block}
+.feat-card h3{margin:0 0 8px;font-size:17px;color:var(--accent)}
+.feat-card p{margin:0;font-size:13.5px;color:#4f4940;line-height:1.7}
+@media(max-width:640px){.ah-stats{gap:22px}}
+
+footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;border-top:1px solid var(--line);margin-top:24px;background:rgba(255,253,248,.5)}
+.badge{display:inline-block;background:var(--chip);color:var(--accent);font-size:11px;padding:2px 9px;border-radius:20px;margin-left:6px;font-family:var(--sans);font-weight:600}
+.badge.ver{background:var(--accent);color:#fff;letter-spacing:.3px}
+
+/* ---------- chat (AI 对话) ---------- */
+.chatwrap{display:flex;flex-direction:column;height:calc(100vh - 230px);min-height:460px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--panel);box-shadow:var(--shadow-sm)}
+.chat-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#fbf8f1,#f5efe2)}
+.chat-head .ttl{font-weight:700;color:var(--accent);font-family:var(--sans);font-size:15px;letter-spacing:.2px}
+/* ---- AI 对话双窗口：文字问答 / AI 生图 ---- */
+.chat-tabs{display:flex;gap:4px;padding:10px 14px 0;background:var(--panel)}
+.chat-tab{padding:7px 14px;border:1px solid var(--line-2);border-bottom:none;border-radius:10px 10px 0 0;background:transparent;cursor:pointer;font-family:var(--sans);font-size:13px;color:var(--muted);transition:var(--t)}
+.chat-tab:hover{color:var(--accent)}
+.chat-tab.active{background:var(--paper);color:var(--accent);font-weight:700}
+.chat-pane{display:none;flex:1;flex-direction:column;min-height:0}
+.chat-pane.active{display:flex}
+.ask-scroll{overflow-x:auto;margin:4px 0}
+.ask-tbl{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+.ask-tbl th,.ask-tbl td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.ask-tbl th{background:var(--panel-2);color:var(--accent);font-weight:700;white-space:nowrap}
+.ask-tbl .ask-dim{white-space:nowrap;font-weight:600}
+.ask-note{color:var(--muted);font-size:12px;line-height:1.5;margin-top:2px}
+.st{font-size:13px;letter-spacing:1px}
+.st3{color:#b8860b}
+.st2{color:#c0622e}
+.st1{color:var(--muted)}
+.chip{display:inline-block;border:1px solid var(--line-2);border-radius:999px;padding:4px 12px;margin:3px 6px 3px 0;font-size:12px;color:var(--accent);background:var(--panel);cursor:pointer;transition:var(--t)}
+.chip:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.chat-body{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:13px;background:var(--paper)}
+.msg{display:flex;gap:10px;max-width:90%;animation:fade .3s var(--ease)}
+.msg .bubble{padding:11px 15px;border-radius:15px;font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.msg.user{flex-direction:row-reverse;align-self:flex-end}
+.msg.user .bubble{background:var(--accent);color:#fff;border-bottom-right-radius:5px;box-shadow:0 3px 10px rgba(168,93,49,.24)}
+.msg.bot .bubble{background:var(--panel);border:1px solid var(--line);border-bottom-left-radius:5px;box-shadow:var(--shadow-sm)}
+.msg .av{width:32px;height:32px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--accent);flex:0 0 auto;font-weight:700}
+.msg.user .av{background:var(--accent);color:#fff}
+.chat-input{border-top:1px solid var(--line);padding:11px 13px;background:var(--panel)}
+.chat-input .row{display:flex;gap:8px;align-items:flex-end}
+.chat-input textarea{flex:1;resize:none;height:48px;max-height:140px;padding:11px;border:1px solid var(--line-2);border-radius:11px;font-family:var(--sans);font-size:14px;transition:var(--t);line-height:1.5}
+.chat-input textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(168,93,49,.14)}
+.chat-thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.chat-thumbs .th{position:relative;width:64px;height:64px;border:1px solid var(--line-2);border-radius:9px;overflow:hidden;background:var(--paper-2)}
+.chat-thumbs .th img{width:100%;height:100%;object-fit:cover}
+.chat-thumbs .th .x{position:absolute;top:1px;right:1px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:11px;cursor:pointer;line-height:1;transition:var(--t)}
+.chat-thumbs .th .x:hover{background:rgba(0,0,0,.8)}
+.chat-tools{display:flex;align-items:center;gap:14px;margin-top:9px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.chat-tools label{display:flex;align-items:center;gap:5px;cursor:pointer;color:var(--muted)}
+.chat-tools input[type=checkbox]{accent-color:var(--accent)}
+
+/* settings modal */
+.settings label{display:block;font-size:12px;color:var(--muted);margin:13px 0 4px;font-weight:600}
+.settings input,.settings select{width:100%;padding:10px 11px;border:1px solid var(--line-2);border-radius:9px;font-family:var(--sans);font-size:13px;transition:var(--t);background:var(--panel);color:var(--ink)}
+.settings select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b8073' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+.settings input:hover{border-color:var(--accent-soft)}
+.settings input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(168,93,49,.14)}
+.settings input.warn{border-color:#c0622e;background:#fff8f3;box-shadow:0 0 0 3px rgba(192,98,46,.12)}
+.settings .hint{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.6}
+.settings .section-title{font-size:13.5px;font-weight:700;color:var(--ink);margin:18px 0 2px;display:flex;align-items:center;gap:8px}
+.settings .section-title:first-child{margin-top:0}
+.settings .section-title .tag{font-size:10.5px;font-weight:600;color:var(--accent);background:rgba(168,93,49,.10);padding:2px 7px;border-radius:6px}
+.settings .krea-section{background:linear-gradient(135deg,#faf6ef,#f5f0e6);border:1px solid var(--line-2);border-radius:12px;padding:16px 18px;margin-top:14px}
+.settings .krea-section label:first-child{margin-top:0}
+.settings .field-warn{display:none;font-size:12px;color:#a85d31;margin-top:6px;padding:7px 10px;background:#fff3e8;border-radius:8px;border-left:3px solid var(--accent)}
+.settings .field-warn.show{display:block}
+
+/* ---------- responsive ---------- */
+@media(max-width:860px){
+  header{padding:12px 16px}
+  header .brand h1{font-size:16px}
+  main{padding:22px 14px 50px}
+  .modal{padding:22px 18px;border-radius:14px}
+  .hero{margin:-22px -18px 0;border-radius:14px 14px 0 0}
+  .hero .htitle{padding:44px 18px 16px}
+  .hero .htitle h2{font-size:22px}
+  .res-hero{padding:26px 22px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M9 11h.01M15 11h.01"/></svg></div>
+    <div class="bt">
+      <h1><span data-i18n="header.title">商业街案例研究与设计指导系统</span> <span class="badge" data-i18n="header.firm">Oval</span> <span class="badge ver" id="verBadge">v—</span></h1>
+      <p data-i18n="header.subtitle">全球标杆案例沉淀 · 成功要素提炼 · 交互式设计指导大师</p>
+    </div>
+  </div>
+  <nav id="nav">
+    <button data-tab="about" class="active" data-i18n="nav.about">首页</button>
+    <button data-tab="lib" data-i18n="nav.lib">案例库</button>
+    <button data-tab="adv" data-i18n="nav.adv">设计指导大师</button>
+    <button data-tab="imp" data-i18n="nav.imp">功能</button>
+    <button data-tab="feedback" data-i18n="nav.feedback">意见</button>
+  </nav>
+  <div class="lang-switch">
+    <span data-i18n="header.langLabel">语言</span>
+    <button onclick="setLang('zh-CN')" class="lang-btn" data-lang="zh-CN">简</button>
+    <button onclick="setLang('zh-TW')" class="lang-btn" data-lang="zh-TW">繁</button>
+    <button onclick="setLang('en')" class="lang-btn" data-lang="en">EN</button>
+  </div>
+</header>
+
+<main>
+  <!-- ============ 案例库（含对比分析子视图） ============ -->
+  <section id="lib" class="section">
+    <div class="subnav" id="libSub">
+      <button class="subtab active" data-sub="browse" onclick="switchLibSub('browse')" data-i18n="lib.sub.browse">案例浏览</button>
+      <button class="subtab" data-sub="cmp" onclick="switchLibSub('cmp')" data-i18n="lib.sub.cmp">对比分析</button>
+    </div>
+    <div class="subpane" id="libBrowseView">
+      <p class="lead" data-i18n="lib.lead">收录 33 个全球标杆商业街（含 Oval 的成都太古里、北京太古里、深圳大运天地），每个案例配实景图与 11 维设计标注。点击卡片进入 ArchDaily 式详情页：封面大图 + 图廊 + 逐维解析。暂无配图的案例显示优雅占位，在本地 images/&lt;案例id&gt;/ 放入照片后自动显示。</p>
+      <div class="filters">
+        <div class="f"><label data-i18n="lib.filter.search">搜索</label><input type="search" id="fSearch" data-i18n-ph="lib.searchPh" placeholder="名称 / 城市 / 关键词"></div>
+        <div class="f"><label data-i18n="lib.filter.region">区域</label><select id="fRegion"><option value="" data-i18n="lib.filter.all">全部</option></select></div>
+        <div class="f"><label data-i18n="lib.filter.context">区位类型</label><select id="fContext"><option value="" data-i18n="lib.filter.all">全部</option></select></div>
+        <div class="f"><label data-i18n="lib.filter.form">地块形态</label><select id="fForm"><option value="" data-i18n="lib.filter.all">全部</option></select></div>
+        <div class="f"><label data-i18n="lib.filter.program">业态侧重</label><select id="fProgram"><option value="" data-i18n="lib.filter.all">全部</option></select></div>
+        <div class="f"><label data-i18n="lib.filter.client">客群</label><select id="fClient"><option value="" data-i18n="lib.filter.all">全部</option></select></div>
+        <div class="f"><label data-i18n="lib.filter.climate">气候</label><select id="fClimate"><option value="" data-i18n="lib.filter.all">全部</option></select></div>
+      </div>
+      <div class="grid" id="cardGrid"></div>
+    </div>
+    <div class="subpane" id="libCmpView" style="display:none">
+      <p class="lead" data-i18n="cmp.lead">勾选 2–8 个案例进行横向对比。系统按维度列出各案例的标注与星级，并提炼共性成功要素。</p>
+      <div class="picklist" id="pickList"></div>
+      <div class="form-actions">
+        <button class="btn" id="cmpBtn" data-i18n="cmp.generate">生成对比</button>
+        <button class="btn ghost" id="cmpClear" data-i18n="cmp.clear">清空选择</button>
+      </div>
+      <div id="cmpResult"></div>
+    </div>
+  </section>
+
+  <!-- ============ 设计指导大师（含 AI 对话子视图） ============ -->
+  <section id="adv" class="section">
+    <div class="subnav" id="advSub">
+      <button class="subtab active" data-sub="guide" onclick="switchAdvSub('guide')" data-i18n="adv.sub.guide">设计指导</button>
+      <button class="subtab" data-sub="chat" onclick="switchAdvSub('chat')" data-i18n="adv.sub.chat">AI 对话</button>
+    </div>
+    <div class="subpane" id="advGuideView">
+      <p class="lead" data-i18n="adv.lead">输入项目参数并填写城市，系统从 33 个案例库匹配相似标杆与本地类比案例，推送「可量化、可溯源、结合在地」的分维度设计指引：每个维度给出决策逻辑（核心目标 / 决策步骤 / 关键参数 / 出彩要点 / 常见误区）+ 量化依据（带案例实证）+ 适配法则 + 案例实证；并输出项目所在地研判（气候 / 业态 / 人文 / 尺度提示）。可在「关注重点」中直接提问（如「多宽的步行街最适宜本地」）。生成结果将以图文并茂方式呈现。</p>
+      <div class="formcard">
+        <div class="formgrid">
+          <div class="f"><label data-i18n="adv.context">区位 / 语境</label><select id="aContext"></select></div>
+          <div class="f"><label data-i18n="adv.climate">气候带</label><select id="aClimate"></select></div>
+          <div class="f"><label data-i18n="adv.program">业态侧重</label><select id="aProgram"></select></div>
+          <div class="f"><label data-i18n="adv.client">目标客群</label><select id="aClient"></select></div>
+          <div class="f"><label data-i18n="adv.form">地块形态</label><select id="aForm"></select></div>
+          <div class="f"><label data-i18n="adv.city">城市（选填）</label><input id="aCity" list="cityList" data-i18n-ph="adv.cityPh" placeholder="如：合肥 / 深圳"></div>
+          <div class="f" style="grid-column:1/-1"><label data-i18n="adv.note">规模 / 约束备注（选填）</label><input id="aNote" data-i18n-ph="adv.notePh" placeholder="如：约 8 万㎡，环湖，需兼顾赛演脉冲客流"></div>
+          <div class="f" style="grid-column:1/-1"><label data-i18n="adv.focus">关注重点 / 提问（选填，例：多宽的步行街最适宜本地）</label><input id="aFocus" data-i18n-ph="adv.focusPh" placeholder="如：步行街宽度 / 尺度 / 立面 / 业态组合 / 交通接驳"></div>
+          <datalist id="cityList"></datalist>
+        </div>
+        <div class="form-actions">
+          <button class="btn" id="advBtn" data-i18n="adv.generate">生成设计指导</button>
+          <button class="btn ghost" id="advReset" data-i18n="adv.reset">重置</button>
+        </div>
+      </div>
+      <div id="advResult"></div>
+    </div>
+    <div class="subpane" id="advChatView" style="display:none">
+      <p class="lead" data-i18n="chat.lead">上传商业街照片 / 效果图，点「发送」即用 <b>Krea gpt-image-2</b> 图生图重绘成一张优化新图（原图与结果可对比、可下载）。输入框可<em>选填</em>重绘要求（如「优化立面比例、增强首层通透率」），不填则用默认优化提示。首次使用请点右上「设置」填入 Krea API Token。</p>
+      <div class="chatwrap">
+        <div id="chatNetWarn" class="netwarn" style="display:none;margin-bottom:10px;padding:10px 14px;border:1px solid #c0622e;border-radius:10px;background:rgba(192,98,46,.14);font-size:13px;line-height:1.8">
+          <span style="float:right"><button onclick="this.parentElement.parentElement.style.display='none'" style="border:none;background:none;color:inherit;font-size:16px;cursor:pointer;line-height:1" title="×">×</button></span>
+          <b>⚠ <span data-i18n="chat.netWarn">当前页面环境无法连接 Krea 接口</span></b><br>
+          <span data-i18n="chat.netWarnFix">请用浏览器直接打开 <code>http://localhost:8091</code> 后再试（内置预览面板与 file:// 直接打开会拦截对外请求）。</span>
+        </div>
+        <div class="chat-tabs">
+          <button class="chat-tab active" data-tab="ask" data-i18n="chat.tabAsk">💬 文字问答</button>
+          <button class="chat-tab" data-tab="krea" data-i18n="chat.tabKrea">🎨 AI 生图</button>
+        </div>
+        <!-- 窗口 1：AI 文字问答（本地检索引擎） -->
+        <div class="chat-pane active" id="chatPaneAsk">
+          <div class="chat-head">
+            <span class="ttl" data-i18n="chat.askTitle">AI 文字问答 · 案例库检索</span>
+          </div>
+          <div class="chat-body" id="askBody"></div>
+          <div class="chat-input">
+            <div class="row">
+              <textarea id="askText" data-i18n-ph="chat.askPh" placeholder="例：对比成都太古里和北京三里屯太古里的动线与立面？"></textarea>
+              <button class="btn" id="askSend" data-i18n="chat.send">发送</button>
+            </div>
+            <div class="chat-tools"><span id="askHint" data-i18n="chat.askHint">本地检索 56 案例 + 92 法则 · 无需联网</span></div>
+          </div>
+        </div>
+        <!-- 窗口 2：AI 生图（保留原功能） -->
+        <div class="chat-pane" id="chatPaneKrea">
+          <div class="chat-head">
+            <span class="ttl" data-i18n="chat.title">AI 对话 · AI 生图</span>
+            <button class="btn ghost" id="chatSettingsBtn" style="padding:6px 12px" data-i18n="chat.settings">设置</button>
+          </div>
+          <div class="chat-body" id="chatBody"></div>
+          <div class="chat-input">
+            <div class="chat-thumbs" id="chatThumbs"></div>
+            <div class="row">
+              <button class="btn ghost" id="chatImgBtn" style="padding:9px 12px" title="上传图片" data-i18n="chat.image">📎 图片</button>
+              <input type="file" id="chatImgFile" accept="image/*" multiple hidden>
+              <textarea id="chatText" data-i18n-ph="chat.placeholder" placeholder="输入画面描述即可直接生图；或先上传图片，再填重绘要求（图生图）"></textarea>
+              <button class="btn" id="chatSend" data-i18n="chat.send" data-i18n-title="chat.sendTip" title="上传图片后点发送，用 Krea 重绘效果图">发送</button>
+            </div>
+            <div class="chat-tools">
+              <span id="chatKeyState"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 功能（工具集） ============ -->
+  <section id="imp" class="section">
+    <p class="lead" data-i18n="imp.lead">本栏目汇集设计工作中常用的小工具。所有工具均支持外网分享，异地同事也可使用。</p>
+
+    <!-- 工具零（置顶）：高德地图 API -->
+    <div class="tool-card" id="toolAmapCard">
+      <div class="tool-head">
+        <div class="tool-icon">🗺️</div>
+        <div class="tool-meta">
+          <h3 data-i18n="imp.tool0.title">高德地图 API</h3>
+          <p data-i18n="imp.tool0.desc">调用高德开放平台 Web 服务 API：地理编码、逆地理、天气、POI 搜索、周边配套、路线与距离。输入地点即可查坐标、看地图、查天气与周边配套，辅助项目选址与交通接驳分析。</p>
+        </div>
+        <span class="tool-tag" data-i18n="imp.tool0.tag">地图 / 位置</span>
+      </div>
+      <div class="tool-body">
+        <div class="formcard">
+          <div class="imp-grid">
+            <div class="f"><label data-i18n="imp.amap.cmd">功能</label>
+              <select id="amapCmd">
+                <option value="geo">地理编码（地址 → 坐标）</option>
+                <option value="regeo">逆地理编码（坐标 → 地址）</option>
+                <option value="weather">天气查询</option>
+                <option value="search">地点搜索（POI）</option>
+                <option value="around">周边配套搜索</option>
+                <option value="route">路线规划</option>
+                <option value="distance">距离测量</option>
+              </select>
+            </div>
+            <div class="f" id="amapFAddr"><label data-i18n="imp.amap.addr">地址 / 关键词</label><input id="amapAddr" type="text" placeholder="如：成都太古里 / 地铁"></div>
+            <div class="f" id="amapFCity"><label data-i18n="imp.amap.city">城市</label><input id="amapCity" type="text" placeholder="如：成都"></div>
+            <div class="f" id="amapFLoc" style="display:none"><label data-i18n="imp.amap.loc">坐标（经度,纬度）</label><input id="amapLoc" type="text" placeholder="114.30,30.59"></div>
+            <div class="f" id="amapFLoc2" style="display:none"><label data-i18n="imp.amap.loc2">终点坐标（经度,纬度）</label><input id="amapLoc2" type="text" placeholder="114.40,30.70"></div>
+            <div class="f" id="amapFRadius" style="display:none"><label data-i18n="imp.amap.radius">半径（米）</label><input id="amapRadius" type="text" value="3000"></div>
+            <div class="f" id="amapFMode" style="display:none"><label data-i18n="imp.amap.mode">出行方式</label>
+              <select id="amapMode">
+                <option value="driving" data-i18n="imp.amap.modeDriving">驾车</option>
+                <option value="walking" data-i18n="imp.amap.modeWalking">步行</option>
+                <option value="cycling" data-i18n="imp.amap.modeCycling">骑行</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn" id="amapRun" data-i18n="imp.amap.run">查询</button>
+            <button class="btn ghost" id="amapCopy" data-i18n="imp.amap.copy">复制结果</button>
+            <button class="btn ghost sm" id="amapKeyBtn" data-i18n="imp.amap.keyBtn">设置密钥</button>
+          </div>
+        </div>
+        <div class="amap-key-row" id="amapFKey" style="display:none;margin-top:12px">
+          <label data-i18n="imp.amap.keyLabel">密钥</label>
+          <input id="amapKey" type="text" data-i18n-ph="imp.amap.keyPlaceholder" placeholder="粘贴你的高德 Web 服务 Key">
+          <button class="btn sm" id="amapKeySave" data-i18n="imp.amap.keySave">保存</button>
+        </div>
+        <div id="amapKeyHint" class="note" style="display:none" data-i18n="imp.amap.keyHint"></div>
+        <div id="amapKeyWarn" class="note" style="display:none" data-i18n="imp.amap.keyMissing"></div>
+        <img id="amapMap" style="display:none;width:100%;border-radius:12px;margin-top:12px;border:1px solid var(--line)" alt="map">
+        <div id="amapResult" class="amap-result"></div>
+      </div>
+    </div>
+
+    <!-- 工具一（置顶）：中国建筑规范（子工具） -->
+    <div class="tool-card" id="toolCodeCard">
+      <div class="tool-head">
+        <div class="tool-icon">📕</div>
+        <div class="tool-meta">
+          <h3 data-i18n="imp.tool3.title">中国建筑规范</h3>
+          <p data-i18n="imp.tool3.desc">建筑防火、商店建筑、无障碍、照明等核心规范条文库（重点 GB 50016 / GB 55037）。按项目细节自动匹配必要条文，也可手动检索条款号或关键词。</p>
+        </div>
+        <span class="tool-tag" data-i18n="imp.tool3.tag">规范库</span>
+      </div>
+      <div class="tool-body">
+        <p class="lead" data-i18n="code.lead">面向商业街 / 商业建筑项目的中国规范条文库（摘要），重点收录建筑防火规范。功能一：按项目细节自动匹配必要条文；功能二：手动检索条文。</p>
+        <div class="code-tabs">
+          <button class="code-tab active" id="codeTabMatch" data-i18n="code.tabMatch">① 项目匹配</button>
+          <button class="code-tab" id="codeTabSearch" data-i18n="code.tabSearch">② 条文检索</button>
+        </div>
+
+        <!-- 功能一：项目细节筛选 → 自动匹配 -->
+        <div id="codeMatchPane">
+          <div class="formcard">
+            <div class="code-grid">
+              <div class="f"><label data-i18n="code.fType">项目类型</label><select id="cType"></select></div>
+              <div class="f"><label data-i18n="code.fFloors">建筑高度</label><select id="cFloors"></select></div>
+              <div class="f"><label data-i18n="code.fBase">地下空间</label><select id="cBase"></select></div>
+              <div class="f"><label data-i18n="code.fArea">总建筑面积</label><select id="cArea"></select></div>
+            </div>
+            <div class="f"><label data-i18n="code.fFuncs">业态（多选）</label><div class="chiprow" id="cFuncs"></div></div>
+            <div class="f"><label data-i18n="code.fFeats">特色要素（多选）</label><div class="chiprow" id="cFeats"></div></div>
+            <p class="hint" data-i18n="code.matchHint">勾选项目细节后点击匹配，系统将筛出必须执行的强制性条文与相关推荐条文。</p>
+            <div class="form-actions">
+              <button class="btn" id="codeRun" data-i18n="code.run">匹配必要条文</button>
+              <button class="btn ghost" id="codeCopy" data-i18n="code.matchCopy">复制匹配清单</button>
+            </div>
+          </div>
+          <div id="codeMatchResult"></div>
+        </div>
+
+        <!-- 功能二：手动检索 -->
+        <div id="codeSearchPane" style="display:none">
+          <div class="formcard">
+            <div class="f"><label data-i18n="code.searchLabel">关键词检索</label>
+              <input type="search" id="codeSearchInput" data-i18n-ph="code.searchPh" placeholder="输入关键词、规范号或条款号，如：防火分区 / GB 50016 / 5.3.6 / 疏散"></div>
+            <div class="f"><label data-i18n="code.catLabel">分类筛选</label><div class="chiprow" id="codeCatChips"></div></div>
+          </div>
+          <div id="codeSearchResult"></div>
+        </div>
+
+        <div class="note"><b data-i18n="code.disTitle">条文效力说明</b><span data-i18n="code.disText">：本栏目条文为依据现行国家 / 行业标准公开文本整理的<b>摘要</b>（截至 2026-08 核对），供方案阶段快速查引；工程设计与报审必须以现行正式发布版本及地方规定为准。GB 55037-2022、GB 55019-2021 为全文强制规范，与 GB 50016-2014（2018 年版）等技术规范并行使用。</span></div>
+      </div>
+    </div>
+
+    <!-- 工具一：案例图片下载器（v1.35.0 起内置到主服务，无需额外启动） -->
+    <div class="tool-card" id="tool1Card">
+      <div class="tool-head">
+        <div class="tool-icon">📥</div>
+        <div class="tool-meta">
+          <h3 data-i18n="imp.tool1.title">案例图片下载器</h3>
+          <p data-i18n="imp.tool1.desc">粘贴任意一个网站页面地址，例如 ArchDaily 文章页、地产发展商项目页面等</p>
+        </div>
+        <span class="tool-tag" data-i18n="imp.tool1.tag">内置工具</span>
+      </div>
+      <div class="tool-body">
+        <div class="form-actions">
+          <button class="btn" id="tool1Open" data-i18n="imp.tool1.open">打开工具</button>
+        </div>
+        <div id="tool1FrameWrap" style="display:none;margin-top:14px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <span class="note" style="margin:0;flex:1" data-i18n="imp.tool1.embedTip">下方即在系统内运行的图片下载器：</span>
+            <button class="btn ghost" id="tool1Close" data-i18n="imp.tool1.close">收起</button>
+          </div>
+          <iframe id="tool1Frame" title="案例图片下载器" style="width:100%;height:640px;border:1px solid var(--line);border-radius:14px;background:var(--panel)"></iframe>
+        </div>
+        <div class="note" data-i18n="imp.tool1.note" style="margin-top:12px">已内置到主服务：用「启动服务.bat」（node server.js）启动后即可使用，所有能访问本系统的同事均可直接使用，无需安装 Python 或额外启动任何程序。直接双击 index.html（file:// 方式）时本工具不可用。</div>
+      </div>
+    </div>
+
+    <!-- 工具三：案例导入与导出 -->
+    <div class="tool-card">
+      <div class="tool-head">
+        <div class="tool-icon">⬆</div>
+        <div class="tool-meta">
+          <h3 data-i18n="imp.tool2.title">案例录入与导出</h3>
+          <p data-i18n="imp.tool2.desc">可视化表单逐条录入新案例，自动生成结构化数据并持久化到本地浏览器；也支持粘贴 JSON 批量导入（collector.py 输出等）。</p>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="imp-form">
+          <div class="imp-grid">
+            <div class="f"><label data-i18n="imp.f.name">项目名称 *</label><input id="imp_name" type="text" placeholder="如：成都太古里"></div>
+            <div class="f"><label data-i18n="imp.f.city">城市 *</label><input id="imp_city" type="text" placeholder="如：成都"></div>
+            <div class="f"><label data-i18n="imp.f.country">国家 / 地区</label><input id="imp_country" type="text" placeholder="中国"></div>
+            <div class="f"><label data-i18n="imp.f.nameEn">英文名</label><input id="imp_nameEn" type="text" placeholder="Chengdu Taikoo Li"></div>
+            <div class="f"><label data-i18n="imp.f.firm">设计单位</label><input id="imp_firm" type="text" placeholder="如：Oval"></div>
+            <div class="f"><label data-i18n="imp.f.year">建成年份</label><input id="imp_year" type="text" placeholder="如：2014"></div>
+            <div class="f"><label data-i18n="imp.f.typology">项目类型</label><input id="imp_typology" type="text" placeholder="街区商业 / 购物中心"></div>
+            <div class="f"><label data-i18n="imp.f.gfa">建筑面积(㎡)</label><input id="imp_gfa" type="text" placeholder="如：120000"></div>
+            <div class="f"><label data-i18n="imp.f.climate">气候区</label><input id="imp_climate" type="text" placeholder="如：夏热冬冷"></div>
+            <div class="f"><label data-i18n="imp.f.context">场景 context</label><input id="imp_context" type="text" placeholder="历史街区 / 新建"></div>
+            <div class="f"><label data-i18n="imp.f.program">业态 program</label><input id="imp_program" type="text" placeholder="零售 / 餐饮 / 休闲"></div>
+            <div class="f"><label data-i18n="imp.f.clientele">客群 clientele</label><input id="imp_clientele" type="text" placeholder="如：年轻家庭"></div>
+            <div class="f"><label data-i18n="imp.f.form">形态 form</label><input id="imp_form" type="text" placeholder="开放式街区"></div>
+            <div class="f"><label data-i18n="imp.f.tags">标签 tags</label><input id="imp_tags" type="text" placeholder="逗号分隔，如：城市更新,低密度"></div>
+          </div>
+          <div class="f" style="margin-top:10px"><label data-i18n="imp.f.success">成功要素 success（逗号分隔）</label><input id="imp_success" type="text" placeholder="如：尺度宜人,业态混合"></div>
+          <div class="f"><label data-i18n="imp.f.summary">项目摘要 summary</label><textarea id="imp_summary" rows="2" placeholder="一两句话概括项目亮点"></textarea></div>
+          <h4 class="imp-dims-title" data-i18n="imp.dimsTitle">11 个设计维度评分（星级 1–3，3=世界级标杆）</h4>
+          <div id="impDimRows" class="imp-dims"></div>
+        </div>
+        <details class="imp-adv">
+          <summary data-i18n="imp.advTitle">高级 · 粘贴 JSON 批量导入（collector.py 输出等）</summary>
+          <textarea id="impJson" rows="4" placeholder='[{"id":"x","name":"…","city":"…","dims":{"facade":{"star":3,"note":"…"}}}]'></textarea>
+          <button class="btn ghost" id="impJsonBtn" data-i18n="imp.import">导入 JSON</button>
+        </details>
+        <div class="form-actions">
+          <button class="btn" id="impBtn" data-i18n="imp.add">添加案例</button>
+          <button class="btn ghost" id="expBtn" data-i18n="imp.export">导出当前案例库</button>
+          <button class="btn ghost" id="impReset" data-i18n="imp.clear">清除本地导入</button>
+        </div>
+        <div id="impMsg" class="note" style="display:none"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============ 意见（贴吧式内部留言板） ============ -->
+  <style>
+    .fb-wrap{max-width:880px;margin:0 auto}
+    .fb-composer{background:#fff;border:1px solid #e6e6e6;border-radius:14px;padding:18px 18px 14px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:18px}
+    .fb-composer .fb-row{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+    .fb-composer label{font-size:13px;color:#666;min-width:42px}
+    .fb-composer input.fb-name{width:240px}
+    .fb-composer textarea{width:100%;min-height:78px;resize:vertical;padding:10px 12px;border:1px solid #ddd;border-radius:10px;font:inherit;font-size:14px;box-sizing:border-box}
+    .fb-composer .form-actions{margin-top:10px;justify-content:flex-end}
+    .fb-banner{display:none;margin:0 auto 16px;max-width:880px;padding:11px 14px;border:1px solid #c0622e;background:rgba(192,98,46,.12);border-radius:10px;font-size:13px;line-height:1.7}
+    .fb-list{display:flex;flex-direction:column;gap:14px}
+    .fb-empty{text-align:center;color:#999;padding:40px 0;font-size:14px}
+    .fb-post{display:flex;gap:12px;background:#fff;border:1px solid #ececec;border-radius:14px;padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+    .fb-avatar{flex:0 0 38px;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#2f6df0,#7aa7ff);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px}
+    .fb-main{flex:1;min-width:0}
+    .fb-meta{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+    .fb-author{font-weight:600;color:#222}
+    .fb-time{font-size:12px;color:#aaa}
+    .fb-region{display:inline-block;font-size:12px;color:#2f6df0;background:rgba(47,109,240,.08);border:1px solid rgba(47,109,240,.18);border-radius:20px;padding:1px 9px;line-height:1.6;white-space:nowrap;flex:0 0 auto}
+    .fb-region.ip{color:#888;background:rgba(0,0,0,.04);border-color:#e3e3e3}
+    .fb-region.unknown{color:#aaa;background:#f3f3f3;border-color:#ececec}
+    .fb-text{font-size:14.5px;line-height:1.7;color:#333;white-space:pre-wrap;word-break:break-word}
+    .fb-actions{margin-top:8px}
+    .fb-reply-btn{background:none;border:none;color:#2f6df0;font-size:13px;cursor:pointer;padding:2px 0}
+    .fb-reply-btn:hover{text-decoration:underline}
+    .fb-reply-box{margin-top:10px;display:none;flex-direction:column;gap:8px;background:#f7f9fc;border:1px solid #eef1f6;border-radius:10px;padding:10px}
+    .fb-reply-box input{width:220px}
+    .fb-reply-box .form-actions{margin-top:0;justify-content:flex-start}
+    .fb-replies{margin-top:10px;border-left:3px solid #eef1f6;padding-left:14px;display:flex;flex-direction:column;gap:10px}
+    .fb-reply{font-size:13.5px}
+    .fb-reply .fb-reply-author{font-weight:600;color:#444;margin-right:8px}
+    .fb-reply .fb-time{font-size:12px;color:#aaa}
+    .fb-reply .fb-text{margin-top:2px;color:#444}
+    .fb-status{max-width:880px;margin:0 auto 14px;padding:9px 14px;border-radius:10px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+    .fb-status.ok{background:rgba(46,160,67,.10);border:1px solid #2ea043;color:#1f7a37}
+    .fb-status.warn{background:rgba(192,98,46,.10);border:1px solid #c0622e;color:#a8521f}
+    .fb-actions{display:flex;gap:14px;align-items:center}
+    .fb-del-btn{background:none;border:none;color:#bbb;font-size:13px;cursor:pointer;padding:2px 0}
+    .fb-del-btn:hover{color:#e0463e;text-decoration:underline}
+    .fb-del-btn.sm{font-size:12px;padding:0}
+    .fb-reply-head{display:flex;align-items:baseline;gap:8px}
+    .fb-reply-head .fb-del-btn{margin-left:auto}
+  </style>
+  <section id="feedback" class="section">
+    <div class="fb-wrap">
+      <p class="lead" data-i18n="fb.lead">在这里留言你对系统的改进与优化建议，类似内部贴吧。意见会保存在公司服务器上，所有同事打开都能看到彼此的记录。</p>
+      <div class="fb-status" id="fbStatus"></div>
+      <div class="fb-banner" id="fbBanner" data-i18n="fb.localMode"></div>
+      <div class="fb-composer">
+        <div class="fb-row">
+          <label for="fbName" data-i18n="fb.nameLabel">名字</label>
+          <input class="fb-name" id="fbName" type="text" maxlength="24" data-i18n-ph="fb.namePlaceholder" placeholder="你的名字（选填）">
+        </div>
+        <textarea id="fbText" maxlength="2000" data-i18n-ph="fb.textPlaceholder" placeholder="写下你的建议或反馈…"></textarea>
+        <div class="form-actions">
+          <button class="btn" id="fbSubmit" onclick="fbSubmit()" data-i18n="fb.submit">发表意见</button>
+        </div>
+      </div>
+      <div class="fb-list" id="fbList"></div>
+    </div>
+  </section>
+
+  <!-- ============ 关于 ============ -->
+  <section id="about" class="section active">
+    <div class="about-hero">
+      <div class="ah-inner">
+        <div class="ah-badge" data-i18n="about.badge">Oval 建筑事务所 · 内部方法论工具</div>
+        <h2 class="ah-title" data-i18n="about.title">商业街空间设计<br>案例研究与经验指导系统</h2>
+        <p class="ah-sub" data-i18n="about.sub">把团队在成都太古里、北京三里屯太古里、深圳大运天地等项目上积累的设计直觉，转化为<b>可检索、可对比、可复用</b>的结构化经验。</p>
+        <div class="ah-stats">
+          <div class="ah-stat"><span class="num">33</span><span class="lab" data-i18n="about.stat.cases">全球标杆案例</span></div>
+          <div class="ah-stat"><span class="num">92</span><span class="lab" data-i18n="about.stat.principles">跨案例设计法则</span></div>
+          <div class="ah-stat"><span class="num">11</span><span class="lab" data-i18n="about.stat.dims">维度分析体系</span></div>
+          <div class="ah-stat"><span class="num">46</span><span class="lab" data-i18n="about.stat.quant">量化设计指标</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sec-h" data-i18n="about.modules">核心模块</h2>
+    <div class="feat-cards">
+      <div class="feat-card" onclick="goTab('adv')">
+        <div class="fc-icon">📋</div>
+        <h3 data-i18n="about.feat.adv.title">设计指导大师</h3>
+        <p data-i18n="about.feat.adv.desc">输入项目参数与城市，系统匹配相似标杆并输出分维度决策指引——核心目标 / 决策步骤 / 关键参数 / 出彩要点 / 常见误区，附量化依据与在地研判。</p>
+      </div>
+      <div class="feat-card" onclick="goTab('lib')">
+        <div class="fc-icon">🏛</div>
+        <h3 data-i18n="about.feat.lib.title">案例库</h3>
+        <p data-i18n="about.feat.lib.desc">33 个全球标杆商业街（含 Oval 代表作），统一按 11 维标注、含星级评价与实景图。点击进入 ArchDaily 式图文详情页。</p>
+      </div>
+      <div class="feat-card" onclick="goTab('lib','cmp')">
+        <div class="fc-icon">⚖</div>
+        <h3 data-i18n="about.feat.cmp.title">对比分析</h3>
+        <p data-i18n="about.feat.cmp.desc">横向比较多个案例在同一维度上的做法，自动提炼共性成功要素，辅助方案决策与竞品研究。</p>
+      </div>
+      <div class="feat-card" onclick="goTab('adv','chat')">
+        <div class="fc-icon">💬</div>
+        <h3 data-i18n="about.feat.chat.title">AI 对话</h3>
+        <p data-i18n="about.feat.chat.desc">双窗口：文字问答（本地检索 56 案例 + 92 法则，直接回答公司项目案例对比与维度数据）；AI 生图（支持纯文字生图，或上传效果图图生图重绘，可对比、可下载）。</p>
+      </div>
+      <div class="feat-card" onclick="goTab('imp','code')">
+        <div class="fc-icon">📕</div>
+        <h3 data-i18n="about.feat.code.title">中国建筑规范</h3>
+        <p data-i18n="about.feat.code.desc">收录建筑防火、商店建筑、无障碍、照明等核心规范条文（重点 GB 50016 / GB 55037）。按项目细节自动匹配必要条文，也可手动检索条款号或关键词。</p>
+      </div>
+      <div class="feat-card" onclick="goTab('imp')">
+        <div class="fc-icon">🧰</div>
+        <h3 data-i18n="about.feat.imp.title">功能</h3>
+        <p data-i18n="about.feat.imp.desc">案例图片下载器（支持外网分享）、案例 JSON 导入与导出等小工具集合，持续扩展中。</p>
+      </div>
+      <div class="feat-card" onclick="goTab('feedback')">
+        <div class="fc-icon">💡</div>
+        <h3 data-i18n="about.feat.fb.title">意见反馈</h3>
+        <p data-i18n="about.feat.fb.desc">贴吧式内部留言板：随时留下对系统的改进与优化建议，所有同事打开都能看到彼此的记录，共建更好用的工具。</p>
+      </div>
+    </div>
+
+    <h2 class="sec-h" data-i18n="about.methodology">方法论</h2>
+    <p class="lead" data-i18n="about.methodology.text">每个维度的设计法则（92 条）由跨案例归纳而来：描述「在什么条件下，什么做法被验证成功」并附来源案例。指导大师据此把抽象经验转译为针对当前项目的可执行指引，而非泛泛而谈。量化依据引擎（46 条指标）提供明确尺度与数据区间——例如询问「多宽的步行街最适宜合肥」，系统引用 10–12m 主街、4–7m 慢巷、外摆≥2.5m 等区间，并结合在地气候、业态与人文给出建议。</p>
+    <div class="note"><b data-i18n="about.boundary">数据来源与边界</b><span data-i18n="about.boundary.text">：案例内容基于公开资料与专业研究（截至 2026 年）整理，用于设计决策辅助与内部研讨；具体项目落地仍需结合现场勘察、规范与专业判断。案例库与法则库均为纯文本，可随时在 <code>data/</code> 目录扩展。</span></div>
+  </section>
+</main>
+
+<footer><span data-i18n="header.title">商业街案例研究与设计指导系统</span> · 内部方法论工具 · 数据可扩展 · <span id="verFoot">版本加载中…</span></footer>
+
+<!-- detail modal -->
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+<div class="lightbox" id="lightbox" onclick="closeLightbox()"><img id="lbimg" src="" alt=""><div class="lbcap" id="lbcap"></div></div>
+
+<!-- settings modal -->
+<div class="overlay" id="settingsOverlay"><div class="modal settings">
+  <button class="close" onclick="closeSettings()">×</button>
+  <h2 data-i18n="settings.title">设置 · AI 生图</h2>
+  <p class="hint" data-i18n="settings.desc">AI 对话已简化为<b>只用 AI 生图</b>：输入画面描述直接生图，或上传效果图点「发送」图生图重绘。只需填入下面的 Krea Token（默认模型 openai/gpt-image-2 无需改动）。Token 仅存你浏览器本地。</p>
+
+  <div class="krea-section" style="margin-top:0">
+    <div class="section-title" data-i18n="settings.kreaSection">AI 生图 <span class="tag">唯一配置</span></div>
+    <p class="hint" data-i18n="settings.kreaHint">上传效果图后点「发送」，会调用 Krea 的 gpt-image-2 把效果图重绘成优化新图（异步生成，可对比、可下载）；输入框可填重绘要求作为提示词。Token 在 Krea 官网（Settings → API Keys）生成；API 按 Compute Unit 计费、与网页版会员额度不一定通用，以官网为准。</p>
+    <label data-i18n="settings.kreaKey">Krea API Token</label><input id="setKreaKey" type="password" placeholder="Krea 官网 Settings → API Keys 生成">
+    <label data-i18n="settings.kreaModel">Krea 模型名（Model）</label><input id="setKreaModel" placeholder="openai/gpt-image-2">
+    <div class="hint" data-i18n="settings.kreaModelHint">Krea 当前只支持 <code>openai/gpt-image-2</code>，不需要去官网找链接；如果以后新增模型，只改这一行模型名即可。</div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px">
+      <button class="btn ghost" id="kreaTestBtn" style="padding:7px 14px;font-size:13px" onclick="kreaTestConnection()" data-i18n="settings.testBtn">测试连接</button>
+      <span id="kreaTestResult" style="font-size:12.5px"></span>
+    </div>
+  </div>
+  <div class="form-actions"><button class="btn" onclick="saveSettings()" data-i18n="settings.save">保存</button><button class="btn ghost" onclick="closeSettings()" data-i18n="settings.cancel">取消</button></div>
+</div></div>
+
+<script src="data/cases.js"></script>
+<script src="data/cases_en.js"></script>
+<script src="data/images.js"></script>
+<script src="data/images.candidates.js"></script>
+<script src="data/images.curated.js"></script>
+<script src="data/gooood.curated.js"></script>
+<script src="data/principles.js"></script>
+<script src="data/guidance.js"></script>
+<script src="data/codes.js"></script>
+<script src="data/quant.js"></script>
+<script src="data/locales.js"></script>
+<script src="data/i18n.js"></script>
+<script>
+// ---------- state ----------
+// 优先使用校对后的定稿图：浏览器本地覆盖 > gooood 实拍 > data/images.curated.js > 既有 data/images.js
+function resolveImages(c){
+  try{ const ov=localStorage.getItem('oval_curated_full'); if(ov){ const m=JSON.parse(ov); if(m[c.id]&&m[c.id].length) return m[c.id]; } }catch(e){}
+  // gooood 实拍优先（仅当该案例已挑选 gooood 图，来源为真实项目照片）
+  if(typeof CASE_GOOOD_CURATED!=="undefined" && CASE_GOOOD_CURATED[c.id] && CASE_GOOOD_CURATED[c.id].length) return CASE_GOOOD_CURATED[c.id];
+  if(typeof CASE_CURATED!=="undefined" && CASE_CURATED[c.id] && CASE_CURATED[c.id].length) return CASE_CURATED[c.id];
+  return ((typeof CASE_IMAGES!=="undefined" && CASE_IMAGES[c.id])||[]);
+}
+let CASES_RUNTIME = (typeof CASES !== "undefined") ? CASES.map(c=>({...c, images:resolveImages(c)})) : [];
+
+// ---------- 案例正文英文切换（v1.34.0）----------
+// 英文模式下返回 data/cases_en.js 中的翻译正文；中文 / 繁體模式返回原文；
+// 同时兼容已导入的本地案例（本地案例无英文翻译，自动回退原文）。
+function enBody(c){
+  if(!c) return { summary:"", success:[], dims:null };
+  if(I18N_CURRENT!=="en" || typeof CASES_EN==="undefined" || !CASES_EN[c.id]){
+    return { summary:c.summary, success:(c.success||[]), dims:null };
+  }
+  const e=CASES_EN[c.id];
+  return {
+    summary:(e.summary!=null)?e.summary:c.summary,
+    success:(e.success&&e.success.length)?e.success:(c.success||[]),
+    dims:(e.dims||null)
+  };
+}
+const DIMS = [
+  ["facade","立面设计"],["landscape","景观设计"],["circulation","人流动线"],
+  ["landmark","精神堡垒 / 地标"],["signage","标识系统"],["scale","尺度与空间序列"],
+  ["program","业态组合"],["material","材质与细部"],["lighting","灯光与夜间"],
+  ["narrative","文化叙事"],["transit","交通接驳"]
+];
+const STORE_KEY = "ctc_imported_cases_v1";
+
+// 维度关键词 → 维度识别（对话与表单共用）
+const FOCUS_MAP=[
+  [/宽|尺度|宽度|多宽|DH|比例|街宽|巷宽|进深|步行街/, "scale"],
+  [/立面|店招|材质界面|界面/, "facade"],
+  [/景观|绿化|水景|可坐|花境|行道树/, "landscape"],
+  [/动线|流线|步行|路线|环线|节点/, "circulation"],
+  [/地标|精神|门户|堡垒/, "landmark"],
+  [/标识|导视|指引/, "signage"],
+  [/业态|招商|零售|餐饮|首店/, "program"],
+  [/材质|材料|细部|砖|瓦/, "material"],
+  [/灯光|夜|亮化|色温/, "lighting"],
+  [/文化|叙事|故事|文脉/, "narrative"],
+  [/交通|地铁|停车|接驳|tod/i, "transit"]
+];
+function dimLabel(k){ return t("dim."+k) || k; }
+
+// ================= 版本号（每次更新请同步递增 APP_VERSION 与 APP_BUILD） =================
+// 显示在界面头部徽标与页脚，便于复制分发时核对是否为最新版。
+const APP_VERSION = "1.39.0";
+const APP_BUILD   = "2026-08-21";
+
+// merge locally-imported cases
+(function(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw){ const arr = JSON.parse(raw); if(Array.isArray(arr)&&arr.length){ CASES_RUNTIME = CASES_RUNTIME.concat(arr); } }
+  }catch(e){}
+})();
+
+// ---------- helpers ----------
+function splitSlash(s){ return (s||"").split(/[\/、,]/).map(x=>x.trim()).filter(Boolean); }
+function stars(n){ n=+n||0; return "★".repeat(n)+"☆".repeat(3-n); }
+function uniq(arr){ return Array.from(new Set(arr)); }
+
+function fillSelect(el, values, withEmpty){
+  el.innerHTML = "";
+  if(withEmpty){
+    const o=new Option(t("lib.filter.all"),"");
+    o.setAttribute("data-i18n","lib.filter.all");
+    el.appendChild(o);
+  }
+  uniq(values).forEach(v=>{
+    const opt=new Option(catLabel(v),v); // value 保留原始中文，仅显示文案随语言切换
+    el.appendChild(opt);
+  });
+}
+// 语言切换时重建「案例库筛选」与「设计指导大师」的下拉，使分类选项文案随语言刷新（保留当前选中值）
+function rebuildFilterSelects(){
+  const pairs=[
+    [fRegion, CASES_RUNTIME.map(c=>c.region).filter(Boolean), true],
+    [fContext, allValues("context"), true],
+    [fForm, allValues("form"), true],
+    [fProgram, allValues("program"), true],
+    [fClient, allValues("clientele"), true],
+    [fClimate, allValues("climate"), true],
+    [aContext, allValues("context"), false],
+    [aClimate, allValues("climate"), false],
+    [aProgram, allValues("program"), false],
+    [aClient, allValues("clientele"), false],
+    [aForm, allValues("form"), false]
+  ];
+  pairs.forEach(([el,vals,withEmpty])=>{
+    if(!el) return;
+    const cur=el.value;
+    fillSelect(el, vals, withEmpty);
+    if(cur) el.value=cur;
+  });
+}
+function allValues(field){ return CASES_RUNTIME.map(c=>c[field]).filter(Boolean).flatMap(splitSlash); }
+
+// ---------- init filters & selects ----------
+const fRegion=document.getElementById("fRegion"), fContext=document.getElementById("fContext"),
+  fForm=document.getElementById("fForm"), fProgram=document.getElementById("fProgram"),
+  fClient=document.getElementById("fClient"), fClimate=document.getElementById("fClimate");
+fillSelect(fRegion, CASES_RUNTIME.map(c=>c.region).filter(Boolean), true);
+fillSelect(fContext, allValues("context"), true);
+fillSelect(fForm, allValues("form"), true);
+fillSelect(fProgram, allValues("program"), true);
+fillSelect(fClient, allValues("clientele"), true);
+fillSelect(fClimate, allValues("climate"), true);
+
+// advisor selects
+const aContext=document.getElementById("aContext"), aClimate=document.getElementById("aClimate"),
+  aProgram=document.getElementById("aProgram"), aClient=document.getElementById("aClient"),
+  aForm=document.getElementById("aForm");
+fillSelect(aContext, allValues("context"));
+fillSelect(aClimate, allValues("climate"));
+fillSelect(aProgram, allValues("program"));
+fillSelect(aClient, allValues("clientele"));
+fillSelect(aForm, allValues("form"));
+
+[fRegion,fContext,fForm,fProgram,fClient,fClimate].forEach(el=>el.addEventListener("change",renderLib));
+document.getElementById("fSearch").addEventListener("input",renderLib);
+
+// ---------- library ----------
+function renderLib(){
+  const q=(document.getElementById("fSearch").value||"").toLowerCase();
+  const f={region:fRegion.value,context:fContext.value,form:fForm.value,program:fProgram.value,clientele:fClient.value,climate:fClimate.value};
+  const grid=document.getElementById("cardGrid"); grid.innerHTML="";
+  const list=CASES_RUNTIME.filter(c=>{
+    if(f.region && c.region!==f.region) return false;
+    if(f.context && !splitSlash(c.context).includes(f.context)) return false;
+    if(f.form && !splitSlash(c.form).includes(f.form)) return false;
+    if(f.program && !splitSlash(c.program).includes(f.program)) return false;
+    if(f.clientele && !splitSlash(c.clientele).includes(f.clientele)) return false;
+    if(f.climate && c.climate!==f.climate) return false;
+    if(q){
+      const hay=(c.name+c.nameEn+c.city+c.country+(c.tags||[]).join("")+c.summary).toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  if(!list.length){ grid.innerHTML='<p class="lead">'+t("lib.noMatch")+'</p>'; return; }
+  list.forEach(c=>{
+    const three=(Object.values(c.dims||{}).filter(d=>d&&d.star===3).length);
+    const imgs=c.images||[]; const hero=imgs[0];
+    const media = hero
+      ? `<img src="${hero.file}" alt="${c.name}" loading="lazy" onerror="imgFail(this,'${c.name}')">`
+      : `<div class="ph"><div class="phname">${c.name}</div></div>`;
+    const div=document.createElement("div"); div.className="card";
+    div.innerHTML=`<div class="card-media">${media}</div>
+      <div class="card-body">
+        <h3>${c.name}</h3><div class="en">${c.nameEn||""}</div>
+        <div class="meta"><b>${caseMeta(c.city)||""}</b> · ${caseMeta(c.country)||""} ${c.year?("· "+c.year):""}</div>
+        <div class="tags">${(c.tags||[]).slice(0,4).map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+        <div class="scoremeta">${"★".repeat(three)||"☆"} ${three} ${t("lib.worldStar")} · ${imgs.length?(t("lib.imgs",{n:imgs.length})):t("lib.clickDetail")}</div>
+      </div>`;
+    div.onclick=()=>openDetail(c.id);
+    grid.appendChild(div);
+  });
+}
+
+function openDetail(id){
+  const c=CASES_RUNTIME.find(x=>x.id===id); if(!c) return;
+  window.__openDetailId = id;
+  const be = enBody(c);
+  const m=document.getElementById("modal");
+  const imgs=c.images||[];
+  let dimsHtml="";
+  DIMS.forEach(([k])=>{
+    const d=(c.dims&&c.dims[k])||{};
+    const note = (be.dims && be.dims[k]!=null) ? be.dims[k] : (d.note||"");
+    dimsHtml+=`<div class="adim"><div class="al">${dimLabel(k)}<span class="st">${stars(d.star||0)}</span></div>
+      <div class="an">${note||"<i>"+t("detail.noDim")+"</i>"}</div></div>`;
+  });
+  const nm=(c.name||"").replace(/'/g,"");
+  const dash=t("detail.dash");
+  const nmMain=(I18N_CURRENT==="en"&&c.nameEn)?c.nameEn:c.name;
+  const nmSub=(I18N_CURRENT==="en")?c.name:(c.nameEn||"");
+  const heroBlock = imgs[0]
+    ? `<div class="hero"><img src="${imgs[0].file}" alt="${c.name}" onerror="imgFail(this,'${nm}')">
+         <div class="htitle"><h2>${nmMain}</h2><div class="sub">${nmSub}</div></div></div>`
+    : `<div class="hero"><div class="ph"><div class="phname">${nmMain}</div><div>${nmSub}</div></div>
+         <div class="htitle"><h2>${nmMain}</h2><div class="sub">${nmSub}</div></div></div>`;
+  let galleryHtml;
+  if(imgs.length){
+    galleryHtml=`<div class="gallery">
+      <div class="gallery-main" onclick="openLightbox(window.__galIdx||0)">
+        <img id="gmain-${c.id}" src="${imgs[0].file}" alt="${imgs[0].caption||c.name}" onerror="imgFail(this,'${nm}')"></div>
+      <div class="gallery-cap" id="gcap-${c.id}">${(imgs[0].caption||"")}${imgs[0].credit?("　·　"+imgs[0].credit):""}</div>
+      ${imgs.length>1?`<div class="gallery-thumbs">${imgs.map((im,i)=>`<div class="thumb${i===0?" active":""}" onclick="setGallery('${c.id}',${i})"><img src="${im.file}" alt="" onerror="imgFail(this,'${nm}')"></div>`).join("")}</div>`:""}
+    </div>`;
+  } else {
+    galleryHtml=`<div class="gallery"><div class="gallery-main gph"><div class="ph"><div class="phname">${c.name}</div><div>${t("detail.galleryEmpty",{id:c.id})}</div></div></div></div>`;
+  }
+  m.innerHTML=`<button class="close" onclick="closeDetail()">×</button>
+    ${heroBlock}
+    <div class="facts">
+      <span><b>${t("detail.city")}</b> ${caseMeta(c.city)||dash} / ${caseMeta(c.country)||dash}</span>
+      <span><b>${t("detail.design")}</b> ${c.firm||dash}</span>
+      <span><b>${t("detail.year")}</b> ${c.year||dash}</span>
+      <span><b>${t("detail.type")}</b> ${caseMeta(c.typology)||dash}</span>
+      <span><b>${t("detail.scale")}</b> ${c.gfa||dash}</span>
+      <span><b>${t("detail.context")}</b> ${c.context?caseMeta(c.context):dash}</span>
+      <span><b>${t("detail.climate")}</b> ${caseMeta(c.climate)||dash}</span>
+      <span><b>${t("detail.program")}</b> ${c.program?caseMeta(c.program):dash}</span>
+      <span><b>${t("detail.client")}</b> ${c.clientele?caseMeta(c.clientele):dash}</span>
+      <span><b>${t("detail.form")}</b> ${c.form?caseMeta(c.form):dash}</span>
+    </div>
+    ${galleryHtml}
+    <div class="summary"><b>${t("detail.summary")}</b>${be.summary||dash}</div>
+    <h3 class="ad-h">${t("detail.success")}</h3>
+    <div class="succ">${(be.success||[]).map(t=>`<span class="tag">${t}</span>`).join("")||dash}</div>
+    <h3 class="ad-h">${t("detail.dims")}</h3>
+    ${dimsHtml}
+    <p class="legend">${t("detail.legend")}</p>`;
+  window.__gal = imgs.map(im=>({file:im.file,caption:im.caption||"",credit:im.credit||""}));
+  window.__galIdx = 0;
+  document.getElementById("overlay").classList.add("show");
+}
+function imgFail(el,name){ const d=document.createElement("div"); d.className="ph";
+  d.innerHTML=`<div class="phname">${name}</div>`; el.replaceWith(d); }
+// 案例配图（带缺图兜底），用于「设计指导大师」生成结果
+function caseImgTag(c){
+  const nm=(c&&c.name||"案例").replace(/'/g,"");
+  if(c && c.images && c.images.length){
+    return `<img src="${c.images[0].file}" alt="${(c.name||"")}" loading="lazy" onerror="imgFail(this,'${nm}')">`;
+  }
+  return `<div class="ph"><div class="phname">${nm}</div></div>`;
+}
+function setGallery(id,i){ const imgs=window.__gal||[]; const im=imgs[i]; if(!im)return;
+  window.__galIdx=i;
+  const main=document.getElementById("gmain-"+id); if(main) main.src=im.file;
+  const cap=document.getElementById("gcap-"+id); if(cap) cap.textContent=(im.caption||"")+(im.credit?("　·　"+im.credit):"");
+  document.querySelectorAll(".thumb").forEach((t,idx)=>t.classList.toggle("active",idx===i)); }
+function openLightbox(i){ const imgs=window.__gal||[]; const im=imgs[i]; if(!im)return;
+  const lb=document.getElementById("lightbox");
+  document.getElementById("lbimg").src=im.file;
+  document.getElementById("lbcap").textContent=(im.caption||"")+(im.credit?("　·　"+im.credit):"");
+  lb.classList.add("show"); }
+function closeLightbox(){ document.getElementById("lightbox").classList.remove("show"); }
+function closeDetail(){ document.getElementById("overlay").classList.remove("show"); window.__openDetailId=null; }
+document.getElementById("overlay").addEventListener("click",e=>{ if(e.target.id==="overlay") closeDetail(); });
+
+// ---------- compare ----------
+function renderPick(){
+  const pl=document.getElementById("pickList"); pl.innerHTML="";
+  CASES_RUNTIME.forEach(c=>{
+    const lb=document.createElement("label");
+    lb.innerHTML=`<input type="checkbox" value="${c.id}"> ${c.name} <span style="color:var(--muted)">· ${c.city}</span>`;
+    pl.appendChild(lb);
+  });
+}
+document.getElementById("cmpClear").onclick=()=>{
+  document.querySelectorAll("#pickList input").forEach(i=>i.checked=false);
+  document.getElementById("cmpResult").innerHTML="";
+  window.__lastCmpIds=null;
+};
+function renderCompare(ids){
+  if(ids.length<2){ alert(t("cmp.alertMin")); return; }
+  const sel=ids.map(id=>CASES_RUNTIME.find(c=>c.id===id)).filter(Boolean);
+  const out=document.getElementById("cmpResult"); let html="";
+
+  // ---- 1. 案例卡片（图文并茂）----
+  html+=`<div class="cmp-cards">`;
+  sel.forEach(c=>{
+    const img=caseImgTag(c);
+    const tags=(c.tags||[]).slice(0,4).map(tg=>`<span>${tg}</span>`).join("");
+    html+=`<div class="cmp-card" onclick="openDetail('${c.id}')">
+      <div class="cmp-card-img">${img}</div>
+      <div class="cmp-card-body">
+        <h4>${c.name}</h4>
+        <div class="meta">${c.city||""} · ${c.year||"—"} · ${c.typology||""}<br>${c.firm||""}<br>${c.gfa||""}</div>
+        ${tags?`<div class="tags">${tags}</div>`:""}
+      </div></div>`;
+  });
+  html+=`</div>`;
+
+  // ---- 2. 项目概况对比表 ----
+  const ovFields=[
+    [t("cmp.fRegion"),c=>caseMeta(c.region)||"—"],
+    [t("cmp.fContext"),c=>caseMeta(c.context)||"—"],
+    [t("cmp.fClimate"),c=>caseMeta(c.climate)||"—"],
+    [t("cmp.fProgram"),c=>caseMeta(c.program)||"—"],
+    [t("cmp.fClientele"),c=>caseMeta(c.clientele)||"—"],
+    [t("cmp.fForm"),c=>caseMeta(c.form)||"—"],
+    [t("cmp.fTypology"),c=>caseMeta(c.typology)||"—"],
+    [t("cmp.fGfa"),c=>c.gfa||"—"],
+    [t("cmp.fFirm"),c=>c.firm||"—"]
+  ];
+  html+=`<h2 style="font-size:18px;margin:20px 0 6px">${t("cmp.overviewTitle")}</h2>`;
+  html+=`<div style="overflow-x:auto"><table class="cmp-overview"><tr><th>${t("cmp.fField")}</th>`;
+  sel.forEach(c=>{ html+=`<th style="cursor:pointer" onclick="openDetail('${c.id}')">${c.name}</th>`; });
+  html+=`</tr>`;
+  ovFields.forEach(([label,fn])=>{
+    html+=`<tr><th>${label}</th>`;
+    sel.forEach(c=>{ html+=`<td>${fn(c)}</td>`; });
+    html+=`</tr>`;
+  });
+  html+=`</table></div>`;
+
+  // ---- 3. 总分对比柱状图 ----
+  html+=`<div class="cmp-score-section">`;
+  html+=`<h2 style="font-size:17px;margin:0 0 10px">${t("cmp.scoreTitle")}</h2>`;
+  const maxTotal=33;
+  sel.forEach(c=>{
+    let total=0; DIMS.forEach(([k])=>{ if(c.dims&&c.dims[k]) total+=(c.dims[k].star||0); });
+    const pct=Math.round(total/maxTotal*100);
+    const cls=total>=28?"b3":total>=20?"b2":"b1";
+    html+=`<div class="cmp-score-row">
+      <div class="sname" onclick="openDetail('${c.id}')">${c.name}</div>
+      <div class="sbar-wrap"><div class="sbar ${cls}" style="width:${pct}%">${total}/${maxTotal}</div></div>
+    </div>`;
+  });
+  html+=`</div>`;
+
+  // ---- 4. 共性成功要素 ----
+  const tagCount={};
+  sel.forEach(c=>(enBody(c).success||[]).forEach(s=>tagCount[s]=(tagCount[s]||0)+1));
+  const common=Object.entries(tagCount).filter(([s,n])=>n>=2).sort((a,b)=>b[1]-a[1]).map(([s])=>s);
+  html+=`<h2 style="font-size:18px;margin:20px 0 6px">${t("cmp.common")}</h2><div class="cloud">${
+    common.length? common.map(s=>`<span class="chip">${s}</span>`).join("") : '<span class="lead">'+t("cmp.commonNone")+'</span>'}</div>`;
+
+  // ---- 5. 逐维度对比（增强：星级条 + 冠军标记 + 完整点评）----
+  DIMS.forEach(([k])=>{
+    const ranked=sel.filter(c=>c.dims&&c.dims[k]).slice().sort((a,b)=>((b.dims[k].star||0)-(a.dims[k].star||0)));
+    if(!ranked.length) return;
+    const topStar=ranked[0].dims[k].star||0;
+    html+=`<div class="cmp-block"><h3>${dimLabel(k)}`;
+    // 维度总分柱
+    html+=`<div class="cmp-dim-bar">`;
+    sel.forEach(c=>{
+      const s=(c.dims&&c.dims[k])?(c.dims[k].star||0):0;
+      const cls=s>=3?"on3":s>=2?"on2":s>=1?"on1":"";
+      html+=`<span class="${cls}" title="${c.name}: ${s}★"></span>`;
+    });
+    html+=`</div></h3>`;
+    ranked.forEach(c=>{
+      const d=c.dims[k];
+      const en=enBody(c);
+      const note=(en.dims && en.dims[k]!=null)? en.dims[k] : (d.note||"");
+      const isWinner=(d.star||0)===topStar && topStar>0;
+      html+=`<div class="cmp-row"><div class="cname">${c.name} <span style="color:var(--star)">${stars(d.star||0)}</span>${isWinner?`<span class="cmp-winner">${t("cmp.winner")}</span>`:""}</div>
+        <div class="cnote">${note||""}</div></div>`;
+    });
+    html+=`</div>`;
+  });
+
+  // ---- 6. 案例综述对比 ----
+  html+=`<h2 style="font-size:18px;margin:20px 0 6px">${t("cmp.summaryTitle")}</h2>`;
+  html+=`<div class="cmp-summary">`;
+  sel.forEach(c=>{
+    html+=`<div class="cmp-summary-item"><h4>${c.name}</h4><p>${enBody(c).summary||"—"}</p></div>`;
+  });
+  html+=`</div>`;
+
+  // ---- 7. 相关设计法则 ----
+  const priSeen={}; const priList=[];
+  DIMS.forEach(([k])=>{
+    PRINCIPLES.forEach(p=>{
+      if(p.dimension!==k) return;
+      const srcs=(p.source||[]).filter(sid=>ids.includes(sid));
+      if(!srcs.length) return;
+      const key=p.id||p.text; if(priSeen[key]) return; priSeen[key]=1;
+      priList.push({p,srcs,k});
+    });
+  });
+  if(priList.length){
+    html+=`<h2 style="font-size:18px;margin:20px 0 6px">📐 ${t("cmp.principlesTitle")}</h2>`;
+    priList.slice(0,8).forEach(({p,srcs,k})=>{
+      const srcNames=srcs.map(sid=>{ const cc=CASES_RUNTIME.find(x=>x.id===sid); return cc?cc.name:sid; }).join("、");
+      html+=`<div style="font-size:13px;margin:5px 0;padding:8px 12px;border-left:3px solid var(--accent);background:var(--panel);border-radius:0 8px 8px 0">
+        <b style="color:var(--accent)">${dimLabel(k)}</b>　${p.text}
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">${t("cmp.source")}: ${srcNames}</div></div>`;
+    });
+  }
+
+  out.innerHTML=html; out.scrollIntoView({behavior:"smooth"});
+}
+document.getElementById("cmpBtn").onclick=()=>{
+  const ids=[...document.querySelectorAll("#pickList input:checked")].map(i=>i.value);
+  if(ids.length<2){ alert(t("cmp.alertMin")); return; }
+  window.__lastCmpIds = ids.slice();
+  renderCompare(ids);
+};
+
+// ---------- advisor ----------
+const WEIGHT={context:4,form:3,program:3,clientele:2,climate:2};
+function scoreCase(c,prof){
+  let s=0; const reasons=[];
+  ["context","form","program","clientele","climate"].forEach(attr=>{
+    const pv=prof[attr]; if(!pv) return;
+    const cvs=splitSlash(c[attr]);
+    if(cvs.includes(pv)){ s+=WEIGHT[attr]; reasons.push(labelOf(attr)+"✓"); }
+    else if((c.tags||[]).includes(pv)){ s+=1; reasons.push(labelOf(attr)+"(标签)✓"); }
+  });
+  return {score:s, reasons};
+}
+function labelOf(a){return {context:t("sys.context"),form:t("sys.form"),program:t("sys.program"),clientele:t("sys.clientele"),climate:t("sys.climate")}[a];}
+
+document.getElementById("advReset").onclick=()=>{
+  [aContext,aClimate,aProgram,aClient,aForm].forEach(s=>s.value="");
+  document.getElementById("aCity").value=""; document.getElementById("aNote").value="";
+  document.getElementById("aFocus").value="";
+  document.getElementById("advResult").innerHTML="";
+  window.__advProf=null;
+};
+function renderAdvisor(prof){
+  if(!prof.context&&!prof.form&&!prof.program&&!prof.clientele&&!prof.climate&&!prof.city){
+    alert(t("adv.alertEmpty")); return;
+  }
+  // ---- 城市 / 地域研判解析 ----
+  const loc = prof.city ? (LOCALES[prof.city] || LOCALES._fallback) : null;
+  const locFound = prof.city ? !!LOCALES[prof.city] : false;
+
+  // ---- 关注重点 / 提问 → 维度识别（FOCUS_MAP 见全局定义）----
+  let focusDim=null;
+  if(prof.focus){ for(const [re,d] of FOCUS_MAP){ if(re.test(prof.focus)){ focusDim=d; break; } } }
+
+  // ---- 匹配案例 ----
+  const scored=CASES_RUNTIME.map(c=>{const r=scoreCase(c,prof);return {c,...r};})
+    .filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,6);
+  let pool = scored.length? scored : CASES_RUNTIME.slice(0,4).map(c=>({c,score:0,reasons:[]}));
+  const matchedIds=new Set(pool.map(x=>x.c.id));
+  // 把城市类比案例纳入参考（即便未直接匹配参数）
+  let analogRefs=[];
+  if(loc && loc.analogCases){
+    loc.analogCases.forEach(id=>{
+      if(matchedIds.has(id)) return;
+      const c=CASES_RUNTIME.find(x=>x.id===id);
+      if(c){ analogRefs.push({c,score:0,reasons:[t("adv.analogReason")+" · 结合"+(prof.city||t("adv.overallCity"))],analog:true}); matchedIds.add(id); }
+    });
+  }
+
+  // ---- 适用法则 ----
+  const applicable=PRINCIPLES.filter(p=>{
+    const cond=p.conditions||{};
+    return Object.keys(cond).every(k=>{
+      const want=prof[k]; if(!want) return true;
+      return (cond[k]||[]).includes(want);
+    });
+  });
+  const byDim={}; applicable.forEach(p=>{(byDim[p.dimension]=byDim[p.dimension]||[]).push(p);});
+
+  // ---- 共性成功要素 ----
+  const tagCount={};
+  pool.forEach(x=>(enBody(x.c).success||[]).forEach(t=>tagCount[t]=(tagCount[t]||0)+1));
+  const common=Object.entries(tagCount).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([t])=>t);
+
+  const caseName=id=>{const c=CASES_RUNTIME.find(x=>x.id===id);return c?c.name:id;};
+  const qcondOk=f=>{const cond=f.conditions||{};return Object.keys(cond).every(ck=>{const want=prof[ck];if(!want)return true;return (cond[ck]||[]).includes(want);});};
+
+  let html="";
+  // ---- 结果头图（图文并茂首屏）----
+  const heroCase = pool[0] && pool[0].c;
+  const heroTitle = prof.city || t("adv.overallCity");
+  if(heroCase && heroCase.images && heroCase.images.length){
+    html+=`<div class="res-hero" style="background-image:linear-gradient(120deg,rgba(79,54,32,.82),rgba(138,90,47,.5)),url('${heroCase.images[0].file}')">
+      <div class="res-hero-t"><h2>${t("adv.heroTitle",{city:heroTitle})}</h2>
+      <p>${t("adv.heroSub",{n:pool.length,case:heroCase.name})}</p></div></div>`;
+  } else {
+    html+=`<div class="res-hero res-hero-plain"><div class="res-hero-t"><h2>${t("adv.heroTitle",{city:heroTitle})}</h2>
+      <p>${t("adv.heroSubNoImg",{n:pool.length})}</p></div></div>`;
+  }
+  // ---- 项目所在地研判 ----
+  if(loc){
+    html+=`<div class="locale"><h2 class="res-h" style="margin-top:0;color:var(--accent)">${t("adv.locale",{city:prof.city||t("adv.overallCity")})}</h2>`;
+    html+=`<div class="loc-grid"><div><b>${t("adv.localeClimate")}</b><br>${loc.climate}</div><div><b>${t("adv.localeRegion")}</b><br>${loc.region}</div></div>`;
+    html+=`<div class="loc-block"><b>${t("adv.localeBusiness")}</b><br>${loc.business}</div>`;
+    html+=`<div class="loc-block"><b>${t("adv.localeCulture")}</b><br>${loc.culture}</div>`;
+    html+=`<div class="loc-block"><b>${t("adv.localeScale")}</b><br>${loc.scaleHint}</div>`;
+    const analogs=(loc.analogCases||[]).map(id=>CASES_RUNTIME.find(c=>c.id===id)).filter(Boolean);
+    if(analogs.length){
+      html+=`<div class="loc-block"><b>${t("adv.localeAnalog")}</b><div class="loc-thumbs">`;
+      analogs.forEach(c=> html+=`<div class="lthumb" onclick="openDetail('${c.id}')">${caseImgTag(c)}<div class="lthumb-cap">${c.name}</div></div>`);
+      html+=`</div></div>`;
+    }
+    if(!locFound) html+=`<div class="note" style="margin-top:8px">${t("adv.localeFallback")}</div>`;
+    html+=`</div>`;
+  }
+  // ---- 关注重点横幅 ----
+  if(focusDim){
+    html+=`<div class="focusban">${t("adv.focusBan",{dim:dimLabel(focusDim)})}</div>`;
+    if(focusDim==="scale" && loc){
+      const sq=(QUANT.scale.facts||[]).filter(qcondOk);
+      const pick=sq.filter(f=>/主街|慢街|外摆/.test(f.metric)).slice(0,3);
+      html+=`<div class="focusban" style="background:var(--good)">${t("adv.focusScale",{city:prof.city||t("adv.overallCity"),facts:pick.map(f=>f.metric+' '+f.value).join('；'),hint:loc.scaleHint})}</div>`;
+    }
+  }
+
+  // ---- 匹配标杆案例（图文卡片）----
+  html+=`<h2 class="res-h">${t("adv.matchCase")}</h2><div class="mcards">`;
+  pool.forEach(x=>{
+    html+=`<div class="mcard" onclick="openDetail('${x.c.id}')">
+      <div class="mcard-img">${caseImgTag(x.c)}</div>
+      <div class="mcard-body"><span class="mscore">${t("adv.matchScore",{n:x.score})}</span>
+      <h4>${x.c.name} <span style="color:var(--muted);font-weight:400;font-size:13px">${x.c.nameEn||""}</span></h4>
+      <div class="mwhy">${x.reasons.length? t("adv.matchReason",{rs:x.reasons.join("　")}) : t("adv.matchGeneric")} · ${x.c.city} · ${x.c.typology||""}</div></div></div>`;
+  });
+  if(analogRefs.length){
+    html+=`</div><h3 style="font-size:14px;color:var(--accent);margin:14px 0 6px">${t("adv.analogRef",{city:prof.city||t("adv.overallCity")})}</h3><div class="mcards">`;
+    analogRefs.forEach(x=>{
+      html+=`<div class="mcard analog" onclick="openDetail('${x.c.id}')">
+        <div class="mcard-img">${caseImgTag(x.c)}</div>
+        <div class="mcard-body"><span class="mscore" style="color:var(--good)">${t("adv.analogTag")}</span>
+        <h4>${x.c.name} <span style="color:var(--muted);font-weight:400;font-size:13px">${x.c.nameEn||""}</span></h4>
+        <div class="mwhy">${x.reasons[0]||t("adv.analogReason")} · ${x.c.city} · ${x.c.typology||""}</div></div></div>`;
+    });
+  }
+  html+=`</div>`;
+
+  // ---- 分维度设计指引 ----
+  html+=`<h2 class="res-h" style="margin-top:22px">${t("adv.guideTitle")}</h2>`;
+  const relOf=p=>{let s=0;const cond=p.conditions||{};Object.keys(cond).forEach(k=>{const pv=prof[k];if(pv&&(cond[k]||[]).includes(pv))s++;});return s;};
+  let order = DIMS.slice();
+  if(focusDim){ order = [[focusDim, dimLabel(focusDim)]].concat(order.filter(([k])=>k!==focusDim)); }
+  order.forEach(([k,label])=>{
+    const ps=(byDim[k]||[]).slice().sort((a,b)=>relOf(b)-relOf(a)).slice(0,3);
+    const demoCase=pool.find(x=>x.c.dims&&x.c.dims[k]&&(x.c.dims[k].star||0)>=2)
+      || pool.find(x=>x.c.dims&&x.c.dims[k])
+      || analogRefs.find(x=>x.c.dims&&x.c.dims[k]);
+    const g=(typeof GUIDANCE!=="undefined"&&GUIDANCE&&GUIDANCE[k])||null;
+    const q=(typeof QUANT!=="undefined"&&QUANT&&QUANT[k])||null;
+    if(!ps.length && !demoCase && !g && !(q&&q.facts&&q.facts.length)) return;
+    html+=`<div class="guideo"><h3>${dimLabel(k)}${k===focusDim?' <span class="badge">'+t("adv.focusBadge")+'</span>':''}</h3>`;
+    if(g){
+      html+=`<div class="gmaster"><div class="gm-goal"><b>${t("adv.goal")}</b>${g.goal}</div>`;
+      html+=`<div class="gm-sec"><b>${t("adv.steps")}</b><ol class="gm-steps">${g.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>`;
+      html+=`<div class="gm-sec"><b>${t("adv.params")}</b><table class="gm-params"><tbody>${g.params.map(p=>`<tr><td>${p[0]}</td><td>${p[1]}</td></tr>`).join("")}</tbody></table></div>`;
+      html+=`<div class="gm-sec two"><div><b>${t("adv.highlights")}</b><ul class="gm-list">${g.highlights.map(h=>`<li>${h}</li>`).join("")}</ul></div>`;
+      html+=`<div><b>${t("adv.pitfalls")}</b><ul class="gm-list pit">${g.pitfalls.map(p=>`<li>${p}</li>`).join("")}</ul></div></div></div>`;
+    }
+    if(q && q.facts && q.facts.length){
+      const facts=q.facts.filter(qcondOk);
+      if(facts.length){
+        html+=`<div class="quant"><b class="qlabel">${t("adv.quantLabel")}</b><table class="qtable"><tbody>`;
+        facts.forEach(f=>{
+          const src=f.cases.filter(id=>CASES_RUNTIME.find(c=>c.id===id)).map(caseName);
+          html+=`<tr><td class="qm">${f.metric}</td><td class="qv">${f.value}</td></tr>`;
+          html+=`<tr class="qsub"><td colspan="2"><span class="qband">${f.band}</span>${src.length?('<b>'+t("adv.evidence")+'</b>：'+src.map(s=>`<span class="tag">${s}</span>`).join(' ')):''}${f.note?('　'+f.note):''}</td></tr>`;
+        });
+        html+=`</tbody></table></div>`;
+      }
+    }
+    if(ps.length){
+      html+=`<div style="margin-top:8px"><b style="font-size:13px;color:var(--accent)">${t("adv.principleLabel")}</b>`;
+      ps.forEach(p=>{
+        const src=p.source.filter(id=>CASES_RUNTIME.find(c=>c.id===id)).map(caseName);
+        html+=`<p class="gtext">${p.text}</p>`;
+        if(src.length) html+=`<div class="gcases">${t("adv.principleRefs")}${src.map(s=>`<span class="tag">${s}</span>`).join(" ")}</div>`;
+      });
+      html+=`</div>`;
+    }
+    if(demoCase){
+      const d=demoCase.c.dims[k];
+      const en=enBody(demoCase.c);
+      const note=(en.dims && en.dims[k]!=null)? en.dims[k] : (d.note||"");
+      html+=`<div class="gdemo"><div class="gdemo-img">${caseImgTag(demoCase.c)}</div>
+        <div class="gdemo-txt"><b>${t("adv.demoLabel",{case:demoCase.c.name})}</b><br>${note||""}</div></div>`;
+    }
+    if(k==='scale' && loc && loc.scaleHint){
+      html+=`<div class="locscale"><b>${t("adv.scaleHint",{city:prof.city||t("adv.overallCity")})}</b>${loc.scaleHint}</div>`;
+    }
+    html+=`</div>`;
+  });
+  // overall
+  html+=`<div class="overall"><b>${t("adv.overallTitle")}</b><br>`;
+  const topPrinciples=applicable.slice(0,4);
+  if(topPrinciples.length){
+    html+= topPrinciples.map(p=>"· "+p.text).join("<br>");
+  } else {
+    html+="· "+t("adv.noPrinciple");
+  }
+  if(common.length) html+=`<br><br><b>${t("adv.commonSuccessRef")}</b>${common.map(tag=>`<span class="tag">${tag}</span>`).join(" ")}`;
+  if(prof.note) html+=`<br><br><b>${t("adv.yourNote")}</b>${prof.note}`;
+  html+=`</div>`;
+  document.getElementById("advResult").innerHTML=html;
+  document.getElementById("advResult").scrollIntoView({behavior:"smooth"});
+}
+document.getElementById("advBtn").onclick=()=>{
+  const prof={context:aContext.value,climate:aClimate.value,program:aProgram.value,
+    clientele:aClient.value,form:aForm.value,
+    city:(document.getElementById("aCity").value||"").trim(),
+    note:document.getElementById("aNote").value,
+    focus:(document.getElementById("aFocus").value||"").trim()};
+  if(!prof.context&&!prof.form&&!prof.program&&!prof.clientele&&!prof.climate&&!prof.city){
+    alert(t("adv.alertEmpty")); return;
+  }
+  window.__advProf = prof;
+  renderAdvisor(prof);
+};
+
+// ---------- import / export ----------
+// 生成 11 维度评分行（标签带 data-i18n，语言切换时由 applyLang 自动刷新）
+function buildImpDimRows(){
+  const host=document.getElementById("impDimRows");
+  if(!host) return;
+  host.innerHTML = DIMS.map(([k])=>`
+    <div class="imp-dim-row" data-dim="${k}">
+      <div class="imp-dim-label" data-i18n="dim.${k}">${dimLabel(k)}</div>
+      <div class="imp-stars">
+        ${[1,2,3].map(s=>`<button type="button" class="imp-star" data-star="${s}" title="${s}★">★</button>`).join("")}
+      </div>
+      <input class="imp-dim-note" type="text" placeholder="点评（可选）">
+    </div>`).join("");
+  host.querySelectorAll(".imp-star").forEach(b=>{
+    b.onclick=()=>{
+      const row=b.closest(".imp-dim-row");
+      const v=+b.dataset.star;
+      row.dataset.star=v;
+      row.querySelectorAll(".imp-star").forEach(x=>x.classList.toggle("on", +x.dataset.star<=v));
+    };
+  });
+}
+// 通用：校验 + 本地持久化 + 合并入库
+function mergeImportedCases(arr){
+  const valid=arr.filter(c=>c.id&&c.name&&c.dims);
+  if(!valid.length) return {added:0, msg:t("imp.noValid")};
+  const existing=new Set(CASES_RUNTIME.map(c=>c.id));
+  const added=valid.filter(c=>!existing.has(c.id));
+  if(!added.length) return {added:0, msg:t("imp.noNew")};
+  let stored=[]; try{stored=JSON.parse(localStorage.getItem(STORE_KEY)||"[]");}catch(e){}
+  stored=stored.concat(added); localStorage.setItem(STORE_KEY,JSON.stringify(stored));
+  CASES_RUNTIME=CASES_RUNTIME.concat(added.map(c=>({...c, images:resolveImages(c)})));
+  refreshAll();
+  return {added:added.length, msg:t("imp.ok",{n:added.length})};
+}
+// 表单逐条录入
+document.getElementById("impBtn").onclick=()=>{
+  const msg=document.getElementById("impMsg"); msg.style.display="block";
+  const v=id=>(document.getElementById(id).value||"").trim();
+  const name=v("imp_name"), city=v("imp_city");
+  if(!name){ msg.textContent=t("imp.needName"); return; }
+  if(!city){ msg.textContent=t("imp.needCity"); return; }
+  const dims={};
+  document.querySelectorAll("#impDimRows .imp-dim-row").forEach(row=>{
+    const k=row.dataset.dim;
+    const star=+row.dataset.star||1;
+    const note=(row.querySelector(".imp-dim-note").value||"").trim();
+    dims[k]={star,note};
+  });
+  const c={
+    id:"imp_"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+    name, city,
+    nameEn:v("imp_nameEn"),
+    country:v("imp_country")||t("imp.defaultCountry"),
+    firm:v("imp_firm"), year:v("imp_year"), typology:v("imp_typology"),
+    gfa:v("imp_gfa"), climate:v("imp_climate"),
+    context:v("imp_context"), program:v("imp_program"),
+    clientele:v("imp_clientele"), form:v("imp_form"),
+    tags:splitSlash(v("imp_tags")),
+    success:splitSlash(v("imp_success")),
+    summary:v("imp_summary"),
+    dims
+  };
+  const r=mergeImportedCases([c]);
+  if(r.added){
+    msg.textContent=t("imp.added",{name});
+    ["imp_name","imp_city","imp_nameEn","imp_country","imp_firm","imp_year","imp_typology","imp_gfa","imp_climate","imp_context","imp_program","imp_clientele","imp_form","imp_tags","imp_success","imp_summary"].forEach(id=>{const el=document.getElementById(id); if(el) el.value="";});
+    document.querySelectorAll("#impDimRows .imp-dim-row").forEach(row=>{ row.dataset.star=""; row.querySelectorAll(".imp-star").forEach(x=>x.classList.remove("on")); });
+  } else {
+    msg.textContent=r.msg;
+  }
+};
+// 高级：粘贴 JSON 批量导入
+document.getElementById("impJsonBtn").onclick=()=>{
+  const msg=document.getElementById("impMsg"); msg.style.display="block";
+  const raw=(document.getElementById("impJson").value||"").trim();
+  if(!raw){ msg.textContent=t("imp.needJson"); return; }
+  try{
+    let data=JSON.parse(raw);
+    let arr=Array.isArray(data)?data:(data.cases||[]);
+    if(!Array.isArray(arr)||!arr.length){ msg.textContent=t("imp.noArr"); return; }
+    const r=mergeImportedCases(arr);
+    msg.textContent=r.msg;
+  }catch(e){ msg.textContent=t("imp.parseFail")+e.message; }
+};
+document.getElementById("expBtn").onclick=()=>{
+  const blob=new Blob([JSON.stringify(CASES_RUNTIME,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="commercial-street-cases.json"; a.click();
+};
+document.getElementById("impReset").onclick=()=>{
+  if(confirm(t("imp.confirmClear"))){
+    localStorage.removeItem(STORE_KEY); location.reload();
+  }
+};
+function refreshAll(){
+  // rebuild selects & lists
+  [fRegion,fContext,fForm,fProgram,fClient,fClimate,aContext,aClimate,aProgram,aClient,aForm].forEach(s=>s.innerHTML="");
+  fillSelect(fRegion,CASES_RUNTIME.map(c=>c.region).filter(Boolean),true);
+  fillSelect(fContext,allValues("context"),true);
+  fillSelect(fForm,allValues("form"),true);
+  fillSelect(fProgram,allValues("program"),true);
+  fillSelect(fClient,allValues("clientele"),true);
+  fillSelect(fClimate,allValues("climate"),true);
+  fillSelect(aContext,allValues("context"));fillSelect(aClimate,allValues("climate"));
+  fillSelect(aProgram,allValues("program"));fillSelect(aClient,allValues("clientele"));
+  fillSelect(aForm,allValues("form"));
+  renderLib(); renderPick();
+}
+
+// ---------- 中国建筑规范 (code library) ----------
+const CODE_OPTS = {
+  types:[["street","code.type.street"],["mall","code.type.mall"],["historic","code.type.historic"],["community","code.type.community"],["town","code.type.town"]],
+  floors:[["low","code.floors.low"],["multi","code.floors.multi"],["high","code.floors.high"]],
+  base:[["none","code.base.none"],["retail","code.base.retail"],["parking","code.base.parking"]],
+  area:[["s","code.area.s"],["m","code.area.m"],["l","code.area.l"]],
+  funcs:[["retail","code.func.retail"],["food","code.func.food"],["cinema","code.func.cinema"],["kids","code.func.kids"],["market","code.func.market"],["fun","code.func.fun"],["gym","code.func.gym"]],
+  feats:[["roof","code.feat.roof"],["open","code.feat.open"],["atrium","code.feat.atrium"],["parking","code.feat.parking"],["curtain","code.feat.curtain"],["wood","code.feat.wood"],["outdoor","code.feat.outdoor"],["roofTop","code.feat.roofTop"]],
+};
+const CODE_SEL_DEFAULT = { types:"street", floors:"multi", base:"none", area:"m", funcs:["retail","food"], feats:["open"] };
+let codeSel = JSON.parse(JSON.stringify(CODE_SEL_DEFAULT));
+let codeCatFilter = "all";
+let codeMatched = [];
+
+// 条件匹配：clause.cond 各维度 AND、维度内任一命中即通过
+function codeCondHit(cl, sel){
+  const c = cl.cond || {};
+  if(c.types  && !c.types.includes(sel.types))  return false;
+  if(c.floors && !c.floors.includes(sel.floors)) return false;
+  if(c.base   && !c.base.includes(sel.base))     return false;
+  if(c.area   && !c.area.includes(sel.area))     return false;
+  if(c.funcs && !(sel.funcs||[]).some(v=>c.funcs.includes(v))) return false;
+  if(c.feats && !(sel.feats||[]).some(v=>c.feats.includes(v))) return false;
+  return true;
+}
+function codeCard(c){
+  const lvl = c.level==="must"
+    ? `<span class="code-lvl must">${t("code.must")}</span>`
+    : `<span class="code-lvl should">${t("code.should")}</span>`;
+  return `<div class="code-card">
+    <button type="button" class="code-fold-head">
+      <span class="code-fold-caret">▶</span>
+      <span class="code-head"><span class="code-std">${c.std}</span><span class="code-clause">${t("code.clause")} ${c.clause}</span>${lvl}</span>
+      <h4>${c.title}</h4>
+    </button>
+    <div class="code-body">
+      <p class="code-text">${mdToHtml(c.text)}</p>
+      ${c.note?`<div class="code-note"><b>${t("code.noteLabel")}：</b>${mdToHtml(c.note)}</div>`:""}
+      ${(c.tags&&c.tags.length)?`<div class="code-tags">${c.tags.map(x=>`<span>${x}</span>`).join("")}</div>`:""}
+    </div>
+  </div>`;
+}
+function codeRunMatch(){
+  codeMatched = CODE_LIB.filter(c=>codeCondHit(c, codeSel));
+  const must = codeMatched.filter(c=>c.level==="must");
+  const ordered = [...must, ...codeMatched.filter(c=>c.level!=="must")];
+  let html = `<div class="code-match-sum">${t("code.matchTitle",{n:codeMatched.length})}　${t("code.matchMustFirst",{m:must.length})}</div><div class="code-fold-hint">${t("code.expandHint")}</div>`;
+  let shown = 0;
+  Object.keys(CODE_CATS).forEach(cat=>{
+    const g = ordered.filter(c=>c.cat===cat);
+    if(!g.length) return;
+    html += `<h3 class="code-cat">${t("code.cat."+cat)} <span class="code-cat-n">${g.length}</span></h3>${g.map(codeCard).join("")}`;
+    shown += g.length;
+  });
+  document.getElementById("codeMatchResult").innerHTML = shown ? html : `<div class="code-empty">${t("code.matchEmpty")}</div>`;
+}
+function codeCopyMatch(){
+  if(!codeMatched.length) codeRunMatch();
+  if(!codeMatched.length){ alert(t("code.matchEmpty")); return; }
+  let text = t("code.copyHeader")+"\n";
+  text += t("code.copyProfile")+"\n";
+  text += "  · "+t("code.fType")+": "+t(CODE_OPTS.types.find(o=>o[0]===codeSel.types)[1])+"\n";
+  text += "  · "+t("code.fFloors")+": "+t(CODE_OPTS.floors.find(o=>o[0]===codeSel.floors)[1])+"\n";
+  text += "  · "+t("code.fBase")+": "+t(CODE_OPTS.base.find(o=>o[0]===codeSel.base)[1])+"\n";
+  text += "  · "+t("code.fArea")+": "+t(CODE_OPTS.area.find(o=>o[0]===codeSel.area)[1])+"\n";
+  const fl=codeSel.funcs||[], ft=codeSel.feats||[];
+  text += "  · "+t("code.fFuncs")+": "+(fl.map(v=>t(CODE_OPTS.funcs.find(o=>o[0]===v)[1])).join(" / ")||"—")+"\n";
+  text += "  · "+t("code.fFeats")+": "+(ft.map(v=>t(CODE_OPTS.feats.find(o=>o[0]===v)[1])).join(" / ")||"—")+"\n";
+  Object.keys(CODE_CATS).forEach(cat=>{
+    const g = codeMatched.filter(c=>c.cat===cat);
+    if(!g.length) return;
+    text += `\n【${t("code.cat."+cat)}】\n`;
+    g.forEach(c=>{ text += `  [${c.level==="must"?"★":"○"}] ${c.std} ${c.clause} ${c.title}\n      ${c.text.replace(/\n/g," ")}\n`; });
+  });
+  const done=()=>alert(t("code.copied"));
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text,done)); }
+  else fallbackCopy(text,done);
+}
+function codeSearch(){
+  const q = (document.getElementById("codeSearchInput").value||"").trim().toLowerCase();
+  let list = CODE_LIB;
+  if(codeCatFilter!=="all") list = list.filter(c=>c.cat===codeCatFilter);
+  if(q) list = list.filter(c=>[c.std,c.stdName,c.clause,c.title,c.text,c.note||"",(c.tags||[]).join(" ")].join(" ").toLowerCase().includes(q));
+  let html = `<div class="code-match-sum">${t("code.searchTitle",{n:list.length})}</div><div class="code-fold-hint">${t("code.expandHint")}</div>`;
+  if(!list.length){
+    document.getElementById("codeSearchResult").innerHTML = `<div class="code-empty">${t("code.searchEmpty")}</div>`;
+    return;
+  }
+  Object.keys(CODE_CATS).forEach(cat=>{
+    const g = list.filter(c=>c.cat===cat);
+    if(!g.length) return;
+    html += `<h3 class="code-cat">${t("code.cat."+cat)} <span class="code-cat-n">${g.length}</span></h3>${g.map(codeCard).join("")}`;
+  });
+  document.getElementById("codeSearchResult").innerHTML = html;
+}
+function buildCodeChips(hostId, dim){
+  const host=document.getElementById(hostId); host.innerHTML="";
+  CODE_OPTS[dim].forEach(([v,key])=>{
+    const b=document.createElement("button");
+    b.type="button"; b.className="chip"+(codeSel[dim].includes(v)?" on":""); b.textContent=t(key); b.dataset.v=v;
+    b.onclick=()=>{
+      const i=codeSel[dim].indexOf(v);
+      if(i>=0) codeSel[dim].splice(i,1); else codeSel[dim].push(v);
+      b.classList.toggle("on");
+    };
+    host.appendChild(b);
+  });
+}
+function buildCodeSelects(){
+  [["cType","types"],["cFloors","floors"],["cBase","base"],["cArea","area"]].forEach(([id,dim])=>{
+    const s=document.getElementById(id); s.innerHTML="";
+    CODE_OPTS[dim].forEach(([v,key])=>s.appendChild(new Option(t(key),v)));
+    s.value=codeSel[dim];
+    s.onchange=()=>{ codeSel[dim]=s.value; };
+  });
+}
+function buildCodeCatChips(){
+  const host=document.getElementById("codeCatChips"); host.innerHTML="";
+  const mk=(v,label)=>{
+    const b=document.createElement("button");
+    b.type="button"; b.className="chip"+(codeCatFilter===v?" on":""); b.textContent=label;
+    b.onclick=()=>{ codeCatFilter=v; buildCodeCatChips(); codeSearch(); };
+    host.appendChild(b);
+  };
+  mk("all",t("code.allCats"));
+  Object.keys(CODE_CATS).forEach(k=>mk(k,t("code.cat."+k)));
+}
+function switchCodeTab(tab){
+  document.querySelectorAll(".code-tab").forEach(b=>b.classList.toggle("active",b.id==="codeTab"+tab));
+  document.getElementById("codeMatchPane").style.display = tab==="Match"?"":"none";
+  document.getElementById("codeSearchPane").style.display = tab==="Search"?"":"none";
+  try{ localStorage.setItem("ctc_code_tab", tab); }catch(e){}
+}
+function initCodes(){
+  buildCodeSelects();
+  buildCodeChips("cFuncs","funcs");
+  buildCodeChips("cFeats","feats");
+  buildCodeCatChips();
+  document.getElementById("codeTabMatch").onclick=()=>switchCodeTab("Match");
+  document.getElementById("codeTabSearch").onclick=()=>switchCodeTab("Search");
+  document.getElementById("codeRun").onclick=codeRunMatch;
+  document.getElementById("codeCopy").onclick=codeCopyMatch;
+  document.getElementById("codeSearchInput").addEventListener("input",codeSearch);
+  // 折叠卡片：点击条文头部展开/收起详情（初始仅显示筛选栏，不预跑匹配）
+  ["codeMatchResult","codeSearchResult"].forEach(id=>{
+    document.getElementById(id).addEventListener("click",e=>{
+      const head=e.target.closest(".code-fold-head");
+      if(head) head.parentElement.classList.toggle("open");
+    });
+  });
+  switchCodeTab(localStorage.getItem("ctc_code_tab")||"Match");
+}
+function fallbackCopy(text,cb){
+  const ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); cb&&cb(); }catch(e){ alert(t("code.copyFail")); }
+  ta.remove();
+}
+
+// ---------- tools hub (功能) ----------
+// 案例图片下载器完全内嵌到本系统（v1.36.0 起 tool1 为系统内 iframe，加载同源静态文件 tools/downloader.html）
+//   - 内嵌＝不是独立工具，无需离开系统、无需额外进程；兼容 Netlify Drop / 公司服务器 / 本机 file://
+//   - 下载器自身会探测后端：有 /api/tool/*（公司服务器或 Netlify Functions）则服务端模式，否则本地代理模式
+// 相对路径 tools/downloader.html：在 Netlify Drop（静态）也能直接加载，不再依赖 /tool/downloader 服务路由
+(function(){
+  const p = location.pathname || "/";
+  const base = p.endsWith("/") ? p : p.replace(/\/[^\/]*$/, "/");
+  const TOOL_URL = base + "tools/downloader.html?embed=1";
+  const openBtn = document.getElementById("tool1Open");
+  const wrap = document.getElementById("tool1FrameWrap");
+  const frame = document.getElementById("tool1Frame");
+  const closeBtn = document.getElementById("tool1Close");
+  if(openBtn){
+    openBtn.onclick = function(){
+      frame.src = TOOL_URL;
+      openBtn.style.display = "none";
+      wrap.style.display = "block";
+      wrap.scrollIntoView({behavior:"smooth", block:"start"});
+    };
+  }
+  if(closeBtn){
+    closeBtn.onclick = function(){
+      wrap.style.display = "none";
+      frame.src = "about:blank";
+      openBtn.style.display = "";
+    };
+  }
+})();
+
+// ---------- nav ----------
+document.querySelectorAll("#nav button").forEach(b=>{
+  b.onclick=()=>{ goTab(b.dataset.tab); };
+});
+// 从「关于」页卡片跳转到指定 tab
+function goTab(tab, sub){
+  document.querySelectorAll("#nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab===tab));
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  const el=document.getElementById(tab); if(el) el.classList.add("active");
+  window.scrollTo({top:0});
+  if(tab==="lib") switchLibSub(sub||localStorage.getItem("ctc_lib_sub")||"browse");
+  if(tab==="adv") switchAdvSub(sub||localStorage.getItem("ctc_adv_sub")||"guide");
+  if(tab==="imp"){
+    if(sub==="code"){ const c=document.getElementById("toolCodeCard"); if(c) c.scrollIntoView({behavior:"smooth",block:"start"}); }
+  }
+  if(tab==="feedback") loadFeedback();
+}
+// 案例库子视图：案例浏览 / 对比分析
+function switchLibSub(sub){
+  if(sub!=="cmp") sub="browse";
+  document.querySelectorAll("#lib .subpane").forEach(p=>p.style.display = (p.id==="lib"+(sub==="cmp"?"Cmp":"Browse")+"View")?"block":"none");
+  document.querySelectorAll("#libSub .subtab").forEach(b=>b.classList.toggle("active", b.dataset.sub===sub));
+  localStorage.setItem("ctc_lib_sub", sub);
+}
+// 设计指导大师子视图：设计指导 / AI 对话
+function switchAdvSub(sub){
+  if(sub!=="chat") sub="guide";
+  document.querySelectorAll("#adv .subpane").forEach(p=>p.style.display = (p.id==="adv"+(sub==="chat"?"Chat":"Guide")+"View")?"block":"none");
+  document.querySelectorAll("#advSub .subtab").forEach(b=>b.classList.toggle("active", b.dataset.sub===sub));
+  localStorage.setItem("ctc_adv_sub", sub);
+}
+
+// ================= 意见反馈（贴吧式留言板） =================
+// 优先走公司服务器共享接口 /api/feedback（所有同事可见）；
+// 若未连到共享服务（直接 file:// 打开 / 第三方静态服务器），自动降级为浏览器本地存储并提示。
+const FB_LOCAL_KEY = "ctc_feedback_local";
+const FB_ANON_KEY  = "ctc_feedback_anon";
+// 意见接口基址：根据当前页面路径自动推导，兼容「域名根部署」与「反向代理子路径部署」两种场景
+const FB_API = (function(){
+  const p = location.pathname || "/";
+  const base = p.endsWith("/") ? p : p.replace(/\/[^\/]*$/, "/");
+  return base + "api/feedback";
+})();
+function fbGenId(){ return Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4); }
+function fbEscape(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function fbClean(s){ return String(s).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,"").slice(0,2000); }
+function fbFmtTime(ts){
+  const d=new Date(ts), diff=Date.now()-ts;
+  if(diff<60000) return t("fb.justNow");
+  if(diff<3600000) return Math.floor(diff/60000)+t("fb.minAgo");
+  if(diff<86400000) return Math.floor(diff/3600000)+t("fb.hourAgo");
+  const p=n=>String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function fbLastAuthor(){ try{ return localStorage.getItem(FB_ANON_KEY)||""; }catch(e){ return ""; } }
+function fbSaveLastAuthor(n){ try{ localStorage.setItem(FB_ANON_KEY,n); }catch(e){} }
+function fbShowBanner(show){
+  const b=document.getElementById("fbBanner");
+  if(b) b.style.display = show ? "block" : "none";
+}
+function fbShowStatus(mode){
+  const el=document.getElementById("fbStatus");
+  if(!el) return;
+  if(mode==="server"){
+    el.textContent = t("fb.statusShared");
+    el.className = "fb-status ok";
+  }else{
+    el.textContent = t("fb.statusLocal");
+    el.className = "fb-status warn";
+  }
+}
+function fbMaskIp(ip){
+  const v=String(ip||"").replace(/^::ffff:/,"").split(":")[0];
+  const parts=v.split(".");
+  if(parts.length===4) return parts[0]+"."+parts[1]+"."+parts[2]+".*";
+  return v||"?";
+}
+function fbRegionHtml(item){
+  const region=item&&item.region;
+  if(region) return `<span class="fb-region" title="${t("fb.regionTitle")}">${fbEscape(region)}</span>`;
+  const ip=item&&item.ip;
+  if(ip) return `<span class="fb-region ip" title="${t("fb.regionTitle")}">IP ${fbEscape(fbMaskIp(ip))}</span>`;
+  return `<span class="fb-region unknown">${t("fb.regionUnknown")}</span>`;
+}
+// 本地模式（无服务器）下，尽力用浏览器侧定位当前用户的网络属地，仅自己可见
+async function fbResolveRegionClient(){
+  try{
+    const ctrl=new AbortController(); const to=setTimeout(()=>ctrl.abort(),2000);
+    const r=await fetch("https://ipapi.co/json/?lang=zh",{signal:ctrl.signal});
+    clearTimeout(to);
+    if(!r.ok) return null;
+    const j=await r.json();
+    if(j&&j.error) return null;
+    const parts=[j.country_name,j.region,j.city].filter(x=>x&&String(x).trim());
+    return parts.length?parts.join(" "):null;
+  }catch(e){ return null; }
+}
+function fbPostHtml(p){
+  const replies=(p.replies||[]).slice().sort((a,b)=>a.ts-b.ts);
+  const replyHtml = replies.length
+    ? `<div class="fb-replies">${replies.map(r=>
+        `<div class="fb-reply" data-rid="${r.id}">
+          <div class="fb-reply-head"><span class="fb-reply-author">${fbEscape(r.author||t("fb.anon"))}</span>${fbRegionHtml(r)}<span class="fb-time">${fbFmtTime(r.ts)}</span><button class="fb-del-btn sm" onclick="fbDelete('reply','${r.id}','${p.id}')">${t("fb.delete")}</button></div>
+          <div class="fb-text">${fbEscape(r.text)}</div>
+        </div>`
+      ).join("")}</div>` : "";
+  return `<div class="fb-post" data-id="${p.id}">
+    <div class="fb-avatar">${(fbEscape(p.author||t("fb.anon"))).slice(0,1)}</div>
+    <div class="fb-main">
+      <div class="fb-meta"><span class="fb-author">${fbEscape(p.author||t("fb.anon"))}</span>${fbRegionHtml(p)}<span class="fb-time">${fbFmtTime(p.ts)}</span></div>
+      <div class="fb-text">${fbEscape(p.text)}</div>
+      <div class="fb-actions">
+        <button class="fb-reply-btn" onclick="fbToggleReply('${p.id}')">${t("fb.reply")}</button>
+        <button class="fb-del-btn" onclick="fbDelete('post','${p.id}')">${t("fb.delete")}</button>
+      </div>
+      <div class="fb-reply-box" id="fbReply_${p.id}">
+        <input id="fbReplyName_${p.id}" type="text" maxlength="24" placeholder="${t("fb.namePlaceholder")}" value="${fbEscape(fbLastAuthor())}">
+        <textarea id="fbReplyText_${p.id}" rows="2" maxlength="2000" placeholder="${t("fb.replyPlaceholder")}"></textarea>
+        <div class="form-actions"><button class="btn" onclick="fbPostReply('${p.id}')">${t("fb.replySubmit")}</button></div>
+      </div>
+      ${replyHtml}
+    </div>
+  </div>`;
+}
+function fbRender(posts){
+  window.__fbPosts = posts || [];
+  const list=document.getElementById("fbList");
+  if(!list) return;
+  if(!window.__fbPosts.length){ list.innerHTML = `<div class="fb-empty">${t("fb.empty")}</div>`; return; }
+  list.innerHTML = window.__fbPosts.slice().sort((a,b)=>b.ts-a.ts).map(fbPostHtml).join("");
+}
+// 合并服务器记录与本地记录：以 id 去重，服务器记录优先；本地独有的（断网时发的）予以保留，避免历史丢失
+function fbMergePosts(srv, local){
+  const map={};
+  (srv||[]).forEach(p=>{ if(p&&p.id) map[p.id]=p; });
+  (local||[]).forEach(p=>{ if(p&&p.id&&!map[p.id]) map[p.id]=p; });
+  return Object.keys(map).map(k=>map[k]);
+}
+async function loadFeedback(){
+  // 0) 先即时渲染本地历史，保证「一打开意见」就能看到记录（无论是否有服务器、网络快慢）
+  let localArr=[]; try{ localArr=JSON.parse(localStorage.getItem(FB_LOCAL_KEY)||"[]"); }catch(e){}
+  if(localArr.length) fbRender(localArr);
+  // 1) 尝试共享服务器接口
+  try{
+    const ctrl=new AbortController(); const to=setTimeout(()=>ctrl.abort(),4000);
+    const r=await fetch(FB_API,{headers:{"Accept":"application/json"},signal:ctrl.signal});
+    clearTimeout(to);
+    if(!r.ok) throw new Error("http"+r.status);
+    const j=await r.json();
+    const srv=(j&&j.posts)||[];
+    window.__fbMode="server";
+    fbShowBanner(false);
+    fbShowStatus("server");
+    // 合并：服务器记录权威，但保留本地独有的历史，避免「打开看不到、发完才出现」
+    fbRender(fbMergePosts(srv, localArr));
+    return;
+  }catch(e){ /* 降级本地 */ }
+  // 2) 本地降级模式
+  window.__fbMode="local";
+  fbShowBanner(true);
+  fbShowStatus("local");
+  fbRender(localArr);
+}
+function fbToggleReply(id){
+  const box=document.getElementById("fbReply_"+id);
+  if(box) box.style.display = (box.style.display==="none"||!box.style.display) ? "flex" : "none";
+}
+async function fbSubmit(){
+  const name=(document.getElementById("fbName").value||"").trim();
+  const text=fbClean((document.getElementById("fbText").value||"").trim());
+  if(!text){ alert(t("fb.needText")); return; }
+  const author=name||t("fb.anon");
+  fbSaveLastAuthor(author);
+  let region=null;
+  if(window.__fbMode!=="server"){ try{ region=await fbResolveRegionClient(); }catch(e){} }
+  await fbSend({author:author, text:text, parent:null, region:region}, ()=>{
+    document.getElementById("fbText").value="";
+    document.getElementById("fbName").value=author;
+  });
+}
+async function fbPostReply(pid){
+  const name=(document.getElementById("fbReplyName_"+pid).value||"").trim();
+  const text=fbClean((document.getElementById("fbReplyText_"+pid).value||"").trim());
+  if(!text){ alert(t("fb.needText")); return; }
+  const author=name||t("fb.anon");
+  fbSaveLastAuthor(author);
+  let region=null;
+  if(window.__fbMode!=="server"){ try{ region=await fbResolveRegionClient(); }catch(e){} }
+  await fbSend({author:author, text:text, parent:pid, region:region});
+}
+async function fbDelete(type, id, parentId){
+  if(!confirm(t("fb.deleteConfirm"))) return;
+  if(window.__fbMode==="server"){
+    try{
+      const url = FB_API+"?id="+encodeURIComponent(id)+(parentId?("&reply="+encodeURIComponent(parentId)):"");
+      const r=await fetch(url,{method:"DELETE"});
+      if(!r.ok) throw new Error("http"+r.status);
+      await loadFeedback();
+      return;
+    }catch(e){ alert(t("fb.delFail")||"删除失败，请重试"); return; }
+  }
+  // 本地降级删除
+  let arr=[]; try{ arr=JSON.parse(localStorage.getItem(FB_LOCAL_KEY)||"[]"); }catch(e){}
+  if(type==="reply" && parentId){
+    const post=arr.find(x=>x.id===parentId);
+    if(post && post.replies) post.replies = post.replies.filter(r=>r.id!==id);
+  }else{
+    arr = arr.filter(x=>x.id!==id);
+  }
+  try{ localStorage.setItem(FB_LOCAL_KEY,JSON.stringify(arr)); }catch(e){}
+  fbRender(arr);
+}
+async function fbSend(payload, after){
+  if(window.__fbMode==="server"){
+    try{
+      const r=await fetch(FB_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+      if(!r.ok) throw new Error("http"+r.status);
+      if(after) after();
+      await loadFeedback();
+      return;
+    }catch(e){ /* 写服务器失败 → 降级本地，保证不丢 */ }
+  }
+  // 本地降级写入
+  let arr=[]; try{ arr=JSON.parse(localStorage.getItem(FB_LOCAL_KEY)||"[]"); }catch(e){}
+  if(payload.parent){
+    const post=arr.find(x=>x.id===payload.parent);
+    if(post){ (post.replies=post.replies||[]).push({id:fbGenId(),author:payload.author,text:payload.text,ts:Date.now(),region:payload.region||null}); }
+  }else{
+    arr.push({id:fbGenId(),author:payload.author,text:payload.text,ts:Date.now(),replies:[],region:payload.region||null});
+  }
+  try{ localStorage.setItem(FB_LOCAL_KEY,JSON.stringify(arr)); }catch(e){}
+  if(after) after();
+  fbRender(arr);
+}
+
+// ================= AI 对话（双窗口：文字问答 · AI 生图） =================
+// 窗口 1「文字问答」：本地检索引擎，从案例库(56) + 法则库(92) 检索回答，无需联网/API Key。
+// 窗口 2「AI 生图」：上传效果图，点「发送」即调用 Krea 的 gpt-image-2（异步任务 + 轮询）
+// 把效果图重绘成优化新图。Token 与模型名在「设置」中配置，仅存浏览器本地。
+let chatImgs = [];          // {mime,data,name}  base64(无前缀)
+
+function mdToHtml(s){
+  return String(s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")
+    .replace(/\n/g,"<br>");
+}
+
+// ---- AI 生图优化（gpt-image-2 · 异步任务 + 轮询）----
+const KREA_KEY   = () => (localStorage.getItem("ctc_krea_key")||"").trim();
+const KREA_MODEL = () => (localStorage.getItem("ctc_krea_model")||"openai/gpt-image-2").trim();
+function kreaFindUrl(o){
+  if(!o) return null;
+  if(typeof o==="string") return /^https?:\/\//.test(o) ? o : null;
+  if(Array.isArray(o)){ for(const i of o){ const u=kreaFindUrl(i); if(u) return u; } return null; }
+  if(typeof o==="object"){
+    if(typeof o.url==="string") return o.url;
+    for(const k of ["urls","image_url","image_urls","files","images","outputs"]){ const u=kreaFindUrl(o[k]); if(u) return u; }
+    for(const k of Object.keys(o)){ if(!["url","urls","image_url","image_urls","files","images","outputs"].includes(k)){ const u=kreaFindUrl(o[k]); if(u) return u; } }
+  }
+  return null;
+}
+async function kreaGenerate(img, prompt, onTick){
+  const key=KREA_KEY(), model=KREA_MODEL();
+  if(!key) throw new Error("NO_KEY");
+  const url="https://api.krea.ai/generate/image/"+model;
+  const body={prompt, quality:"high"};
+  if(img) body.image_urls=["data:"+img.mime+";base64,"+img.data];
+  const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+key},body:JSON.stringify(body)});
+  if(!res.ok){ const txt=await res.text().catch(()=>""); throw new Error("HTTP "+res.status+" "+txt.slice(0,160)); }
+  const j=await res.json();
+  if(!j.job_id) throw new Error(JSON.stringify(j).slice(0,160));
+  const t0=Date.now();
+  for(let i=1;i<=120;i++){
+    await new Promise(r=>setTimeout(r,3000));
+    const r=await fetch("https://api.krea.ai/jobs/"+j.job_id,{headers:{"Authorization":"Bearer "+key}});
+    if(!r.ok){ const txt=await r.text().catch(()=>""); throw new Error("job HTTP "+r.status+" "+txt.slice(0,120)); }
+    const jj=await r.json();
+    const st=jj.status||"";
+    if(st==="completed"||st==="succeeded"){ const u=kreaFindUrl(jj.result); if(u) return {url:u}; throw new Error(t("chat.kreaDoneFail")); }
+    if(st==="failed"||st==="cancelled"){ const em=(jj.error&&(jj.error.message||jj.error.code))||st; throw new Error(em); }
+    if(onTick) onTick(i, Math.round((Date.now()-t0)/1000), st);
+  }
+  throw new Error("timeout");
+}
+async function kreaRedraw(){
+  const imgs=chatImgs.slice();
+  const text=(document.getElementById("chatText").value||"").trim();
+  if(!imgs.length && !text){ addMsg("bot","<i style='color:var(--muted)'>"+t("chat.kreaNoImg")+"</i>"); return; }
+  if(!KREA_KEY()){ addMsg("bot","<i style='color:var(--muted)'>"+t("chat.kreaNoKey")+"</i>"); return; }
+  const img=imgs[0]||null;
+  const prompt = text || t("chat.kreaDefaultPrompt");
+  let uhtml="<b>✨ Krea · "+KREA_MODEL()+"</b>";
+  if(img) uhtml+='<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">'+
+    imgs.map(im=>`<img src="data:${im.mime};base64,${im.data}" style="max-width:130px;border-radius:8px;border:1px solid rgba(255,255,255,.4)">`).join("")+'</div>';
+  if(text) uhtml+='<div style="margin-top:6px;font-size:12.5px">'+mdToHtml(text)+'</div>';
+  addMsg("user", uhtml);
+  document.getElementById("chatText").value=""; clearThumbs();
+  const typing=addMsg("bot","<i>"+t("chat.kreaWorking").replace("{st}","queued").replace("{sec}","0")+"</i>");
+  try{
+    const out=await kreaGenerate(img, prompt, (n,sec,st)=>{
+      if(sec%3===0||n===1) typing.innerHTML="<i>"+t("chat.kreaWorking").replace("{st}",st||"queued").replace("{sec}",String(sec))+"</i>";
+    });
+    const model=KREA_MODEL();
+    let h='<div style="font-weight:600;color:var(--accent);margin-bottom:6px">'+t("chat.kreaDone").replace("{model}",model)+'</div>';
+    if(img){
+      h+='<div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start">';
+      h+='<div style="min-width:140px;flex:1;max-width:240px"><div style="font-size:11.5px;color:var(--muted);margin-bottom:4px">原图</div><img src="data:'+img.mime+';base64,'+img.data+'" style="width:100%;border-radius:8px;border:1px solid var(--line-2)"></div>';
+      h+='<div style="min-width:220px;flex:2"><div style="font-size:11.5px;color:var(--muted);margin-bottom:4px">AI 生图结果</div><img id="kreaOut" src="" style="width:100%;max-width:480px;border-radius:8px;border:1px solid var(--line-2);background:var(--paper-2)">';
+    } else {
+      h+='<div style="max-width:520px"><div style="font-size:11.5px;color:var(--muted);margin-bottom:4px">AI 生图结果</div><img id="kreaOut" src="" style="width:100%;border-radius:8px;border:1px solid var(--line-2);background:var(--paper-2)">';
+    }
+    h+='<div id="kreaOutBar" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" style="padding:6px 12px;font-size:12.5px" onclick="kreaDownload(\''+String(out.url).replace(/'/g,"")+'\')">'+t("chat.kreaDownload")+'</button></div>'+(img?'</div>':'')+'</div>';
+    h+='<div style="margin-top:8px;font-size:12px;color:var(--muted)">'+t("chat.kreaNote")+'</div>';
+    typing.innerHTML=h;
+    const o=document.getElementById("kreaOut");
+    if(o){ o.onload=()=>{ const bar=document.getElementById("kreaOutBar"); if(bar) bar.innerHTML='<a class="btn ghost" style="padding:6px 12px;font-size:12.5px;text-decoration:none" href="'+String(out.url)+'" target="_blank" rel="noopener">'+t("chat.kreaDownload")+'</a>'; };
+      o.onerror=()=>{ const bar=document.getElementById("kreaOutBar"); if(bar) bar.innerHTML='<span style="color:#c0622e;font-size:12.5px">'+t("chat.kreaImgFail")+'</span><a href="'+String(out.url)+'" target="_blank" rel="noopener" style="font-size:12px;margin-left:6px">'+String(out.url).slice(0,64)+'…</a>'; o.style.display="none"; };
+      o.src=out.url;
+    }
+  }catch(e){
+    if(e.message==="NO_KEY"){ typing.innerHTML="<i style='color:#c0622e'>"+t("chat.kreaNoKey")+"</i>"; }
+    else if(e.message==="timeout"){ typing.innerHTML="<i style='color:#c0622e'>"+t("chat.kreaFail")+t("chat.kreaTimeout")+"</i>"; }
+    else if(e.name==="TypeError"||/fetch|network|load failed/i.test(String(e.message||e))){ showNetWarn(); typing.innerHTML="<i style='color:#c0622e'>"+t("chat.kreaFail")+t("chat.failNetwork")+"</i>"; }
+    else typing.innerHTML="<i style='color:#c0622e'>"+t("chat.kreaFail")+mdToHtml(String(e.message||e))+"</i><br><span style='color:var(--muted);font-size:12px'>"+t("chat.failHint")+"</span>";
+  }
+}
+function kreaDownload(url){
+  fetch(url).then(r=>{ if(!r.ok) throw 0; return r.blob(); }).then(b=>{
+    const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="krea_edit_"+Date.now()+".png"; document.body.appendChild(a); a.click(); a.remove();
+  }).catch(()=>{ window.open(url,"_blank"); });
+}
+
+// ---- 文字问答 · 本地检索引擎（无需联网） ----
+// 案例别名表（长别名优先匹配；同一别名可映射多个案例，如「太古里」= 成北前滩三家）
+const ASK_ALIASES = {
+  "成都太古里":["chengdu-taikoo-li"], "北京三里屯太古里":["sanlitun-taikoo-li"], "上海前滩太古里":["sh-qiantan"],
+  "三里屯太古里":["sanlitun-taikoo-li"], "前滩太古里":["sh-qiantan"],
+  "太古里":["chengdu-taikoo-li","sanlitun-taikoo-li","sh-qiantan"], "三里屯":["sanlitun-taikoo-li"], "前滩":["sh-qiantan"],
+  "大运天地":["shenzhen-dayun-tiandi"], "大运":["shenzhen-dayun-tiandi"], "新天地":["shanghai-xintiandi"],
+  "永庆坊":["guangzhou-yongqing-fang"], "宽窄巷子":["chengdu-kuanzhai"], "欢乐港湾":["shenzhen-happy-harbor"],
+  "平江路":["suzhou-pingjiang"], "表参道":["omotesando"], "难波公园":["namba-parks"], "难波":["namba-parks"],
+  "六本木":["roppongi-hills"], "银座":["ginza"], "乌节路":["orchard-road"], "克拉码头":["clarke-quay"],
+  "科文特花园":["covent-garden"], "科文特":["covent-garden"], "摄政街":["regent-street"], "香榭丽舍":["champs-elysees"],
+  "兰布拉":["la-rambla"], "二世长廊":["galleria-ve"], "埃马努埃莱":["galleria-ve"], "第五大道":["fifth-avenue"],
+  "高线公园":["high-line"], "高线":["high-line"], "罗迪欧":["rodeo-drive"], "暹罗":["siam-paragon"], "龙华会":["sh-longhua"],
+  "玉鸟集":["hz-yuniaoji"], "淮海街":["sz-huaihai"], "鹭洲里":["cd-luzhouli"], "斯特罗盖特":["dk-stroget"], "斯特罗":["dk-stroget"],
+  "莱茵班":["nl-lijnbaan"], "格罗夫":["us-thegrove"], "16 大街":["us-16thstreet"], "16大街":["us-16thstreet"],
+  "深圳湾文化广场":["sz-bay-cultural-plaza"], "曲江":["xian-qujiang"], "澳门M8":["macau-m8"], "M8":["macau-m8"],
+  "南湖天地":["jiaxing-nanhu"], "梦中心":["sh-dream-center"], "上生":["sh-columbia-circle"], "东风韵":["yunnan-dongfengyun"],
+  "北村":["seoul-bukchon"], "益善洞":["seoul-ikseondong"], "田子坊":["sh-tianzifang"], "老门东":["nj-laomendong"],
+  "三坊七巷":["fz-sanfangqixiang"], "十八梯":["cq-shibati"], "锦市场":["kyoto-nishiki"], "祇园":["kyoto-gion"], "祗园":["kyoto-gion"],
+  "嵩祝寺":["bj-trb-hutong"], "TRB":["bj-trb-hutong"], "思南":["sh-sinan-mansions"], "崇德里":["cd-chongdeli"],
+  "岩石区":["sydney-rocks"], "蒸馏厂":["toronto-distillery"], "会安":["hoi-an"], "独立大街":["istanbul-istiklal"], "纽伯里":["boston-newbury"]
+};
+const ASK_DIM_KW = {
+  facade:["立面","店招","幕墙"], landscape:["景观","绿化","植物","水景","花园"],
+  circulation:["动线","人流动线","流线","路径","回游"], landmark:["地标","精神堡垒","标志"],
+  signage:["标识","导视","招牌","导向"], scale:["尺度","比例","宽高","DH","空间序列"],
+  program:["业态","组合","招商","功能"], material:["材质","材料","细部","肌理"],
+  lighting:["灯光","照明","夜景","夜间"], narrative:["叙事","文化","故事","在地","文创"],
+  transit:["交通","接驳","地铁","停车","TOD"]
+};
+const ASK_CMP_WORDS = ["对比","比较","哪个","谁更","区别","差异","vs","versus","优劣","相比","差在哪"];
+const ASK_PRI_WORDS = ["法则","原则","要点","如何","怎么做","guideline","principle","建议"];
+const ASK_REC_WORDS = ["推荐","参考","类似","相似","值得","好案例","标杆案例","灵感"];
+function askNorm(s){ return String(s||"").toLowerCase().replace(/[，。！？、；：""''（）\s]+/g," "); }
+function askFindCases(q){
+  const ql=askNorm(q), out=[], seen={};
+  const push=id=>{ if(!seen[id]){ seen[id]=1; out.push(id); } };
+  CASES.forEach(c=>{
+    if(ql.includes(askNorm(c.name))) push(c.id);
+    if(c.nameEn && ql.includes(askNorm(c.nameEn))) push(c.id);
+  });
+  // 别名：仅当别名未被已命中的案例全名包含时才生效（避免「太古里」把前滩误带入「成都太古里」）
+  const namesMatched=out.map(id=>{ const c=CASES.find(x=>x.id===id); return c?askNorm(c.name):""; }).filter(Boolean);
+  Object.keys(ASK_ALIASES).sort((a,b)=>b.length-a.length).forEach(k=>{
+    const kn=askNorm(k);
+    if(!ql.includes(kn)) return;
+    if(namesMatched.some(n=>n.includes(kn))) return;
+    const fresh=ASK_ALIASES[k].filter(id=>!seen[id]);
+    ASK_ALIASES[k].forEach(push);
+    fresh.forEach(id=>{ const c=CASES.find(x=>x.id===id); if(c) namesMatched.push(askNorm(c.name)); });
+  });
+  return out;
+}
+function askFindDims(q){
+  const ql=askNorm(q), out=[];
+  DIMENSIONS.forEach(d=>{ if((ASK_DIM_KW[d.key]||[]).some(k=>ql.includes(k))) out.push(d.key); });
+  return out;
+}
+function askFindCity(q){
+  const ql=askNorm(q);
+  const citySet={};
+  CASES.forEach(c=>{ (c.city||"").split(/[\/、,，]/).forEach(ct=>{ ct=ct.trim(); if(ct) citySet[ct]=1; }); });
+  return Object.keys(citySet).find(ct=>ql.includes(ct))||null;
+}
+function askStar(s){ s=+s||0; return "<span class='st st"+s+"'>"+"★".repeat(s)+"☆".repeat(3-s)+"</span>"; }
+function askNote(n,len){ n=String(n||""); return n.length>(len||38) ? n.slice(0,len||38)+"…" : n; }
+function askByDim(k, ids){
+  return CASES
+    .filter(c=>!ids||ids.includes(c.id))
+    .map(c=>({c, s:(c.dims[k]||{}).star||0}))
+    .filter(x=>x.s>0)
+    .sort((a,b)=>b.s-a.s);
+}
+function askPickPrinciples(dims, ids, max){
+  const out=[]; const seen={};
+  dims.forEach(k=>{
+    PRINCIPLES.forEach(p=>{
+      if(p.dimension!==k) return;
+      const srcs=p.source||[];
+      if(ids && !srcs.some(id=>ids.includes(id))) return;
+      const key=p.id||p.text; if(seen[key]) return; seen[key]=1;
+      out.push(p);
+    });
+  });
+  return out.slice(0, max||3);
+}
+function askAnswer(q){
+  const ql=askNorm(q);
+  if(!ql) return null;
+  const ids=askFindCases(q);
+  const cases=ids.map(id=>CASES.find(c=>c.id===id)).filter(Boolean);
+  const dims=askFindDims(q);
+  const isCmp=ASK_CMP_WORDS.some(w=>ql.includes(w));
+  const isPri=ASK_PRI_WORDS.some(w=>ql.includes(w));
+  const isRec=ASK_REC_WORDS.some(w=>ql.includes(w));
+  if(cases.length>=2) return askBuildCompare(cases, dims, q);
+  if(cases.length===1 && dims.length && !isRec) return askBuildCaseDims(cases[0], dims);
+  if(cases.length===1 && !isRec) return askBuildCaseDetail(cases[0]);
+  if(dims.length && !isRec) return askBuildDimRank(dims);
+  if(isRec) return askBuildRecommend(cases, dims, askFindCity(q));
+  if(isPri) return askBuildPrinciples(ql, dims);
+  const city=askFindCity(q);
+  if(city) return askBuildCity(city);
+  return null;
+}
+function askRT(id){ return (typeof CASES_RUNTIME!=="undefined"?CASES_RUNTIME:CASES).find(c=>c.id===id); }
+function askBuildCompare(cases, dims, q){
+  const scope = dims.length ? dims : DIMENSIONS.map(d=>d.key);
+  let h='<div style="font-weight:700;color:var(--accent);margin-bottom:8px">📊 '+t("ask.compareTitle")+'</div>';
+
+  // ---- 案例缩略图卡片 ----
+  h+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">';
+  cases.forEach(c=>{
+    const rt=askRT(c.id)||c;
+    const hasImg=rt.images&&rt.images.length;
+    const imgHtml=hasImg
+      ?`<img src="${rt.images[0].file}" style="width:100%;height:100%;object-fit:cover;display:block" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+         <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;background:var(--paper-2);color:var(--muted);font-size:11px;font-weight:600;text-align:center;padding:6px">${c.name}</div>`
+      :`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--paper-2);color:var(--muted);font-size:11px;font-weight:600;text-align:center;padding:6px">${c.name}</div>`;
+    h+=`<div style="width:110px;flex-shrink:0;cursor:pointer" onclick="openDetail('${c.id}')">
+      <div style="width:110px;height:72px;border-radius:9px;overflow:hidden;border:1px solid var(--line)">${imgHtml}</div>
+      <div style="font-size:11.5px;font-weight:600;margin-top:4px;line-height:1.3">${c.name}</div>
+      <div style="font-size:10px;color:var(--muted)">${c.city||""} · ${c.year||"—"}</div>
+    </div>`;
+  });
+  h+='</div>';
+
+  // ---- 项目概况快览 ----
+  h+='<div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:4px">'+t("ask.overviewMini")+'</div>';
+  h+='<div class="ask-scroll"><table class="ask-tbl" style="font-size:11.5px">';
+  const miniFields=[["context","ask.fContext"],["climate","ask.fClimate"],["program","ask.fProgram"],["form","ask.fForm"],["typology","ask.fTypology"],["gfa","ask.fGfa"]];
+  miniFields.forEach(([f,lk])=>{
+    h+='<tr><th style="white-space:nowrap">'+t(lk)+'</th>';
+    cases.forEach(c=>{ h+='<td style="color:#433f39">'+mdToHtml(c[f]||"—")+'</td>'; });
+    h+='</tr>';
+  });
+  h+='</table></div>';
+
+  // ---- 维度对比表（完整点评 + 冠军标记）----
+  h+='<div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin:10px 0 4px">'+t("ask.dimCompare")+'</div>';
+  h+='<div class="ask-scroll"><table class="ask-tbl"><tr><th>'+t("ask.dimCol")+'</th>';
+  cases.forEach(c=>{ h+='<th>'+mdToHtml(c.name)+'</th>'; });
+  h+='</tr>';
+  scope.forEach(k=>{
+    const starsInDim=cases.map(c=>(c.dims[k]||{}).star||0);
+    const maxS=Math.max(...starsInDim);
+    h+='<tr><td class="ask-dim">'+dimLabel(k)+'</td>';
+    cases.forEach(c=>{
+      const d=c.dims[k];
+      if(!d){ h+='<td><span style="color:var(--muted)">—</span></td>'; return; }
+      const en=enBody(c);
+      const note=(en.dims&&en.dims[k]!=null)?en.dims[k]:d.note;
+      const isWin=(d.star||0)===maxS&&maxS>0;
+      h+='<td>'+askStar(d.star)+(isWin?'<span class="cmp-winner">'+t("ask.winner")+'</span>':'')+'<div class="ask-note" style="white-space:normal">'+mdToHtml(note)+'</div></td>';
+    });
+    h+='</tr>';
+  });
+  h+='</table></div>';
+
+  // ---- 总分对比条 ----
+  h+='<div style="margin-top:8px">';
+  cases.forEach(c=>{
+    let s=0; DIMENSIONS.forEach(d=>{ if(c.dims[d.key]) s+=c.dims[d.key].star; });
+    const pct=Math.round(s/33*100);
+    const cls=s>=28?"b3":s>=20?"b2":"b1";
+    h+='<div class="cmp-score-row"><div class="sname" style="width:90px;font-size:12px" onclick="openDetail(\''+c.id+'\')">'+mdToHtml(c.name)+'</div><div class="sbar-wrap" style="height:18px"><div class="sbar '+cls+'" style="width:'+pct+'%;font-size:10px">'+s+'/33</div></div></div>';
+  });
+  h+='</div>';
+
+  // ---- 成功要素 ----
+  h+='<div style="margin-top:8px;font-size:13px">';
+  cases.forEach(c=>{
+    h+='<div style="margin:4px 0"><b>'+mdToHtml(c.name)+'</b> <span style="color:var(--muted);font-size:12px">'+t("ask.success")+'：'+mdToHtml((enBody(c).success||[]).join(' / '))+'</span></div>';
+  });
+  h+='</div>';
+
+  // ---- 相关法则（带来源案例）----
+  const priSeen={}; const priList=[];
+  scope.forEach(k=>{
+    PRINCIPLES.forEach(p=>{
+      if(p.dimension!==k) return;
+      const srcs=(p.source||[]).filter(sid=>cases.some(c=>c.id===sid));
+      if(!srcs.length) return;
+      const key=p.id||p.text; if(priSeen[key]) return; priSeen[key]=1;
+      priList.push({p,srcs,k});
+    });
+  });
+  if(priList.length){
+    h+='<div style="margin-top:8px;font-size:12.5px;color:var(--muted)">📐 '+t("ask.principles")+'：</div>';
+    priList.slice(0,4).forEach(({p,srcs,k})=>{
+      const srcNames=srcs.map(sid=>{ const cc=askRT(sid); return cc?cc.name:sid; }).join("、");
+      h+='<div style="font-size:12.5px;margin:4px 0;padding:6px 10px;border-left:3px solid var(--accent);background:var(--panel);border-radius:0 6px 6px 0">'+mdToHtml(p.text)+'<div style="font-size:10.5px;color:var(--muted);margin-top:2px">'+t("ask.source")+': '+mdToHtml(srcNames)+'</div></div>';
+    });
+  }
+  return h;
+}
+function askBuildCaseDims(c, dims){
+  const en=enBody(c);
+  let h='<div style="font-weight:700;color:var(--accent);margin-bottom:4px">'+mdToHtml(c.name)+' <span style="font-weight:400;color:var(--muted);font-size:12px">'+mdToHtml(c.city)+' · '+(c.year||"—")+'</span></div>';
+  dims.forEach(k=>{
+    const v=c.dims[k]; if(!v) return;
+    const note=(en.dims&&en.dims[k]!=null)?en.dims[k]:v.note;
+    h+='<div style="font-size:13px;margin:6px 0"><b>'+dimLabel(k)+'</b> '+askStar(v.star)+'<div class="ask-note">'+mdToHtml(note)+'</div></div>';
+  });
+  const pri=askPickPrinciples(dims, [c.id], 2);
+  if(pri.length){
+    h+='<div style="margin-top:6px;font-size:12.5px;color:var(--muted)">📐 '+t("ask.principles")+'：</div>';
+    pri.forEach(p=>{ h+='<div style="font-size:12.5px;margin:3px 0;padding-left:10px;border-left:3px solid var(--accent)">'+mdToHtml(p.text)+'</div>'; });
+  }
+  return h;
+}
+function askBuildCaseDetail(c){
+  const en=enBody(c);
+  let h='<div style="font-weight:700;color:var(--accent);margin-bottom:4px">'+mdToHtml(c.name)+' <span style="font-weight:400;color:var(--muted);font-size:12px">'+mdToHtml(c.city)+' · '+(c.year||"—")+' · '+mdToHtml(c.typology||"")+'</span></div>';
+  if(en.summary) h+='<div class="ask-note" style="margin-bottom:6px">'+mdToHtml(en.summary)+'</div>';
+  if(c.firm||c.gfa) h+='<div style="font-size:12px;color:var(--muted);margin-bottom:6px">'+mdToHtml([c.firm,c.gfa].filter(Boolean).join(' · '))+'</div>';
+  DIMENSIONS.forEach(d=>{
+    const v=c.dims[d.key]; if(!v) return;
+    const note=(en.dims&&en.dims[d.key]!=null)?en.dims[d.key]:v.note;
+    h+='<div style="font-size:13px;margin:6px 0"><b>'+dimLabel(d.key)+'</b> '+askStar(v.star)+'<div class="ask-note">'+mdToHtml(note)+'</div></div>';
+  });
+  h+='<div style="margin-top:6px;font-size:12.5px;color:var(--muted)">'+t("ask.success")+'：'+mdToHtml((en.success||[]).join(' / '))+'</div>';
+  return h;
+}
+function askBuildDimRank(dims){
+  let h='';
+  dims.forEach(k=>{
+    const list=askByDim(k).slice(0,5);
+    h+='<div style="font-weight:700;color:var(--accent);margin:8px 0 4px">🏆 '+dimLabel(k)+' · '+t("ask.topTitle")+'</div>';
+    if(!list.length){ h+='<div style="font-size:12.5px;color:var(--muted)">'+t("ask.noData")+'</div>'; return; }
+    list.forEach((x,i)=>{
+      const rk=(enBody(x.c).dims&&enBody(x.c).dims[k]!=null)?enBody(x.c).dims[k]:(x.c.dims[k]?x.c.dims[k].note:"");
+      h+='<div style="font-size:13px;margin:4px 0"><b>'+mdToHtml(x.c.name)+'</b> <span style="color:var(--muted);font-size:12px">'+mdToHtml(x.c.city)+'</span> '+askStar(x.s)+'<div class="ask-note" style="margin-left:20px">'+mdToHtml(askNote(rk,62))+'</div></div>';
+    });
+    const pri=PRINCIPLES.filter(p=>p.dimension===k).slice(0,2);
+    pri.forEach(p=>{ h+='<div style="font-size:12px;color:var(--muted);margin:2px 0;padding-left:10px;border-left:3px solid var(--accent)">📐 '+mdToHtml(p.text)+'</div>'; });
+  });
+  return h;
+}
+function askBuildCity(city){
+  const list=CASES.filter(c=>(c.city||"").split(/[\/、,，]/).map(x=>x.trim()).includes(city));
+  let h='<div style="font-weight:700;color:var(--accent);margin-bottom:6px">📍 '+t("ask.cityTitle").replace("{city}",mdToHtml(city))+'（'+list.length+'）</div>';
+  list.forEach(c=>{
+    h+='<div style="font-size:13px;margin:6px 0"><b>'+mdToHtml(c.name)+'</b> <span style="color:var(--muted);font-size:12px">'+(c.year||"—")+' · '+mdToHtml(c.typology||"")+'</span><div class="ask-note">'+mdToHtml(askNote(enBody(c).summary||"",70))+'</div></div>';
+  });
+  return h;
+}
+function askTotal(c){
+  return DIMENSIONS.reduce((s,d)=>s+((c.dims[d.key]||{}).star||0),0);
+}
+function askBuildRecommend(anchors, dims, city){
+  const pool=[]; const seen={};
+  const push=c=>{ if(c&&!seen[c.id]){ seen[c.id]=1; pool.push(c); } };
+  anchors.forEach(push);
+  // 1) 同城案例（以锚点城市为准）
+  anchors.forEach(a=>{
+    (a.city||"").split(/[\/、,，]/).map(x=>x.trim()).filter(Boolean).forEach(ct=>{
+      CASES.forEach(c=>{ if((c.city||"").split(/[\/、,，]/).map(x=>x.trim()).includes(ct)) push(c); });
+    });
+  });
+  // 2) 锚点的世界级维度（3 星）同维度高分案例
+  anchors.forEach(a=>{
+    DIMENSIONS.forEach(d=>{ const v=a.dims[d.key]; if(v && (+v.star||0)>=3) askByDim(d.key).slice(0,3).forEach(x=>push(x.c)); });
+  });
+  // 3) 问句中提到的维度 → 该维度高分案例
+  dims.forEach(k=>{ askByDim(k).slice(0,4).forEach(x=>push(x.c)); });
+  // 4) 问句中的城市 → 该市案例
+  if(city) CASES.forEach(c=>{ if((c.city||"").split(/[\/、,，]/).map(x=>x.trim()).includes(city)) push(c); });
+  // 5) 按总分补足到 6 个
+  [...CASES].sort((a,b)=>askTotal(b)-askTotal(a)).slice(0,6).forEach(push);
+  const list=pool.slice(0,6);
+  let h='<div style="font-weight:700;color:var(--accent);margin-bottom:6px">💡 '+t("ask.recommendTitle")+'（'+list.length+'）</div>';
+  if(!list.length){ h+='<div style="font-size:12.5px;color:var(--muted)">'+t("ask.noData")+'</div>'; return h; }
+  list.forEach(c=>{
+    const isAnchor=anchors.some(a=>a.id===c.id);
+    h+='<div style="font-size:13px;margin:7px 0;padding-left:10px;border-left:3px solid '+(isAnchor?'var(--accent)':'var(--line-2)')+'">';
+    h+='<b>'+mdToHtml(c.name)+'</b> '+(isAnchor?'<span style="font-size:11px;color:var(--accent)">📌 '+t("ask.anchor")+'</span> ':'')+'<span style="color:var(--muted);font-size:12px">'+mdToHtml(c.city)+' · '+(c.year||"—")+' · 总分 '+askTotal(c)+'/33</span>';
+    const top=DIMENSIONS.map(d=>d.key).map(k=>({k,v:c.dims[k]})).filter(x=>x.v&&(+x.v.star||0)>0).sort((a,b)=>b.v.star-a.v.star).slice(0,3);
+    if(top.length) h+='<div style="font-size:12px;color:var(--muted);margin-top:2px">'+top.map(x=>dimLabel(x.k)+' '+askStar(x.v.star)).join('　')+'</div>';
+    if(c.summary) h+='<div class="ask-note">'+mdToHtml(askNote(enBody(c).summary||"",60))+'</div>';
+    h+='</div>';
+  });
+  return h;
+}
+function askBuildPrinciples(ql, dims){
+  const pool = dims.length ? PRINCIPLES.filter(p=>dims.includes(p.dimension)) : PRINCIPLES.slice();
+  const picked = pool.slice(0,6);
+  let h='<div style="font-weight:700;color:var(--accent);margin-bottom:6px">📐 '+t("ask.principles")+'</div>';
+  if(!picked.length){ h+='<div style="font-size:12.5px;color:var(--muted)">'+t("ask.noData")+'</div>'; return h; }
+  picked.forEach(p=>{
+    const srcs=(p.source||[]).map(id=>{ const c=CASES.find(x=>x.id===id); return c?c.name:null; }).filter(Boolean).join('、');
+    h+='<div style="font-size:13px;margin:5px 0;padding-left:10px;border-left:3px solid var(--accent)"><b>'+dimLabel(p.dimension)+'</b>：'+mdToHtml(p.text)+(srcs?'<div style="font-size:11.5px;color:var(--muted)">'+t("ask.source")+'：'+mdToHtml(srcs)+'</div>':'')+'</div>';
+  });
+  return h;
+}
+function askFallback(){
+  let h='<div style="font-size:13px;color:var(--muted)">'+t("ask.fallback")+'</div>';
+  h+='<div style="font-size:12.5px;margin-top:8px;color:var(--muted)">'+t("ask.examples")+'：</div>';
+  [t("ask.ex1"),t("ask.ex2"),t("ask.ex3"),t("ask.ex4")].forEach(e=>{
+    h+='<button class="chip" onclick="askChip(\''+String(e).replace(/'/g,"").replace(/"/g,"")+'\')">'+mdToHtml(e)+'</button>';
+  });
+  const top=[...CASES].sort((a,b)=>askTotal(b)-askTotal(a)).slice(0,3);
+  if(top.length){
+    h+='<div style="font-size:12.5px;margin-top:10px;color:var(--muted)">'+t("ask.fallbackCases")+'</div>';
+    top.forEach(c=>{
+      h+='<div style="font-size:13px;margin:5px 0;padding-left:10px;border-left:3px solid var(--line-2)"><b>'+mdToHtml(c.name)+'</b> <span style="color:var(--muted);font-size:12px">'+mdToHtml(c.city)+' · '+(c.year||"—")+' · 总分 '+askTotal(c)+'/33</span><div class="ask-note">'+mdToHtml(askNote(enBody(c).summary||"",60))+'</div></div>';
+    });
+  }
+  return h;
+}
+function askChip(q){ const ta=document.getElementById("askText"); if(ta) ta.value=q; askSend(); }
+async function askSend(){
+  const ta=document.getElementById("askText"); const q=(ta?ta.value:"").trim();
+  if(!q) return;
+  askAddMsg("user", mdToHtml(q));
+  ta.value="";
+  const typing=askAddMsg("bot","<i style='color:var(--muted)'>"+t("ask.thinking")+"…</i>");
+  await new Promise(r=>setTimeout(r,320));
+  const html=askAnswer(q);
+  typing.innerHTML = html ? html : askFallback();
+}
+function switchChatTab(tab){
+  document.querySelectorAll(".chat-tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+  const pa=document.getElementById("chatPaneAsk"), pk=document.getElementById("chatPaneKrea");
+  if(pa) pa.classList.toggle("active",tab==="ask");
+  if(pk) pk.classList.toggle("active",tab==="krea");
+  localStorage.setItem("ctc_chat_tab",tab);
+  const body=(tab==="ask"?pa:pk); if(body) body.scrollTop=body.scrollHeight;
+}
+document.querySelectorAll(".chat-tab").forEach(b=>{ b.onclick=()=>switchChatTab(b.dataset.tab); });
+document.getElementById("askSend").onclick=askSend;
+document.getElementById("askText").addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); askSend(); }
+});
+
+// ---- 连接自测（免费探针：空 body POST，401=Token 无效，其它 4xx=链路通；TypeError=浏览器被拦截）----
+async function kreaTestConnection(){
+  const btn=document.getElementById("kreaTestBtn");
+  const res=document.getElementById("kreaTestResult");
+  if(!res) return;
+  const key=KREA_KEY();
+  if(!key){ res.innerHTML='<span style="color:#c0622e">'+t("chat.kreaNoKey")+'</span>'; return; }
+  res.innerHTML='<i style="color:var(--muted)">'+t("settings.testing")+'…</i>';
+  const t0=Date.now();
+  try{
+    const r=await fetch("https://api.krea.ai/generate/image/openai/gpt-image-2",{
+      method:"POST", headers:{"Content-Type":"application/json","Authorization":"Bearer "+key}, body:"{}"
+    });
+    const ms=Date.now()-t0;
+    if(r.status===401||r.status===403){
+      res.innerHTML='<span style="color:#c0392b">✗ '+t("settings.testBadToken").replace("{status}",String(r.status))+'（'+ms+'ms）</span>';
+    } else {
+      res.innerHTML='<span style="color:var(--good)">✓ '+t("settings.testOk").replace("{ms}",String(ms))+'</span>';
+    }
+  }catch(e){
+    const ms=Date.now()-t0;
+    res.innerHTML='<span style="color:#c0392b">✗ '+t("settings.testBlocked")+'（'+ms+'ms）</span>';
+    if(location.protocol==="file:") res.innerHTML+='<br><span style="color:#c0622e">'+t("settings.testFileMode")+'</span>';
+    showNetWarn();
+  }
+}
+function showNetWarn(){
+  const w=document.getElementById("chatNetWarn"); if(w) w.style.display="block";
+}
+// 启动时探测：GET /jobs/xxx 无鉴权也无副作用；能返回任意状态码=链路通，TypeError=浏览器拦截对外请求
+function bootNetProbe(){
+  if(typeof fetch!=="function") return;
+  fetch("https://api.krea.ai/jobs/probe-"+Date.now()).then(()=>{}).catch(()=>{ showNetWarn(); });
+}
+
+// ---- 渲染 ----
+function addMsg(role, html, bodyId){
+  const body=document.getElementById(bodyId||"chatBody");
+  const div=document.createElement("div"); div.className="msg "+role;
+  const av=document.createElement("div"); av.className="av"; av.textContent= role==="bot"?t("sys.avShort"):t("sys.avYou");
+  const b=document.createElement("div"); b.className="bubble"; b.innerHTML=html;
+  div.appendChild(av); div.appendChild(b); body.appendChild(div); body.scrollTop=body.scrollHeight;
+  return b;
+}
+function askAddMsg(role, html){ return addMsg(role, html, "askBody"); }
+
+// ---- 发送（AI 生图：纯文字生图 / 图生图）----
+function chatSend(){
+  kreaRedraw();
+}
+
+// ---- 图片附件 ----
+function renderThumbs(){
+  const t=document.getElementById("chatThumbs"); if(!t) return; t.innerHTML="";
+  chatImgs.forEach((im,i)=>{
+    const d=document.createElement("div"); d.className="th";
+    d.innerHTML=`<img src="data:${im.mime};base64,${im.data}"><button class="x" data-i="${i}">×</button>`;
+    t.appendChild(d);
+  });
+  t.querySelectorAll(".x").forEach(btn=>btn.onclick=()=>{ chatImgs.splice(+btn.dataset.i,1); renderThumbs(); });
+}
+function clearThumbs(){ chatImgs=[]; renderThumbs(); }
+
+// ---- 设置（仅 Krea）----
+function openSettings(){ const o=document.getElementById("settingsOverlay");
+  document.getElementById("setKreaKey").value=KREA_KEY();
+  document.getElementById("setKreaModel").value=KREA_MODEL();
+  o.classList.add("show"); }
+function closeSettings(){ document.getElementById("settingsOverlay").classList.remove("show"); }
+function saveSettings(){
+  localStorage.setItem("ctc_krea_key",(document.getElementById("setKreaKey").value||"").trim());
+  localStorage.setItem("ctc_krea_model",(document.getElementById("setKreaModel").value||"openai/gpt-image-2").trim());
+  updateKeyState(); closeSettings();
+}
+function updateKeyState(){
+  const el=document.getElementById("chatKeyState"); if(!el) return;
+  el.textContent = KREA_KEY() ? t("chat.kreaOk") : t("chat.kreaNo");
+  el.style.color = KREA_KEY() ? "var(--good)" : "var(--muted)";
+}
+
+// ---- 事件绑定 ----
+document.getElementById("chatSettingsBtn").onclick=openSettings;
+document.getElementById("chatSend").onclick=chatSend;
+document.getElementById("chatImgBtn").onclick=()=>document.getElementById("chatImgFile").click();
+document.getElementById("chatImgFile").onchange=(e)=>{
+  [...e.target.files].forEach(f=>{
+    const r=new FileReader();
+    r.onload=()=>{ chatImgs.push({mime:f.type,data:(r.result.split(",")[1]),name:f.name}); renderThumbs(); };
+    r.readAsDataURL(f);
+  });
+  e.target.value="";
+};
+document.getElementById("chatText").addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); chatSend(); }
+});
+document.getElementById("settingsOverlay").addEventListener("click",e=>{ if(e.target.id==="settingsOverlay") closeSettings(); });
+
+// ---------- i18n: re-render dynamic content on language change ----------
+function rerenderI18nDynamic(){
+  if(typeof renderLib==="function") renderLib();
+  if(typeof renderPick==="function") renderPick();
+  if(typeof updateKeyState==="function") updateKeyState();
+  // 案例库筛选 + 设计指导大师 下拉：重建分类选项文案（保留选中值）
+  if(typeof rebuildFilterSelects==="function") rebuildFilterSelects();
+  // code library: rebuild option labels (keep selections)
+  if(typeof CODE_LIB!=="undefined" && typeof initCodes==="function"){
+    const selBackup=JSON.parse(JSON.stringify(codeSel)), catBackup=codeCatFilter;
+    buildCodeSelects();
+    buildCodeChips("cFuncs","funcs");
+    buildCodeChips("cFeats","feats");
+    codeSel=selBackup; codeCatFilter=catBackup;
+    buildCodeCatChips();
+    if(codeMatched.length) codeRunMatch();
+    if((document.getElementById("codeSearchInput")||{}).value) codeSearch();
+  }
+  // 意见反馈：语言切换时重建列表文案
+  if(window.__fbPosts && typeof fbRender==="function") fbRender(window.__fbPosts);
+  // 按需生成的动态视图：语言切换时按新语言重建其 innerHTML（否则会停留在旧语言）
+  if(window.__openDetailId) openDetail(window.__openDetailId);
+  if(window.__lastCmpIds && window.__lastCmpIds.length) renderCompare(window.__lastCmpIds);
+  if(window.__advProf) renderAdvisor(window.__advProf);
+}
+
+// ================= 高德地图 API 子工具（功能页置顶） =================
+const AMAP_API = (function(){
+  const p = location.pathname || "/";
+  const base = p.endsWith("/") ? p : p.replace(/\/[^\/]*$/, "/");
+  return base + "api/amap";
+})();
+const AMAP_KEY_LS = "ctc_amap_key";
+function amapPK(){ try{ return localStorage.getItem(AMAP_KEY_LS) || ""; }catch(e){ return ""; } }
+function amapSetPK(v){ try{ if(v) localStorage.setItem(AMAP_KEY_LS, v); else localStorage.removeItem(AMAP_KEY_LS); }catch(e){} }
+function amapVal(id){ const el=document.getElementById(id); return el ? el.value.trim() : ""; }
+function amapEsc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function amapMarkerLink(lon,lat){
+  if(!lon||!lat) return "";
+  const u = "https://uri.amap.com/marker?position="+encodeURIComponent(lon+","+lat)+"&name="+encodeURIComponent(t("imp.tool0.title"));
+  return ' · <a class="ar-link" href="'+u+'" target="_blank" rel="noopener">高德地图</a>';
+}
+const AMAP_DIRECT = {
+  geo:"https://restapi.amap.com/v3/geocode/geo",
+  regeo:"https://restapi.amap.com/v3/geocode/regeo",
+  weather:"https://restapi.amap.com/v3/weather/weatherInfo",
+  search:"https://restapi.amap.com/v3/place/text",
+  around:"https://restapi.amap.com/v3/place/around",
+  route:"https://restapi.amap.com/v3/direction",
+  distance:"https://restapi.amap.com/v3/distance",
+};
+function amapDirectEp(cmd, mode){
+  if(cmd==="route"){ const sub = mode==="walking"?"walking":mode==="cycling"?"bicycling":"driving"; return AMAP_DIRECT.route+"/"+sub; }
+  return AMAP_DIRECT[cmd]||AMAP_DIRECT.geo;
+}
+function amapDirectUrl(cmd, p, key){
+  const q = new URLSearchParams();
+  ["address","city","location","keywords","radius","origins","origin","destination","type","extensions","offset","page"].forEach(k=>{ if(p[k]!==undefined && p[k]!=="") q.set(k,p[k]); });
+  q.set("key", key); q.set("output","JSON");
+  return amapDirectEp(cmd, p.mode) + "?" + q.toString();
+}
+function amapJsonp(url){
+  return new Promise((resolve,reject)=>{
+    const cb = "amap_cb_" + Date.now() + "_" + Math.floor(Math.random()*100000);
+    const sep = url.indexOf("?")>=0 ? "&" : "?";
+    const full = url + sep + "callback=" + cb;
+    let done=false;
+    const timer = setTimeout(()=>{ if(!done){ done=true; cleanup(); reject(new Error(t("imp.amap.errFail")+"timeout")); } }, 12000);
+    function cleanup(){ if(window[cb]) delete window[cb]; clearTimeout(timer); if(s.parentNode) s.parentNode.removeChild(s); }
+    window[cb] = function(data){ if(done) return; done=true; cleanup(); resolve(data); };
+    const s = document.createElement("script");
+    s.src = full;
+    s.onerror = function(){ if(done) return; done=true; cleanup(); reject(new Error(t("imp.amap.errFail")+"network")); };
+    document.head.appendChild(s);
+  });
+}
+function amapToggleFields(){
+  const cmd = amapVal("amapCmd");
+  const show = (id,on)=>{ const el=document.getElementById(id); if(el) el.style.display = on ? "" : "none"; };
+  show("amapFAddr", cmd==="geo"||cmd==="search"||cmd==="around");
+  show("amapFCity", cmd==="geo"||cmd==="search"||cmd==="weather");
+  show("amapFLoc", cmd==="regeo"||cmd==="around"||cmd==="route"||cmd==="distance");
+  show("amapFLoc2", cmd==="route"||cmd==="distance");
+  show("amapFRadius", cmd==="around");
+  show("amapFMode", cmd==="route");
+}
+async function amapQuery(){
+  const cmd = amapVal("amapCmd");
+  const result = document.getElementById("amapResult");
+  const warn = document.getElementById("amapKeyWarn");
+  const mapImg = document.getElementById("amapMap");
+  if(result) result.innerHTML = ""; if(mapImg) mapImg.style.display="none";
+  const p = {
+    address: amapVal("amapAddr"), city: amapVal("amapCity"),
+    location: amapVal("amapLoc"), keywords: amapVal("amapAddr"),
+    radius: amapVal("amapRadius"), mode: amapVal("amapMode"),
+    destination: amapVal("amapLoc2"),
+  };
+  if(cmd==="weather") p.extensions="all";
+  if(cmd==="route" || cmd==="distance"){ p.origin = p.location; p.origins = p.location; }
+  if((cmd==="geo"||cmd==="search") && !p.address) return amapErr(t("imp.amap.errEmpty"));
+  if(cmd==="regeo" && !p.location) return amapErr(t("imp.amap.errEmpty"));
+  if((cmd==="route"||cmd==="distance") && (!p.location||!p.destination)) return amapErr(t("imp.amap.errEmpty"));
+  if(cmd==="weather" && !p.city) return amapErr(t("imp.amap.errEmpty"));
+  if(cmd==="around" && !p.location) return amapErr(t("imp.amap.errEmpty"));
+
+  let data;
+  const pk = amapPK();
+  if(pk){
+    try{ data = await amapJsonp(amapDirectUrl(cmd, p, pk)); }
+    catch(e){ return amapErr(String(e.message||e)); }
+  } else {
+    const q = new URLSearchParams({ cmd });
+    ["address","city","location","keywords","radius","mode","destination","origin","origins","extensions"].forEach(k=>{ if(p[k]) q.set(k, p[k]); });
+    try{
+      const r = await fetch(AMAP_API + "?" + q.toString());
+      data = await r.json();
+    }catch(e){ return amapErr(t("imp.amap.errFail") + e.message); }
+    if(data && data.amap_proxy==="no_key"){ if(warn){ warn.style.display="block"; warn.textContent = t("imp.amap.keyMissing"); } return; }
+  }
+  if(warn) warn.style.display="none";
+  if(!data || data.status!=="1"){
+    const info = (data && (data.info || data.infocode)) || "Amap error";
+    return amapErr(t("imp.amap.errFail") + amapFriendlyInfo(info));
+  }
+  amapRender(cmd, data, p);
+}
+function amapErr(msg){ const r=document.getElementById("amapResult"); if(r) r.innerHTML = '<div class="ar-err">'+amapEsc(msg)+'</div>'; }
+function amapFriendlyInfo(info){
+  const map = {
+    "INVALID_USER_KEY":"INVALID_USER_KEY：Key 无效。请确认粘贴的是「Key」那串（不是「安全密钥」），且该 Key 的「服务平台」为「Web服务」（JS API / 小程序等类型的 Key 不能用于本工具）；另检查 IP 白名单与是否已启用。",
+    "INVALID_KEY":"INVALID_KEY：Key 错误，请重新复制「Key」那串（勿带空格/换行）。",
+    "KEY_IP_MISMATCH":"KEY_IP_MISMATCH：该 Key 设置了 IP 白名单，当前网络出口 IP 不在其中（控制台改为「不限制」或加入当前公网 IP）。",
+    "USERKEY_PLAT_NOMATCH":"USERKEY_PLAT_NOMATCH：Key 的平台类型不匹配，需使用「Web服务」类型的 Key。",
+    "DAILY_QUERY_OVER_LIMIT":"DAILY_QUERY_OVER_LIMIT：今日调用额度已用完，明天重置或升级配额。",
+    "NO_PERMISSION":"NO_PERMISSION：该 Key 未开通此服务（在控制台为应用添加对应服务）。",
+    "INVALID_PARAMS":"INVALID_PARAMS：请求参数不完整，请检查输入。",
+    "SERVICE_NOT_EXIST":"SERVICE_NOT_EXIST：该 Key 未开通对应 Web 服务。",
+    "OK":""
+  };
+  return map[info] || info;
+}
+function amapShowMap(lon,lat){
+  const img = document.getElementById("amapMap");
+  if(!img || !lon || !lat) return;
+  const pk = amapPK();
+  const loc = lon+","+lat;
+  const size = (window.innerWidth<640)?"400*280":"640*360";
+  const markers = "mid,,A:"+loc;
+  let src;
+  if(pk){
+    src = "https://restapi.amap.com/v3/staticmap?location="+encodeURIComponent(loc)+"&zoom=15&size="+size+"&markers="+encodeURIComponent(markers)+"&key="+encodeURIComponent(pk);
+  } else {
+    src = AMAP_API + "?cmd=static&location="+encodeURIComponent(loc)+"&zoom=15&size="+encodeURIComponent(size)+"&markers="+encodeURIComponent(markers);
+  }
+  img.src = src; img.style.display="block";
+}
+function amapRender(cmd, data, p){
+  const r = document.getElementById("amapResult");
+  if(!r) return;
+  const titleMap = { geo:"imp.amap.rGeo", regeo:"imp.amap.rRegeo", weather:"imp.amap.rWeather", search:"imp.amap.rSearch", around:"imp.amap.rAround", route:"imp.amap.rRoute", distance:"imp.amap.rDistance" };
+  let html = '<div class="ar-sec">'+t(titleMap[cmd]||"imp.amap.rTitle")+'</div>';
+  let mapPt = null;
+
+  if(cmd==="geo"){
+    const gcs = data.geocodes||[];
+    if(!gcs.length){ html += '<div class="ar-empty">'+t("imp.amap.errEmpty")+'</div>'; }
+    gcs.forEach(g=>{
+      const loc=(g.location||"").split(","); const lon=loc[0],lat=loc[1];
+      if(lon&&lat&&!mapPt) mapPt={lon,lat};
+      html += '<div class="ar-card"><div><b>'+amapEsc(g.formatted_address||"")+'</b>'+amapMarkerLink(lon,lat)+'</div>'+
+              '<div class="ar-kv"><span>'+amapEsc(g.level||"")+'</span><span>坐标 '+amapEsc(g.location||"")+'</span></div></div>';
+    });
+  }
+  else if(cmd==="regeo"){
+    const rg = data.regeocode||{};
+    const ac = rg.addressComponent||{};
+    const a = p.location.split(",");
+    html += '<div class="ar-card"><div><b>'+amapEsc(rg.formatted_address||"")+'</b>'+amapMarkerLink(a[0],a[1])+'</div>'+
+            '<div class="ar-kv">'+["province","city","district","township","street","streetNumber","neighborhood","building"].map(k=> ac[k]?'<span>'+amapEsc(ac[k])+'</span>':'').join('')+'</div></div>';
+    if(a[0]&&a[1]) mapPt={lon:a[0],lat:a[1]};
+  }
+  else if(cmd==="weather"){
+    const fc0 = (data.forecasts&&data.forecasts[0])||{};
+    const fcs = fc0.casts||[];
+    html += '<div class="ar-card"><div class="ar-kv"><span>城市 '+amapEsc(fc0.city||"")+'</span><span>'+(fc0.reporttime||"")+'</span></div>'+
+            '<table><tr><th>日期</th><th>白天</th><th>夜间</th><th>气温</th><th>风向/风力</th></tr>'+
+            fcs.map(c=>'<tr><td>'+amapEsc(c.date||"")+'</td><td>'+amapEsc(c.dayweather||"")+'</td><td>'+amapEsc(c.nightweather||"")+'</td><td>'+amapEsc((c.daytemp||"")+"° / "+(c.nighttemp||"")+"°")+'</td><td>'+amapEsc((c.daywind||"")+" "+amapEsc(c.daypower||""))+'</td></tr>').join('')+
+            '</table></div>';
+  }
+  else if(cmd==="search"||cmd==="around"){
+    const pois = data.pois||[];
+    if(!pois.length){ html += '<div class="ar-empty">无结果</div>'; }
+    pois.forEach(poi=>{
+      const loc=(poi.location||"").split(","); const lon=loc[0],lat=loc[1];
+      if(lon&&lat&&!mapPt) mapPt={lon,lat};
+      html += '<div class="ar-poi"><div><div class="nm">'+amapEsc(poi.name||"")+'</div>'+
+              '<div class="ad">'+(amapEsc(poi.address||"")+(poi.adname?" · "+amapEsc(poi.adname):"")+(poi.type?" · "+amapEsc(poi.type):""))+'</div></div>'+
+              '<div style="text-align:right;white-space:nowrap"><span class="ar-kv" style="margin-bottom:4px">'+amapEsc(poi.location||"")+'</span>'+amapMarkerLink(lon,lat)+'</div></div>';
+    });
+  }
+  else if(cmd==="route"){
+    const rt = data.route||{};
+    const path = (rt.paths&&rt.paths[0])||{};
+    const dist = path.distance? (path.distance/1000).toFixed(2)+" km" : "-";
+    const dur = path.duration? Math.round(path.duration/60)+" 分钟" : "-";
+    let stepsHtml = "";
+    const steps = path.steps||[];
+    if(steps.length){
+      stepsHtml = '<ol class="ar-num">'+steps.map(s=>'<li>'+amapEsc(s.instruction||"")+(s.distance?' <span class="ar-kv"><span>'+Math.round(s.distance/1000*10)/10+' m</span></span>':'')+'</li>').join('')+'</ol>';
+    } else if(path.polyline){
+      stepsHtml = '<div class="ar-empty">已生成路线（无分步文字）</div>';
+    }
+    const a=p.location.split(","), b=p.destination.split(",");
+    if(a[0]&&a[1]) mapPt={lon:a[0],lat:a[1]};
+    html += '<div class="ar-card"><div class="ar-kv"><span>距离 '+dist+'</span><span>耗时 '+dur+'</span>'+
+            (path.tolls!==undefined&&path.tolls!==""&&path.tolls!=="0"?'<span>过路费 '+amapEsc(path.tolls)+' 元</span>':'')+
+            (path.toll_distance?'<span>收费路段 '+Math.round(path.toll_distance/1000)+' km</span>':'')+'</div>'+
+            (stepsHtml?'<div class="ar-steps">'+stepsHtml+'</div>':'')+'</div>';
+  }
+  else if(cmd==="distance"){
+    const res = data.results||[];
+    if(!res.length){ html += '<div class="ar-empty">无结果</div>'; }
+    res.forEach(x=>{
+      const d = x.distance? (x.distance/1000).toFixed(2)+" km" : "-";
+      const du = x.duration? Math.round(x.duration/60)+" 分钟" : "-";
+      html += '<div class="ar-card"><div class="ar-kv"><span>距离 '+d+'</span><span>驾车耗时 '+du+'</span>'+(x.info&&x.info!=="OK"?'<span>'+amapEsc(x.info)+'</span>':'')+'</div></div>';
+    });
+  }
+  r.innerHTML = html;
+  if(mapPt) amapShowMap(mapPt.lon, mapPt.lat);
+}
+function amapCopyResult(){
+  const r = document.getElementById("amapResult");
+  if(!r) return;
+  const txt = r.innerText || "";
+  if(!txt.trim()) return;
+  const done = ()=>{ const b=document.getElementById("amapCopy"); if(b){ const o=b.textContent; b.textContent="✓"; setTimeout(()=>{ b.textContent=o; },1200); } };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(()=>amapFallbackCopy(txt,done));
+  } else amapFallbackCopy(txt,done);
+}
+function amapFallbackCopy(txt, done){
+  try{
+    const ta=document.createElement("textarea"); ta.value=txt; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); done();
+  }catch(e){}
+}
+function amapInitKeyUI(){
+  const btn=document.getElementById("amapKeyBtn");
+  const row=document.getElementById("amapFKey");
+  const save=document.getElementById("amapKeySave");
+  const input=document.getElementById("amapKey");
+  const hint=document.getElementById("amapKeyHint");
+  if(input) input.value = amapPK();
+  if(btn) btn.onclick=()=>{
+    const open = row.style.display==="none";
+    row.style.display = open ? "flex" : "none";
+    if(hint) hint.style.display = open ? "block" : "none";
+    if(open && input) input.focus();
+  };
+  if(save) save.onclick=()=>{
+    amapSetPK(input ? input.value.trim() : "");
+    const warn=document.getElementById("amapKeyWarn");
+    if(warn) warn.style.display="none";
+    amapProbe();
+  };
+}
+async function amapProbe(){
+  const warn=document.getElementById("amapKeyWarn");
+  if(!warn) return;
+  if(amapPK()){ warn.style.display="none"; return; }
+  try{
+    const r=await fetch(AMAP_API+"?cmd=geo");
+    const d=await r.json();
+    if(d && d.amap_proxy==="no_key"){ warn.style.display="block"; warn.textContent=t("imp.amap.keyMissing"); }
+    else warn.style.display="none";
+  }catch(e){ warn.style.display="none"; }
+}
+function initAmap(){
+  const cmd=document.getElementById("amapCmd");
+  if(!cmd) return;
+  cmd.onchange=amapToggleFields;
+  amapToggleFields();
+  const run=document.getElementById("amapRun"); if(run) run.onclick=amapQuery;
+  const cp=document.getElementById("amapCopy"); if(cp) cp.onclick=amapCopyResult;
+  amapInitKeyUI();
+  amapProbe();
+}
+
+// ---------- boot ----------
+// 版本号注入（头部徽标 + 页脚）+ i18n 初始化
+(function(){
+  const v = "v"+APP_VERSION+" · "+APP_BUILD;
+  const a=document.getElementById("verBadge"); if(a) a.textContent=v;
+  const f=document.getElementById("verFoot"); if(f) f.textContent=t("sys.version")+" "+v;
+})();
+renderLib(); renderPick(); initCodes(); initAmap();
+// city autocomplete from locales
+(function(){
+  const dl=document.getElementById("cityList");
+  if(dl && typeof LOCALES!=="undefined"){
+    Object.keys(LOCALES).filter(k=>k!=="_fallback").forEach(c=>dl.appendChild(new Option(c,c)));
+  }
+})();
+// chat init
+updateKeyState();
+addMsg("bot", mdToHtml(t("chat.greeting")));
+askAddMsg("bot", mdToHtml(t("ask.hello")));
+switchChatTab(localStorage.getItem("ctc_chat_tab")||"ask");
+// 启动时探测：若当前页面环境拦截对外请求（内置预览面板 / file://），显示提示横幅
+setTimeout(bootNetProbe, 800);
+// 案例录入：生成 11 维度评分行（标签随后由 applyLang 本地化）
+buildImpDimRows();
+// i18n: apply saved language to all UI elements + highlight active lang button
+applyLang();
+</script>
+</body>
+</html>

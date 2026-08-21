@@ -1,0 +1,26 @@
+# ===== 不上传：本地/缓存/敏感内容 =====
+# 本机项目记忆与任务数据，勿公开到仓库
+.workbuddy/
+node_modules/
+__pycache__/
+
+# 本地图片缓存（约 368MB；app 显示走远程 CDN，无需上云）
+images/
+
+# 调试与抓取过程产物
+*.log
+fetch_*.txt
+fetch_*_output.txt
+fetch_*_retry*.txt
+candidate_report.json
+image_fetch_report*.json
+_t.js
+
+# 旧版 / 可选的开发脚本与临时界面（保留主程序与下载器即可）
+tools/gooood-downloader/
+gooood_review.html
+curate.html
+netprobe.html
+fetch_*.py
+gen_candidates.py
+update_manifest*.js

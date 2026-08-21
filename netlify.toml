@@ -1,0 +1,24 @@
+# Netlify 配置（案例图片下载器后端）
+# 说明：Netlify Drop（直接拖拽文件夹）仅托管静态文件，不会运行函数。
+#       若要让「图片下载器」完整运行（服务端抓取，规避浏览器 CORS / 站点反爬），
+#       请用以下任一方式部署（函数会自动启用）：
+#         1) 在 Netlify 后台 Connect 本文件夹所在的 Git 仓库；
+#         2) 在本文件夹执行：`npx netlify-cli deploy --prod --dir=. --functions=netlify/functions`
+#       纯 Drop 部署时，下载器会退化为「本地代理模式」（依赖公共 CORS 代理，部分站点受限）。
+
+[build]
+  # 发布目录为仓库根（index.html 在此）；无需任何构建步骤（纯静态 + 函数）
+  publish = "."
+  functions = "netlify/functions"
+
+# 将 /api/tool/* 重写到 Netlify Function（保留路径后缀，函数内按 pathParameters.splat 路由）
+[[redirects]]
+  from = "/api/tool/*"
+  to = "/.netlify/functions/tool/:splat"
+  status = 200
+
+# 将 /api/feedback 重写到意见共享 Function
+[[redirects]]
+  from = "/api/feedback"
+  to = "/.netlify/functions/feedback"
+  status = 200

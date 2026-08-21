@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>案例图片下载器 · Oval</title>
+<style>
+:root{
+  --accent:#a85d31; --accent-dark:#7c4222; --accent-soft:#c89a5e;
+  --ink:#221d16; --ink2:#4a4138; --ink3:#8b8073;
+  --bg:#f4f1ea; --paper-2:#eee7d8; --panel:#fffdf8;
+  --line:#e7ddca; --line2:#d9ccb3;
+  --good:#4f8165; --danger:#c0392b;
+  --r:14px;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  --serif:Georgia,"Times New Roman","Songti SC",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6}
+.wrap{max-width:920px;margin:0 auto;padding:18px 16px 60px}
+header{display:flex;align-items:center;gap:12px;padding:6px 0 18px}
+.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 4px 12px rgba(124,66,34,.25)}
+.logo svg{width:21px;height:21px}
+.brand h1{font-size:19px;font-weight:700;letter-spacing:.3px;font-family:var(--serif)}
+.oval-badge{display:inline-block;vertical-align:3px;margin-left:9px;padding:2px 10px;border-radius:20px;background:var(--accent);color:#fff;font-size:11px;font-weight:700;letter-spacing:1.5px}
+.brand p{font-size:12px;color:var(--ink3);margin-top:1px}
+.back-link{margin-left:auto;font-size:13px;color:var(--accent);text-decoration:none}
+.back-link:hover{color:var(--accent-dark)}
+/* 内嵌到主系统工具卡时，隐藏「返回主系统」链接 */
+html.embed .back-link{display:none}
+html.embed header{padding-bottom:6px}
+
+/* 模式切换 */
+.mode-tabs{display:flex;gap:6px;margin-bottom:16px}
+.mode-tab{padding:9px 20px;border:1px solid var(--line2);border-radius:999px;background:var(--panel);cursor:pointer;font-family:var(--sans);font-size:14px;color:var(--ink3);transition:all .2s}
+.mode-tab:hover{color:var(--accent);border-color:var(--accent-soft)}
+.mode-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin-bottom:16px;box-shadow:0 1px 2px rgba(54,42,28,.04)}
+.card h2{font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px;font-family:var(--sans)}
+.num{width:24px;height:24px;border-radius:8px;background:rgba(168,93,49,.12);color:var(--accent);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.card p.desc{font-size:13px;color:var(--ink3);margin:-6px 0 14px}
+label.f{display:block;font-size:13px;font-weight:600;color:var(--ink2);margin:12px 0 6px}
+.inrow{display:flex;gap:10px;flex-wrap:wrap}
+input[type=text]{flex:1;min-width:200px;height:46px;padding:0 14px;border:1.5px solid var(--line2);border-radius:11px;font-size:16px;color:var(--ink);background:var(--panel);outline:none;transition:border-color .15s}
+input[type=text]:focus{border-color:var(--accent)}
+input::placeholder{color:#b9bdc6}
+.btn{height:46px;padding:0 20px;border:none;border-radius:11px;font-size:15px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;white-space:nowrap;font-family:var(--sans)}
+.btn svg{width:17px;height:17px}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(168,93,49,.22)}
+.btn-primary:hover{background:var(--accent-dark)}
+.btn-primary:disabled{background:rgba(168,93,49,.4);box-shadow:none;cursor:not-allowed}
+.btn-ghost{background:var(--panel);color:var(--ink);border:1.5px solid var(--line2)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ghost:disabled{color:#b9bdc6;border-color:var(--line);cursor:not-allowed}
+
+/* 搜索结果网格 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px}
+.r-card{border:1.5px solid var(--line);border-radius:13px;overflow:hidden;background:var(--panel);cursor:pointer;position:relative;transition:all .15s;text-align:left}
+.r-card:hover{border-color:var(--accent-soft);transform:translateY(-1px);box-shadow:0 6px 16px rgba(54,42,28,.07)}
+.r-card.sel{border-color:var(--accent);box-shadow:0 0 0 3px rgba(168,93,49,.12)}
+.r-card .thumb{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;background:var(--paper-2)}
+.r-card .badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:2px 8px;border-radius:20px;backdrop-filter:blur(4px)}
+.r-card.sel .tick{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center}
+.r-card.sel .tick svg{width:13px;height:13px}
+.r-body{padding:11px 12px 13px}
+.r-title{font-size:13.5px;font-weight:600;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:39px}
+.r-sub{font-size:12px;color:var(--ink3);margin-top:5px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+
+/* 图片预览 */
+.meta-chips{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 14px}
+.chip{background:rgba(168,93,49,.06);border:1px solid var(--line);color:var(--ink2);font-size:12px;padding:3px 11px;border-radius:20px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px;margin-top:4px;max-height:460px;overflow-y:auto;padding:2px}
+.p-tile{position:relative;border-radius:10px;overflow:hidden;border:2px solid var(--line);cursor:pointer;background:var(--paper-2);aspect-ratio:4/3;user-select:none}
+.p-tile img{width:100%;height:100%;object-fit:cover;display:block}
+.p-tile.on{border-color:var(--accent)}
+.p-tile.small img{opacity:.4}
+.p-tile .ck{position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:7px;background:rgba(255,255,255,.94);border:1.5px solid #c6cad2;display:flex;align-items:center;justify-content:center}
+.p-tile.on .ck{background:var(--accent);border-color:var(--accent)}
+.p-tile .ck svg{width:14px;height:14px;opacity:0}
+.p-tile.on .ck svg{opacity:1}
+.p-tile .idx{position:absolute;top:5px;left:5px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:1px 7px;border-radius:6px}
+.p-tile .dim{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.66));color:#fff;font-size:10.5px;padding:16px 6px 3px;text-align:right}
+.p-tile .warn{position:absolute;bottom:5px;left:5px;background:#b46900;color:#fff;font-size:10.5px;padding:1px 7px;border-radius:6px}
+.selbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:2px 0 12px}
+.mini{font-size:12.5px;color:var(--ink2);background:rgba(168,93,49,.06);border:1px solid var(--line);border-radius:18px;padding:5px 14px;cursor:pointer;min-height:32px}
+.mini:hover{background:rgba(168,93,49,.12)}
+
+/* 进度 */
+.pbar{height:10px;background:var(--paper-2);border-radius:20px;overflow:hidden;margin:14px 0 8px}
+.pbar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent-soft),var(--accent));border-radius:20px;transition:width .35s ease}
+.pinfo{font-size:13px;color:var(--ink2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.pinfo b{color:var(--accent);font-size:16px}
+.logs{margin-top:10px;max-height:190px;overflow-y:auto;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--ink2);font-family:Consolas,Menlo,monospace;line-height:1.9}
+.logs .ok{color:var(--good)}
+.logs .bad{color:var(--danger)}
+.logs .skip{color:var(--ink3)}
+.done-box{margin-top:14px;background:rgba(79,129,101,.06);border:1px solid rgba(79,129,101,.2);border-radius:11px;padding:13px 15px;font-size:13.5px;color:#0d6b4c}
+.done-box b{font-size:15px}
+
+#toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);background:#22262e;color:#fff;font-size:13.5px;padding:11px 20px;border-radius:12px;opacity:0;pointer-events:none;transition:all .25s;z-index:99;max-width:88vw}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.spin{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-3px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{text-align:center;color:var(--ink3);font-size:13.5px;padding:26px 0 8px}
+.footer{text-align:center;color:#b0b4bd;font-size:12px;margin-top:8px;line-height:1.8}
+.mode-badge{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:20px;font-size:11px;font-weight:700;vertical-align:2px}
+.mode-badge.srv{background:rgba(79,129,101,.14);color:#2f6b4f}
+.mode-badge.cli{background:rgba(168,93,49,.12);color:var(--accent-dark)}
+@media(max-width:640px){
+  .wrap{padding:12px 12px 48px}
+  .inrow{flex-direction:column}
+  .inrow .btn{width:100%}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .btn{min-height:44px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+  </div>
+  <div class="brand">
+    <h1>案例图片下载器<span class="oval-badge">OVAL</span><span id="modeBadge" class="mode-badge cli">检测中…</span></h1>
+    <p>搜索项目或粘贴网址 → 选择图片 → 下载</p>
+  </div>
+  <a href="../" class="back-link">← 返回主系统</a>
+</header>
+
+<div class="mode-tabs">
+  <button class="mode-tab active" id="modeSearch" onclick="switchMode('search')">搜索项目</button>
+  <button class="mode-tab" id="modeUrl" onclick="switchMode('url')">粘贴网址</button>
+</div>
+
+<!-- 搜索模式 -->
+<section class="card" id="cardSearch">
+  <h2><span class="num">1</span>输入项目名称</h2>
+  <p class="desc">在谷德设计网搜索案例，例如「成都太古里」「深圳大运天地」「阿那亚」</p>
+  <div class="inrow">
+    <input type="text" id="q" placeholder="输入关键词，如：太古里、北京坊、阿那亚…" autocomplete="off">
+    <button class="btn btn-primary" id="btnSearch">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
+      搜索
+    </button>
+  </div>
+</section>
+
+<!-- 粘贴网址模式 -->
+<section class="card" id="cardUrl" style="display:none">
+  <h2><span class="num">1</span>粘贴网页地址</h2>
+  <p class="desc">粘贴任意一个网站页面地址，例如 ArchDaily 文章页、地产发展商项目页面等</p>
+  <div class="inrow">
+    <input type="text" id="urlInput" placeholder="https://www.gooood.cn/… 或 https://www.archdaily.com/…" autocomplete="off">
+    <button class="btn btn-primary" id="btnFetch">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-9-9c2.5 0 4.8 1 6.5 2.6L21 8"/><path d="M21 3v5h-5"/></svg>
+      获取图片
+    </button>
+  </div>
+</section>
+
+<!-- 搜索结果 -->
+<section class="card" id="cardResults" style="display:none">
+  <h2><span class="num">2</span>选择项目</h2>
+  <p class="desc" id="resultCount"></p>
+  <div class="grid" id="resultGrid"></div>
+  <div class="empty" id="resultEmpty" style="display:none">没有找到相关项目，试试换个关键词？</div>
+</section>
+
+<!-- 图片预览与下载 -->
+<section class="card" id="cardPreview" style="display:none">
+  <h2><span class="num">3</span>勾选图片并下载</h2>
+  <p class="desc">点击图片勾选/取消（深色边框为已选）；小图/缩略图已默认排除</p>
+  <h3 id="pTitle" style="font-size:15px;font-weight:700;margin-bottom:4px"></h3>
+  <div class="meta-chips" id="pChips"></div>
+  <div class="selbar" id="selBar" style="display:none">
+    <button class="mini" id="selAll">全选</button>
+    <button class="mini" id="selNone">清空</button>
+    <button class="mini" id="selBig">只选大图</button>
+    <span style="margin-left:auto;font-size:13px;color:var(--ink2)" id="selCnt">已选 0 张</span>
+  </div>
+  <div class="pgrid" id="pPreview"></div>
+  <div class="inrow" style="margin-top:6px">
+    <button class="btn btn-primary" id="btnSaveLocal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 19h16"/></svg>
+      存到我的电脑
+    </button>
+    <button class="btn btn-ghost" id="btnDownload">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+      存到服务器
+    </button>
+    <button class="btn btn-ghost" id="btnStop" style="display:none;color:var(--danger);border-color:#f0c4c4">
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+      停止
+    </button>
+  </div>
+  <div id="dlArea" style="display:none">
+    <div class="pbar"><i id="pbarFill"></i></div>
+    <div class="pinfo"><span id="pinfoText">准备中…</span><b id="pinfoPct">0%</b></div>
+    <div class="logs" id="pLogs"></div>
+    <div class="done-box" id="doneBox" style="display:none"></div>
+  </div>
+</section>
+
+<div class="footer">
+  图片版权归原作者所有，请仅用于个人学习研究<br>
+  本工具由主系统提供（OVAL 内部使用），不收集任何数据
+</div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// 内嵌模式（主系统工具卡 iframe 注入 ?embed）：隐藏返回链接，避免嵌套导航
+if(location.search.indexOf("embed")>=0) document.documentElement.classList.add("embed");
+var SAVE_KEY="wb_case_img_save_dir";
+var state={results:[],selected:null,project:null,timer:null,downloading:false,jobId:null,sel:{},mode:"search"};
+var $=function(id){return document.getElementById(id)};
+// API 基址：剥离 /tool/ 或 /tools/ 子路径，得到应用根前缀，兼容「域名根部署」与「反向代理子路径部署」
+var API_BASE=(function(){
+  var p=location.pathname||"/";
+  var i=p.lastIndexOf("/tool/"); if(i>=0)return p.slice(0,i+1);
+  i=p.lastIndexOf("/tools/"); if(i>=0)return p.slice(0,i+1);
+  return p.endsWith("/")?p:p.replace(/\/[^\/]*$/,"/");
+})();
+function api(path){return API_BASE+path}
+
+// ====== 运行模式：BACKEND=null(未知) / true(服务端：公司服务器或 Netlify 函数) / false(纯前端代理) ======
+var BACKEND=null;
+
+// ====== 纯前端解析逻辑（与服务端 tools/downloader.js 同源移植） ======
+var SIZE_SUFFIX=/-\d+x\d+(?=\.(?:jpe?g|png|webp|gif|avif|bmp)$)/i;
+var BAD_PATH=/\/(?:jobs?|category|tag|search|about|wp-|feed)\//i;
+var MIN_DIM=700;
+function cAbsUrl(href,base){
+  if(!href)return "";
+  if(href.indexOf("//")===0)return "https:"+href;
+  var b=base||"https://www.gooood.cn";
+  if(href.indexOf("/")===0){if(b.charAt(b.length-1)==="/")b=b.slice(0,-1);return b+href;}
+  if(/^https?:\/\//.test(href))return href;
+  if(b.charAt(b.length-1)!=="/")b=b+"/";
+  return b+href;
+}
+function cOriginalUrl(u){return u.replace(SIZE_SUFFIX,"")}
+function cCleanTitle(raw){var t=(raw||"").trim();t=t.replace(/\s*[|\-–—·]\s*谷德设计网.*$/i,"");t=t.replace(/\s*[|\-–—]\s*ArchDaily.*$/i,"");return t.replace(/\s+/g," ")}
+function cPickImgSrc(attrs){
+  var s=(attrs.match(/(?:data-src|data-original|data-lazy-src|data-lazy)\s*=\s*"([^"]+)"/i)||[])[1];
+  if(!s)s=(attrs.match(/(?:data-src|data-original|data-lazy-src|data-lazy)\s*=\s*'([^']+)'/i)||[])[1];
+  if(!s&&/srcset/i.test(attrs)){var ss=(attrs.match(/(?:srcset|data-srcset)\s*=\s*"([^"]+)"/i)||[])[1]||"";s=ss.split(",").map(function(x){return x.trim().split(/\s+/)[0]}).filter(Boolean)[0]||"";}
+  if(!s)s=(attrs.match(/\bsrc\s*=\s*"([^"]+)"/i)||[])[1];
+  if(!s)s=(attrs.match(/\bsrc\s*=\s*'([^']+)'/i)||[])[1];
+  return s||"";
+}
+function cCollectJsonLd(html){
+  var out=[];var re=/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;var m;
+  while((m=re.exec(html))){try{var obj=JSON.parse(m[1].replace(/<!\[CDATA\[|\]\]>/g,""));var walk=function(v){if(!v)return;if(typeof v==="string"){if(/^https?:\/\//.test(v))out.push(v);}else if(Array.isArray(v))v.forEach(walk);else if(typeof v==="object")["image","images","contentUrl","url","thumbnailUrl"].forEach(function(k){if(v[k]!==undefined)walk(v[k]);});};walk(obj);}catch(e){}}
+  return out;
+}
+function cParseArticle(html,pageUrl){
+  var title="";var m=html.match(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)/i);
+  if(!m)m=html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:title["']/i);
+  if(m)title=cCleanTitle(m[1]);
+  if(!title){m=html.match(/<title[^>]*>(.*?)<\/title>/is);if(m)title=cCleanTitle(m[1]);}
+  if(!title)title="未命名项目";
+  var host="";try{host=new URL(pageUrl).hostname;}catch(e){}
+  var imgUrls=[],dimsMap={},seen={};
+  function cDimFromQuery(u){
+    try{var q=new URL(u).searchParams;var w=parseInt(q.get("w")||q.get("mw")||q.get("width")||"0")||0;var h=parseInt(q.get("h")||q.get("mh")||q.get("height")||"0")||0;return [w,h];}catch(e){return [0,0];}
+  }
+  function maybePush(u,w,h){
+    if(!u||!/^https?:\/\//.test(u))return;
+    if(seen[u])return;
+    if(u.indexOf("oss.gooood.cn")>=0){/* 谷德图床，全部保留 */}
+    else if(host.indexOf("gooood")>=0){if(!/\.(jpe?g|png|webp|gif)/i.test(u)||/avatar|logo|icon/.test(u))return;}
+    else{if(!/\.(jpe?g|png|webp|gif|avif|bmp|ashx|aspx|php|jsp|do|img)/i.test(u))return;if(/avatar|logo|icon|emoji|spacer|pixel|gravatar|ad-|banner-ad|share|social|facebook|twitter|linkedin|whatsapp|gmail|wechat|doubleclick|tracking|mega-menu/i.test(u))return;}
+    if(w<=0&&h<=0){var dq=cDimFromQuery(u);w=dq[0];h=dq[1];}
+    seen[u]=1;imgUrls.push(u);
+    if(w>0&&h>0){var key=cOriginalUrl(u);var old=dimsMap[key];if(!old||w*h>old[0]*old[1])dimsMap[key]=[w,h];}
+  }
+  var imgRe=/<img\s+([^>]*)>/gi,im;
+  while((im=imgRe.exec(html))){var attrs=im[1];var src=cPickImgSrc(attrs);if(!src)continue;var abs=cAbsUrl(src.trim(),pageUrl);var w=0,h=0;var wm=attrs.match(/\bwidth\s*=\s*["']?(\d+)/i);var hm=attrs.match(/\bheight\s*=\s*["']?(\d+)/i);if(wm)w=parseInt(wm[1])||0;if(hm)h=parseInt(hm[1])||0;maybePush(abs,w,h);}
+  var picRe=/<picture[^>]*>([\s\S]*?)<\/picture>/gi,pm;
+  while((pm=picRe.exec(html))){var sr=/<source[^>]*(?:srcset|data-srcset)\s*=\s*"([^"]+)"/gi,sm;while((sm=sr.exec(pm[1]))){sm[1].split(",").map(function(x){return x.trim().split(/\s+/)[0]}).filter(Boolean).forEach(function(u){maybePush(cAbsUrl(u,pageUrl),0,0);});}}
+  cCollectJsonLd(html).forEach(function(u){maybePush(cAbsUrl(u,pageUrl),0,0);});
+  var bgRe=/background-image\s*:\s*url\(\s*['"]?([^'"\)]+)['"]?\s*\)/gi,bm;
+  while((bm=bgRe.exec(html)))maybePush(cAbsUrl(bm[1].trim(),pageUrl),0,0);
+  var hasVariant={};imgUrls.forEach(function(s){if(SIZE_SUFFIX.test(s))hasVariant[cOriginalUrl(s)]=1;});
+  var originals=[],oseen={};
+  imgUrls.forEach(function(s){var o=cOriginalUrl(s);if(oseen[o])return;oseen[o]=1;var wh=dimsMap[o];var item={url:o,w:wh?wh[0]:0,h:wh?wh[1]:0};if(wh&&!hasVariant[o]){item.exact=true;item.small=Math.max(wh[0],wh[1])<MIN_DIM;}else{item.exact=false;item.small=false;}originals.push(item);});
+  return {title:title,images:originals,source:host.indexOf("gooood")>=0?"gooood":"generic"};
+}
+function cParseSearch(html){
+  var results=[],seen={};var cardRe=/<article[^>]*class="[^"]*result-card[^"]*"[^>]*>([\s\S]*?)<\/article>/gi;var m;
+  while((m=cardRe.exec(html))&&results.length<20){var block=m[1];var href=(block.match(/<a[^>]*href="([^"]+)"/i)||[])[1]||"";var url=cAbsUrl(href.trim());if(!url||BAD_PATH.test(url)||seen[url])continue;seen[url]=1;var title=((block.match(/<h2[^>]*>([\s\S]*?)<\/h2>/i)||[])[1]||"").replace(/<[^>]+>/g,"").trim();var subtitle=((block.match(/<p[^>]*class="[^"]*result-subtitle[^"]*"[^>]*>([\s\S]*?)<\/p>/i)||[])[1]||"").replace(/<[^>]+>/g,"").trim();var meta=((block.match(/<p[^>]*class="[^"]*card-meta[^"]*"[^>]*>([\s\S]*?)<\/p>/i)||[])[1]||"").replace(/<[^>]+>/g,"").trim();var thumb=(block.match(/<img[^>]*(?:data-src|src)="([^"]+)"/i)||[])[1]||"";thumb=cAbsUrl(thumb.trim());results.push({title:title,subtitle:subtitle,meta:meta,thumb:thumb,url:url});}
+  return results;
+}
+
+// ====== 公共 CORS 代理（纯前端模式抓取外部网页 / 图片） ======
+var PROXIES=[
+  function(u){return "https://api.allorigins.win/raw?url="+encodeURIComponent(u);},
+  function(u){return "https://api.codetabs.com/v1/proxy/?quest="+encodeURIComponent(u);},
+  function(u){return "https://thingproxy.freeboard.io/fetch/"+u;},
+  function(u){return "https://corsproxy.io/?url="+encodeURIComponent(u);}
+];
+function fetchHtmlViaProxy(url){
+  var lastErr="";
+  function tryOne(i){
+    if(i>=PROXIES.length)return Promise.reject(new Error(lastErr||"代理不可用"));
+    var ctrl;
+    var opts={};
+    if(typeof AbortController!=="undefined"){ctrl=new AbortController();opts.signal=ctrl.signal;var t=setTimeout(function(){ctrl.abort();},20000);}
+    return fetch(PROXIES[i](url),opts).then(function(r){
+      if(typeof t!=="undefined")clearTimeout(t);
+      if(!r.ok)throw new Error("HTTP "+r.status);
+      return r.text();
+    }).then(function(txt){
+      if(txt&&txt.length>200)return txt;
+      throw new Error("空响应");
+    }).catch(function(e){lastErr=e.message;return tryOne(i+1);});
+  }
+  return tryOne(0);
+}
+function fetchImgViaProxy(url){
+  var lastErr="";
+  function tryOne(i){
+    if(i>=PROXIES.length)return Promise.reject(new Error(lastErr||"图片代理不可用"));
+    var ctrl;var opts={};
+    if(typeof AbortController!=="undefined"){ctrl=new AbortController();opts.signal=ctrl.signal;var t=setTimeout(function(){ctrl.abort();},25000);}
+    return fetch(PROXIES[i](url),opts).then(function(r){
+      if(typeof t!=="undefined")clearTimeout(t);
+      if(!r.ok)throw new Error("HTTP "+r.status);
+      return r.blob();
+    }).catch(function(e){lastErr=e.message;return tryOne(i+1);});
+  }
+  return tryOne(0);
+}
+
+// ====== 后端探测：/api/tool/ping ======
+function detectBackend(){
+  var ctrl;var opts={};
+  if(typeof AbortController!=="undefined"){ctrl=new AbortController();opts.signal=ctrl.signal;setTimeout(function(){ctrl.abort();},3000);}
+  fetch(api("api/tool/ping"),opts).then(function(r){
+    if(!r.ok)throw new Error("no");
+    return r.json();
+  }).then(function(j){
+    BACKEND=!!(j&&j.mode);
+    updateModeBadge();
+  }).catch(function(){
+    BACKEND=false;updateModeBadge();
+  });
+}
+function updateModeBadge(){
+  var b=$("modeBadge");
+  if(BACKEND===null){b.textContent="检测中…";b.className="mode-badge cli";return;}
+  if(BACKEND){b.textContent="服务端模式";b.className="mode-badge srv";}
+  else{b.textContent="本地代理模式";b.className="mode-badge cli";}
+  // 纯前端模式无「存到服务器」能力
+  if($("btnDownload"))$("btnDownload").style.display=BACKEND?"":"none";
+}
+
+// ====== 预览图地址 ======
+function imgProxy(u){return api("api/tool/img")+"?url="+encodeURIComponent(u)}
+function previewSrc(u){return BACKEND?imgProxy(u):u}
+function imgFallback(el,u){
+  if(el._pf==null)el._pf=0;
+  el._pf++;
+  if(el._pf>=PROXIES.length){el.style.opacity=0.3;el.onerror=null;return;}
+  el.onerror=function(){imgFallback(el,u);};
+  el.src=PROXIES[el._pf](u);
+}
+
+function toast(msg){var t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove("show")},2400)}
+function esc(s){return (s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+
+function switchMode(mode){
+  state.mode=mode;
+  $("modeSearch").classList.toggle("active",mode==="search");
+  $("modeUrl").classList.toggle("active",mode==="url");
+  $("cardSearch").style.display=mode==="search"?"":"none";
+  $("cardUrl").style.display=mode==="url"?"":"none";
+  if(mode==="url"){$("urlInput").focus()}
+  else{$("q").focus()}
+}
+
+$("q").addEventListener("keydown",function(e){if(e.key==="Enter")doSearch()});
+$("urlInput").addEventListener("keydown",function(e){if(e.key==="Enter")doFetchUrl()});
+$("btnSearch").addEventListener("click",doSearch);
+$("btnFetch").addEventListener("click",doFetchUrl);
+$("btnSaveLocal").addEventListener("click",saveToMyComputer);
+$("btnDownload").addEventListener("click",startServerDownload);
+$("btnStop").addEventListener("click",function(){
+  if(!state.jobId)return;
+  fetch(api("api/tool/cancel"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({job_id:state.jobId})})
+    .then(function(r){return r.json()})
+    .then(function(d){if(d.ok)toast("正在停止…")})
+    .catch(function(){});
+});
+$("selAll").addEventListener("click",function(){setAll(true)});
+$("selNone").addEventListener("click",function(){setAll(false)});
+$("selBig").addEventListener("click",function(){
+  (state.project&&state.project.images||[]).forEach(function(it){state.sel[it.url]=!it.small});
+  refreshSelUI();
+});
+
+// ====== 搜索 ======
+function doSearch(){
+  var q=$("q").value.trim();
+  if(!q){toast("请先输入项目名称");$("q").focus();return}
+  var btn=$("btnSearch");btn.disabled=true;btn.innerHTML='<span class="spin"></span> 搜索中…';
+  var done=function(){btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg> 搜索';};
+  if(BACKEND){
+    fetch(api("api/tool/search")+"?q="+encodeURIComponent(q))
+      .then(function(r){return r.json()})
+      .then(function(d){state.results=d.results||[];state.selected=null;state.project=null;$("cardResults").style.display="";$("cardPreview").style.display="none";renderResults(d.results,d.error);if(d.error)toast(d.error);})
+      .catch(function(){toast("搜索失败，请检查网络")})
+      .finally(done);
+  }else{
+    fetchHtmlViaProxy("https://www.gooood.cn/search?q="+encodeURIComponent(q))
+      .then(function(html){var list=cParseSearch(html);state.results=list;state.selected=null;state.project=null;$("cardResults").style.display="";$("cardPreview").style.display="none";renderResults(list,list.length?"":"未找到结果，可换关键词或在「粘贴网址」中直接贴文章链接");})
+      .catch(function(e){toast("搜索失败："+(e.message||"")+"（纯前端代理不稳定，部署到支持服务端函数的平台可稳定抓取）")})
+      .finally(done);
+  }
+}
+
+// ====== 粘贴网址 → 解析图片 ======
+function doFetchUrl(){
+  var url=$("urlInput").value.trim();
+  if(!url||!/^https?:\/\//.test(url)){toast("请粘贴有效的网页地址（以 http 开头）");$("urlInput").focus();return}
+  var btn=$("btnFetch");btn.disabled=true;btn.innerHTML='<span class="spin"></span> 获取中…';
+  $("cardResults").style.display="none";
+  $("cardPreview").style.display="";
+  $("pTitle").textContent="正在获取图片…";
+  $("pChips").innerHTML='<span class="chip">解析中…</span>';
+  $("pPreview").innerHTML="";
+  $("dlArea").style.display="none";
+  var done=function(){btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-9-9c2.5 0 4.8 1 6.5 2.6L21 8"/><path d="M21 3v5h-5"/></svg> 获取图片';};
+  function showProject(d){
+    state.project=d;state.selected=null;
+    if(!d.image_count){toast("该网页未找到可下载的图片（可能是动态加载或需登录的站点；纯前端代理模式下部分站点受限）");$("pTitle").textContent=d.title||"未找到图片";$("pChips").innerHTML='<span class="chip">0 张图片</span>';$("pPreview").innerHTML='<div class="empty">未从该网页提取到图片。可尝试用「搜索项目」找谷德上的同名案例，或更换网址；若部署到支持服务端函数的平台则兼容性最佳。</div>';return}
+    $("pTitle").textContent=d.title;
+    var sc=d.small_count||0;
+    $("pChips").innerHTML=
+      '<span class="chip">共 '+d.image_count+' 张图片</span>'+
+      (sc?'<span class="chip">疑似小图 '+sc+' 张</span>':"")+
+      '<span class="chip">来源：'+(d.source==="gooood"?"谷德":"通用网页")+"</span>";
+    renderPreview(d.images);
+  }
+  if(BACKEND){
+    fetch(api("api/tool/project")+"?url="+encodeURIComponent(url))
+      .then(function(r){return r.json()})
+      .then(function(d){if(d.error){toast(d.error);$("pTitle").textContent="获取失败";return}showProject(d);})
+      .catch(function(){toast("获取图片失败")})
+      .finally(done);
+  }else{
+    fetchHtmlViaProxy(url)
+      .then(function(html){var p=cParseArticle(html,url);showProject({title:p.title,images:p.images,image_count:p.images.length,small_count:p.images.filter(function(x){return x.small}).length,source:p.source});})
+      .catch(function(e){toast("获取图片失败："+(e.message||"")+"（纯前端代理不稳定，部署到支持服务端函数的平台可稳定抓取）");$("pTitle").textContent="获取失败";})
+      .finally(done);
+  }
+}
+
+function renderResults(list,errMsg){
+  var g=$("resultGrid"),empty=$("resultEmpty");
+  g.innerHTML="";
+  if(!list.length){empty.style.display="";$("resultCount").textContent=errMsg||"没有找到相关项目";return}
+  empty.style.display="none";
+  $("resultCount").textContent="共找到 "+list.length+" 个结果，点击卡片选择项目";
+  list.forEach(function(item,i){
+    var card=document.createElement("div");
+    card.className="r-card";card.tabIndex=0;
+    var thumbSrc=BACKEND?imgProxy(item.thumb||""):(item.thumb||"");
+    card.innerHTML=
+      '<img class="thumb" loading="lazy" src="'+esc(thumbSrc)+'" onerror="this.style.visibility=\'hidden\'">'+
+      (item.meta?'<span class="badge">'+esc(item.meta)+'</span>':"")+
+      '<span class="tick" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4.5 4.5L19 7"/></svg></span>'+
+      '<div class="r-body"><div class="r-title">'+esc(item.title)+"</div>"+
+      (item.subtitle?'<div class="r-sub">'+esc(item.subtitle)+"</div>":"")+
+      "</div>";
+    card.addEventListener("click",function(){selectResult(item,card)});
+    card.addEventListener("keydown",function(e){if(e.key==="Enter")selectResult(item,card)});
+    g.appendChild(card);
+  });
+}
+
+function selectResult(item,card){
+  var cards=$("resultGrid").children;
+  for(var k=0;k<cards.length;k++){cards[k].classList.remove("sel");var t=cards[k].querySelector(".tick");if(t)t.style.display="none"}
+  card.classList.add("sel");var tick=card.querySelector(".tick");if(tick)tick.style.display="";
+  state.selected=item;
+  $("cardPreview").style.display="";
+  $("dlArea").style.display="none";
+  $("pTitle").textContent="正在获取项目详情…";
+  $("pChips").innerHTML='<span class="chip">解析图片中…</span>';
+  $("pPreview").innerHTML="";
+  function showProject(d){
+    state.project=d;
+    $("pTitle").textContent=d.title;
+    var sc=d.small_count||0;
+    $("pChips").innerHTML=
+      '<span class="chip">共 '+d.image_count+' 张</span>'+
+      (sc?'<span class="chip">疑似小图 '+sc+' 张</span>':"")+
+      '<span class="chip">来源：'+(d.source==="gooood"?"谷德":"通用网页")+"</span>";
+    renderPreview(d.images);
+  }
+  if(BACKEND){
+    fetch(api("api/tool/project")+"?url="+encodeURIComponent(item.url))
+      .then(function(r){return r.json()})
+      .then(function(d){if(d.error){toast(d.error);$("pTitle").textContent=item.title;return}showProject(d);})
+      .catch(function(){toast("获取项目详情失败");$("pTitle").textContent=item.title});
+  }else{
+    fetchHtmlViaProxy(item.url)
+      .then(function(html){var p=cParseArticle(html,item.url);showProject({title:p.title,images:p.images,image_count:p.images.length,small_count:p.images.filter(function(x){return x.small}).length,source:p.source});})
+      .catch(function(e){toast("获取项目详情失败："+(e.message||""));$("pTitle").textContent=item.title});
+  }
+}
+
+function renderPreview(items){
+  var pv=$("pPreview");pv.innerHTML="";
+  state.sel={};
+  items.forEach(function(it,i){
+    state.sel[it.url]=!it.small;
+    var tile=document.createElement("div");
+    tile.className="p-tile"+(it.small?" small":"")+(state.sel[it.url]?" on":"");
+    var dimTxt="";
+    if(it.w&&it.h)dimTxt=it.exact?(it.w+"×"+it.h):("≥"+it.w+"×"+it.h);
+    tile.innerHTML=
+      '<img loading="lazy" src="'+esc(previewSrc(it.url))+'"'+(BACKEND?' onerror="this.src=\''+esc(it.url)+'\';this.onerror=null;this.style.opacity=0.3"':' onerror="imgFallback(this,\''+esc(it.url)+'\')"')+'>'+
+      '<span class="idx">'+(i+1)+'</span>'+
+      '<span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4.5 4.5L19 7"/></svg></span>'+
+      (dimTxt?'<span class="dim">'+dimTxt+"</span>":"")+
+      (it.small?'<span class="warn">小图</span>':"");
+    tile.addEventListener("click",function(){
+      state.sel[it.url]=!state.sel[it.url];
+      tile.classList.toggle("on",state.sel[it.url]);
+      refreshSelUI();
+    });
+    pv.appendChild(tile);
+  });
+  $("selBar").style.display=items.length?"":"none";
+  refreshSelUI();
+}
+
+function setAll(v){
+  var tiles=$("pPreview").children;
+  (state.project&&state.project.images||[]).forEach(function(it,i){
+    state.sel[it.url]=v;
+    if(tiles[i])tiles[i].classList.toggle("on",v);
+  });
+  refreshSelUI();
+}
+
+function selectedUrls(){
+  return (state.project&&state.project.images||[]).filter(function(it){return state.sel[it.url]}).map(function(it){return it.url});
+}
+
+function refreshSelUI(){
+  var n=selectedUrls().length;
+  $("selCnt").textContent="已选 "+n+" 张";
+  $("btnSaveLocal").innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 19h16"/></svg> 存到我的电脑（'+n+" 张）";
+  $("btnDownload").innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg> 存到服务器（'+n+" 张）";
+  if(!state.downloading){$("btnSaveLocal").disabled=(n===0);$("btnDownload").disabled=(n===0)}
+}
+
+function fileNameFromUrl(u){
+  var n=(u.split("/").pop().split("?")[0]||"image.jpg");
+  if(/\.(ashx|aspx|php|jsp|do|img)$/i.test(n))n=n.replace(/\.[^.]+$/,".jpg");
+  if(!/\.(jpe?g|png|webp|gif|avif|bmp)$/i.test(n))n+=".jpg";
+  return n;
+}
+
+function saveToMyComputer(){
+  if(!state.project||state.downloading)return;
+  var urls=selectedUrls();
+  if(!urls.length){toast("请先勾选至少一张图片");return;}
+  state.downloading=true;
+  $("dlArea").style.display="";
+  $("btnSaveLocal").disabled=true;
+  $("btnDownload").disabled=true;
+  $("btnStop").style.display="none";
+  $("pbarFill").style.width="0%";
+  $("pinfoPct").textContent="0%";
+  $("pinfoText").textContent="正在保存到你的电脑…";
+  $("pLogs").innerHTML="";
+  $("doneBox").style.display="none";
+  var oks=0,skips=0,fails=0;
+  function line(cls,html){
+    var d=document.createElement("div");
+    d.className=cls;
+    d.innerHTML=html;
+    $("pLogs").appendChild(d);
+    $("pLogs").scrollTop=$("pLogs").scrollHeight;
+  }
+  function finish(){
+    state.downloading=false;
+    refreshSelUI();
+    $("pinfoText").textContent="保存完成";
+    var box=$("doneBox");
+    box.style.display="";
+    var msg="<b>✅ 完成！</b>已保存 <b>"+oks+"</b> 张到你的电脑（浏览器默认下载文件夹）";
+    if(skips)msg+="，跳过小图 <b>"+skips+"</b> 张";
+    if(fails)msg+='，未完成 <b style="color:var(--danger)">'+fails+"</b> 张";
+    msg+="<br>请留意浏览器底部的下载提示";
+    box.innerHTML=msg;
+  }
+  function downloadOne(u){
+    return new Promise(function(resolve){
+      var nm=fileNameFromUrl(u);
+      function saveBlob(blob){
+        var a=document.createElement("a");
+        a.href=URL.createObjectURL(blob);
+        a.download=nm;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function(){
+          URL.revokeObjectURL(a.href);
+          document.body.removeChild(a);
+        },5000);
+        resolve({ok:true,name:nm,size:blob.size});
+      }
+      if(BACKEND){
+        var url=api("api/tool/dl-img")+"?url="+encodeURIComponent(u);
+        fetch(url).then(function(r){
+          if(r.ok){
+            return r.blob().then(function(b){
+              var fn=r.headers.get("X-File-Name")||"";
+              try{fn=decodeURIComponent(fn);}catch(e){}
+              saveBlob(b);
+              return {ok:true,name:fn||nm,size:b.size};
+            });
+          }
+          return r.json().then(function(j){
+            return {ok:false,error:j.error||"下载失败"};
+          }).catch(function(){
+            return {ok:false,error:"下载失败"};
+          });
+        }).then(resolve).catch(function(){
+          resolve({ok:false,error:"网络错误"});
+        });
+      }else{
+        fetchImgViaProxy(u).then(saveBlob).catch(function(e){
+          resolve({ok:false,error:e.message||"代理不可用"});
+        });
+      }
+    });
+  }
+  var i=0;
+  function next(){
+    if(i>=urls.length){finish();return;}
+    var u=urls[i];
+    var pct=Math.round(i/urls.length*100);
+    $("pbarFill").style.width=pct+"%";
+    $("pinfoPct").textContent=pct+"%";
+    $("pinfoText").textContent="正在保存 "+(i+1)+" / "+urls.length+" 张…";
+    downloadOne(u).then(function(res){
+      if(res.ok){
+        oks++;
+        line("ok","✓ "+esc(res.name)+"（"+(res.size/1024).toFixed(0)+" KB）");
+      }else if(res.error&&res.error.indexOf("小图")>=0){
+        skips++;
+        line("skip","↷ "+res.error);
+      }else{
+        fails++;
+        line("bad","✗ "+(res.error||"下载失败"));
+      }
+      i++;
+      setTimeout(next,400);
+    });
+  }
+  next();
+}
+
+function startServerDownload(){
+  if(!BACKEND){toast("当前为纯前端模式，无「存到服务器」能力；请部署到支持服务端函数的平台，或使用「存到我的电脑」");return;}
+  if(!state.project||state.downloading)return;
+  var urls=selectedUrls();
+  if(!urls.length){toast("请先勾选至少一张图片");return}
+  var p=state.project;
+  state.jobId=null;
+  $("dlArea").style.display="";
+  $("btnSaveLocal").disabled=true;$("btnDownload").disabled=true;
+  $("btnStop").style.display="";
+  $("pbarFill").style.width="0%";$("pinfoPct").textContent="0%";
+  $("pinfoText").textContent="准备下载 "+urls.length+" 张…";
+  $("pLogs").innerHTML="";$("doneBox").style.display="none";
+  state.downloading=true;
+  fetch(api("api/tool/download"),{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({url:p.url,title:p.title,images:urls})})
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if(d.error){toast(d.error);state.downloading=false;refreshSelUI();$("btnStop").style.display="none";return}
+      state.jobId=d.job_id;
+      poll(d.job_id);
+    })
+    .catch(function(){toast("启动下载失败");state.downloading=false;refreshSelUI();$("btnStop").style.display="none"});
+}
+
+function poll(id){
+  state.timer=setInterval(function(){
+    fetch(api("api/tool/job")+"?id="+id).then(function(r){return r.json()}).then(function(j){
+      var pct=j.total?Math.round(j.done/j.total*100):0;
+      $("pbarFill").style.width=pct+"%";
+      $("pinfoPct").textContent=pct+"%";
+      $("pinfoText").textContent=(j.waiting?"⏳ ":"正在下载 ")+j.done+" / "+j.total+" 张 · "+(j.current||"");
+      if(j.status==="done"||j.status==="cancelled"||j.status==="blocked"){
+        var cancelled=j.status==="cancelled",blocked=j.status==="blocked";
+        clearInterval(state.timer);state.downloading=false;
+        $("btnStop").style.display="none";refreshSelUI();
+        $("pinfoText").textContent=cancelled?"已停止":(blocked?"已中止":"下载完成");
+        var box=$("doneBox");box.style.display="";
+        var fails=j.fail_count||0,skips=j.skip_count||0;
+        box.innerHTML=(blocked?"<b>⚠️ 已中止。</b>":(cancelled?"<b>⏹ 已停止。</b>":"<b>✅ 完成！</b>"))+"成功下载 <b>"+j.ok_count+"</b> 张"+
+          (skips?"，跳过小图 <b>"+skips+"</b> 张":"")+
+          (fails?'，未完成 <b style="color:var(--danger)">'+fails+"</b> 张":"")+
+          " · 用时 "+j.elapsed+" 秒<br>保存位置："+esc(j.folder)+"<br>文件已按项目分类存放（编号 001、002…），另附《_下载记录.json》清单"+
+          (blocked?"<br>CDN 当前对大量下载有限流保护，请等待 20-30 分钟后再试。":"");
+        var lg=$("pLogs");
+        (j.results||[]).forEach(function(r){
+          var ln=document.createElement("div");
+          if(r.ok){ln.className="ok";ln.textContent="✓ "+r.name+"（"+(r.size/1024).toFixed(0)+" KB）"}
+          else if(r.skipped){ln.className="skip";ln.textContent="↷ "+r.name+" "+(r.error||"跳过")}
+          else{ln.className="bad";ln.textContent="✗ "+r.name+" "+(r.error||"失败")}
+          lg.appendChild(ln);
+        });
+        lg.scrollTop=lg.scrollHeight;
+      }
+    }).catch(function(){});
+  },650);
+}
+
+$("q").focus();
+detectBackend();
+</script>
+</body>
+</html>
