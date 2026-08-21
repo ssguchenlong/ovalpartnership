@@ -1119,7 +1119,7 @@ function dimLabel(k){ return t("dim."+k) || k; }
 
 // ================= 版本号（每次更新请同步递增 APP_VERSION 与 APP_BUILD） =================
 // 显示在界面头部徽标与页脚，便于复制分发时核对是否为最新版。
-const APP_VERSION = "1.39.5";
+const APP_VERSION = "1.39.6";
 const APP_BUILD   = "2026-08-21";
 
 // merge locally-imported cases
@@ -2108,7 +2108,7 @@ async function loadFeedback(){
   if(localArr.length) fbRender(localArr);
   // 1) 尝试共享服务器接口
   try{
-    const ctrl=new AbortController(); const to=setTimeout(()=>ctrl.abort(),4000);
+    const ctrl=new AbortController(); const to=setTimeout(()=>ctrl.abort(),8000);
     const r=await fetch(FB_API,{headers:{"Accept":"application/json"},signal:ctrl.signal});
     clearTimeout(to);
     if(!r.ok) throw new Error("http"+r.status);
@@ -2181,6 +2181,20 @@ async function fbSend(payload, after){
     try{
       const r=await fetch(FB_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
       if(!r.ok) throw new Error("http"+r.status);
+      // 将服务器返回的帖子/回复同步写入 localStorage 作为本地备份
+      // （防止服务器冷启动超时 / 网络抖动导致 loadFeedback 取不到服务器数据时记录消失）
+      try{
+        const j=await r.json();
+        let localArr=[]; try{ localArr=JSON.parse(localStorage.getItem(FB_LOCAL_KEY)||"[]"); }catch(e){}
+        if(j&&j.post){
+          localArr=localArr.filter(p=>p.id!==j.post.id); // 去重：同 ID 替换
+          localArr.push(j.post);
+        }else if(j&&j.reply&&payload.parent){
+          const post=localArr.find(x=>x.id===payload.parent);
+          if(post){ post.replies=post.replies||[]; if(!post.replies.find(rr=>rr.id===j.reply.id)) post.replies.push(j.reply); }
+        }
+        localStorage.setItem(FB_LOCAL_KEY,JSON.stringify(localArr));
+      }catch(e){}
       if(after) after();
       await loadFeedback();
       return;
